@@ -32,6 +32,7 @@ namespace SimpleYetSoSharp
         static int qOff, wOff, eOff, rOff = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
         public static bool lowhealth = false;
+        public static bool quietm = true;
 
 
         //list of known adcs to follow
@@ -98,6 +99,7 @@ namespace SimpleYetSoSharp
             menu = new Menu("AutoPlay Bot", "syssb", true);
             menu.AddItem(new MenuItem("on", "Activate it!").SetValue(new KeyBind(32, KeyBindType.Toggle)));
             menu.AddSubMenu(new Menu("Follow:", "follower"));
+            menu.AddItem(new MenuItem("quiet", "Quiet mode").SetValue(quietm));
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
             {
                 allies.Add(ally);
@@ -153,7 +155,7 @@ namespace SimpleYetSoSharp
 
   
 
-            if (ObjectManager.Player.IsDead && Game.Time - timedead > 80)
+            if (ObjectManager.Player.IsDead && Game.Time - timedead > 80 && !quietm)
             {
                 Game.Say(shityousaywhenyoudead[deathcounter]);
                 deathcounter++;

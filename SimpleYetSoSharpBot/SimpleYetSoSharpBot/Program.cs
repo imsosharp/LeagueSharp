@@ -222,10 +222,6 @@ namespace SimpleYetSoSharp
                }
 
            }
-		if (!Utility.InFountain())
-		{
-			timeInFountain = 0;
-		}
         if (follow.Distance(ObjectManager.Player.Position) > 700)
             {
                 ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);

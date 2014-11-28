@@ -112,6 +112,7 @@ namespace SimpleYetSoSharp
             menu.AddToMainMenu();
             Game.OnGameProcessPacket += Game_OnGameProcessPacket;
             Game.OnGameUpdate += Game_OnGameUpdate;
+			Game.OnGameEnd += OnGameEnd;
             BuyItems();
         }
 
@@ -255,5 +256,9 @@ namespace SimpleYetSoSharp
             }
 
         }
+		private static void OnGameEnd(EventArgs args)
+		{
+		Game.Say("gg");
+		}
     }
 }

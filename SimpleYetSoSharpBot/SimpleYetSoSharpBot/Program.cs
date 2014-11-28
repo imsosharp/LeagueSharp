@@ -27,7 +27,7 @@ namespace SimpleYetSoSharp
         private static double timedead;
         private static List<Obj_AI_Hero> allies;
         private static int i = 0;
-        private static bool boughtbots, boughtaegis, boughtzekes = false;
+        public static bool boughtItemOne, boughtItemTwo, boughtItemThree = false;
         static Obj_AI_Hero player = ObjectManager.Player;
         static int qOff, wOff, eOff, rOff = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
@@ -91,10 +91,20 @@ namespace SimpleYetSoSharp
 
             allies = new List<Obj_AI_Hero>();
 
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E);
-            R = new Spell(SpellSlot.R);
+            if (ObjectManager.Player.ChampionName == "Annie")
+            {
+                Q = new Spell(SpellSlot.Q, 650);
+                W = new Spell(SpellSlot.W, 625);
+                E = new Spell(SpellSlot.E);
+                R = new Spell(SpellSlot.R, 600);
+            }
+            else
+            {
+                Q = new Spell(SpellSlot.Q);
+                W = new Spell(SpellSlot.W);
+                E = new Spell(SpellSlot.E);
+                R = new Spell(SpellSlot.R);
+            }
             ts = new TargetSelector(1025, TargetSelector.TargetingMode.AutoPriority);
             // things you will say when you die
             menu = new Menu("AutoPlay Bot", "syssb", true);
@@ -207,61 +217,112 @@ namespace SimpleYetSoSharp
 
 
 
-
+       
         public static void doFollow()
         {
+            
             if (isEnabled)
             {
-                if (follow.Distance(ObjectManager.Player.Position) > 700)
+                if (follow.Distance(ObjectManager.Player.Position) > 600)
                 {
                     ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);
                 }
 
-                //if spells available, cast them.
-                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                if (ObjectManager.Player.ChampionName == "Annie")
                 {
-                    Q.Cast(ts.Target);
-                }
+                    if (ts.Target.Distance(ObjectManager.Player) < Q.Range && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        Q.Cast(ts.Target);
+                    }
 
-                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && W.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-                {
-                    W.Cast(ts.Target);
-                }
+                    if (ts.Target.Distance(ObjectManager.Player) < W.Range && W.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        W.Cast(ts.Target);
+                    }
 
-                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && R.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-                {
-                    R.Cast(ts.Target);
+                    if (ts.Target.Distance(ObjectManager.Player) < R.Range && R.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        R.Cast(ts.Target);
+                    }
+                    if (E.IsReady())
+                    {
+                        E.Cast();
+                    }
                 }
-                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && E.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                else
                 {
-                    E.Cast(ts.Target);
+                    //if spells available, cast them.
+                    if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        Q.Cast(ts.Target);
+                    }
+
+                    if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && W.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        W.Cast(ts.Target);
+                    }
+
+                    if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && R.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        R.Cast(ts.Target);
+                    }
+                    if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && E.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                    {
+                        E.Cast(ts.Target);
+                    }
                 }
             }
         }
 
         public static void BuyItems()
         {
-            if (isEnabled)
+            if (ObjectManager.Player.ChampionName == "Annie")
             {
-                if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtbots)
+                if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtItemOne)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
-                    Game.PrintChat("BOUGHT BOTS");
-                    boughtbots = true;
+                    Game.PrintChat("Buying Boots");
+                    boughtItemOne = true;
                 }
-                if (Utility.InShopRange() && ObjectManager.Player.Gold > 1900 && ObjectManager.Player.Gold < 2550 && !boughtaegis)
+                if (Utility.InShopRange() && ObjectManager.Player.Gold > 1200 && ObjectManager.Player.Gold < 2800 && !boughtItemTwo)
                 {
-                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3105)).Send();
-                    Game.PrintChat("BOUGHT AEGIS");
-                    boughtaegis = true;
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3010)).Send();
+                    Game.PrintChat("Buying Catalyst");
+                    boughtItemTwo = true;
+                    boughtItemThree = false;
                 }
-                else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2550 && !boughtzekes)
+                else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2800 && !boughtItemThree)
                 {
-                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3050)).Send();
-                    Game.PrintChat("BOUGHT ZEKES");
-                    boughtzekes = true;
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3027)).Send();
+                    Game.PrintChat("Buying RoA");
+                    boughtItemThree = true;
+                    boughtItemTwo = false;
                 }
+            }
+            else
+            {
+                if (isEnabled)
+                {
+                    if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtItemOne)
+                    {
+                        Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
+                        Game.PrintChat("BOUGHT BOTS");
+                        boughtItemOne = true;
+                    }
+                    if (Utility.InShopRange() && ObjectManager.Player.Gold > 1900 && ObjectManager.Player.Gold < 2550 && !boughtItemTwo)
+                    {
+                        Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3105)).Send();
+                        Game.PrintChat("BOUGHT AEGIS");
+                        boughtItemTwo = true;
+                    }
+                    else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2550 && !boughtItemThree)
+                    {
+                        Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3050)).Send();
+                        Game.PrintChat("BOUGHT ZEKES");
+                        boughtItemThree = true;
+                    }
 
+                }
             }
 
         }

@@ -15,14 +15,15 @@ namespace SimpleYetSoSharp
 {
     internal class Program
     {
+		//edit this if you feel like it
+        private static string[] shityousaywhenyoudead = { "lulz", "lol", "omg", "noooooob", "help me", "fkin nooooobs", "TEAM WHERE YOU AT???", "WILL YOU HELP?", "HEEEEEEEEEEEELP", "OMG REPORT MY NOOB TEAM", "OMG MY TEAM SHOULD UNINSTALL", "MATCHMAKING SO UNFAIR", "gg", "I just want this game to end fking noobs" };
         private static Spell Q;
         private static Spell W;
         private static Spell E;
         private static Spell R;
         private static TargetSelector ts;
         private static Menu menu;
-        private static string[] deaths;
-        private static int deathcounter = 0;
+		private static int deathcounter = 0;
         private static double timedead;
         private static List<Obj_AI_Hero> allies;
         private static int i = 0;
@@ -94,7 +95,6 @@ namespace SimpleYetSoSharp
             R = new Spell(SpellSlot.R);
             ts = new TargetSelector(1025, TargetSelector.TargetingMode.AutoPriority);
             // things you will say when you die
-            deaths = new[] { "lulz", "lol", "omg", "noooooob", "help me", "fkin nooooobs", "TEAM WHERE YOU AT???", "WILL YOU HELP?", "HEEEEEEEEEEEELP", "OMG REPORT MY NOOB TEAM", "OMG MY TEAM SHOULD UNINSTALL", "MATCHMAKING SO UNFAIR", "gg", "I just want this game to end fking noobs" };
             menu = new Menu("AutoPlay Bot", "syssb", true);
             menu.AddItem(new MenuItem("on", "Activate it!").SetValue(new KeyBind(32, KeyBindType.Toggle)));
             menu.AddSubMenu(new Menu("Follow:", "follower"));
@@ -155,7 +155,7 @@ namespace SimpleYetSoSharp
 
             if (ObjectManager.Player.IsDead && Game.Time - timedead > 80)
             {
-                Game.Say(deaths[deathcounter]);
+                Game.Say(shityousaywhenyoudead[deathcounter]);
                 deathcounter++;
                 timedead = Game.Time;
             }

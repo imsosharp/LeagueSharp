@@ -89,11 +89,21 @@ namespace SimpleYetSoSharp
             CustomEvents.Unit.OnLevelUp += OnLevelUp;
 
             allies = new List<Obj_AI_Hero>();
+            if (ObjectManager.Player.ChampionName == "Annie")
+            {
+                Q = new Spell(SpellSlot.Q, 650);
+                W = new Spell(SpellSlot.W, 625);
+                E = new Spell(SpellSlot.E);
+                R = new Spell(SpellSlot.R, 600);
+            }
+            else
+            {
 
-            Q = new Spell(SpellSlot.Q);
-            W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E);
-            R = new Spell(SpellSlot.R);
+                Q = new Spell(SpellSlot.Q);
+                W = new Spell(SpellSlot.W);
+                E = new Spell(SpellSlot.E);
+                R = new Spell(SpellSlot.R);
+            }
             ts = new TargetSelector(1025, TargetSelector.TargetingMode.AutoPriority);
             menu = new Menu("AutoPlay Bot", "syssb", true);
             menu.AddItem(new MenuItem("on", "Activate it!").SetValue(new KeyBind(32, KeyBindType.Toggle)));
@@ -232,6 +242,30 @@ namespace SimpleYetSoSharp
             }
 
             //if spells available, cast them.
+            
+        if (ObjectManager.Player.ChampionName == "Annie")
+        {
+            if (ts.Target.Distance(ObjectManager.Player) < Q.Range && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+            {
+                Q.Cast(ts.Target);
+            }
+
+            if (ts.Target.Distance(ObjectManager.Player) < W.Range && W.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+            {
+                W.Cast(ts.Target);
+            }
+
+            if (ts.Target.Distance(ObjectManager.Player) < R.Range && R.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+            {
+                R.Cast(ts.Target);
+            }
+            if (E.IsReady())
+            {
+                E.Cast();
+            }
+        }
+        else 
+        {
             if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
             {
                 Q.Cast(ts.Target);
@@ -250,6 +284,7 @@ namespace SimpleYetSoSharp
             {
                 E.Cast(ts.Target);
             }
+        } 
         }
 
         public static void BuyItems()

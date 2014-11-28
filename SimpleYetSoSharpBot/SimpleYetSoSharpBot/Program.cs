@@ -146,7 +146,7 @@ namespace SimpleYetSoSharp
                 ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe);
             if (follow == null)
             {
-                ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
+                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
             }
             followpos = follow.Position;
             if (deathcounter == 14)

@@ -32,7 +32,8 @@ namespace SimpleYetSoSharp
         static int qOff, wOff, eOff, rOff = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
         public static bool lowhealth = false;
-        public static int timeInFountain = 0;
+        public static bool quietm = true;
+        public static bool isEnabled = true;
 
 
         //list of known adcs to follow
@@ -95,9 +96,11 @@ namespace SimpleYetSoSharp
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R);
             ts = new TargetSelector(1025, TargetSelector.TargetingMode.AutoPriority);
+            // things you will say when you die
             menu = new Menu("AutoPlay Bot", "syssb", true);
-            menu.AddItem(new MenuItem("on", "Activate it!").SetValue(new KeyBind(32, KeyBindType.Toggle)));
+            menu.AddItem(new MenuItem("on", "Activate it!").SetValue(isEnabled));
             menu.AddSubMenu(new Menu("Follow:", "follower"));
+            menu.AddItem(new MenuItem("quiet", "Quiet mode").SetValue(quietm));
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
             {
                 allies.Add(ally);
@@ -143,7 +146,7 @@ namespace SimpleYetSoSharp
                 ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe);
             if (follow == null)
             {
-                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
+                ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
             }
             followpos = follow.Position;
             if (deathcounter == 14)
@@ -153,7 +156,7 @@ namespace SimpleYetSoSharp
 
   
 
-            if (ObjectManager.Player.IsDead && Game.Time - timedead > 80)
+            if (ObjectManager.Player.IsDead && Game.Time - timedead > 80 && !quietm)
             {
                 Game.Say(shityousaywhenyoudead[deathcounter]);
                 deathcounter++;
@@ -207,67 +210,58 @@ namespace SimpleYetSoSharp
 
         public static void doFollow()
         {
-           while (Utility.InFountain())
-           {
-
-               do
-               {
-                   timeInFountain++;
-               }
-               while (timeInFountain < 60000);
-               if (timeInFountain >= 60000)
-               {
-                   follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
-                   timeInFountain = 0;
-               }
-
-           }
-        if (follow.Distance(ObjectManager.Player.Position) > 700)
+            if (isEnabled)
             {
-                ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);
-            }
+                if (follow.Distance(ObjectManager.Player.Position) > 700)
+                {
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);
+                }
 
-            //if spells available, cast them.
-            if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-            {
-                Q.Cast(ts.Target);
-            }
+                //if spells available, cast them.
+                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                {
+                    Q.Cast(ts.Target);
+                }
 
-            if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && W.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-            {
-                W.Cast(ts.Target);
-            }
+                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && W.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                {
+                    W.Cast(ts.Target);
+                }
 
-            if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 &&  R.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-            {
-                R.Cast(ts.Target);
-            }
-            if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && E.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-            {
-                E.Cast(ts.Target);
+                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && R.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                {
+                    R.Cast(ts.Target);
+                }
+                if (ts.Target.Distance(follow.Position) < 600 && follow.Distance(ObjectManager.Player.Position) < 700 && E.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
+                {
+                    E.Cast(ts.Target);
+                }
             }
         }
 
         public static void BuyItems()
         {
-            
-            if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtbots)
+            if (isEnabled)
             {
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
-                Game.PrintChat("BOUGHT BOTS");
-                boughtbots = true;
-            }
-            if (Utility.InShopRange() && ObjectManager.Player.Gold > 1900 && ObjectManager.Player.Gold < 2550 && !boughtaegis)
-            {
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3105)).Send();
-                Game.PrintChat("BOUGHT AEGIS");
-                boughtaegis = true;
-            }
-            else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2550 && !boughtzekes)
-            {
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3050)).Send();
-                Game.PrintChat("BOUGHT ZEKES");
-                boughtzekes = true;
+                if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtbots)
+                {
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
+                    Game.PrintChat("BOUGHT BOTS");
+                    boughtbots = true;
+                }
+                if (Utility.InShopRange() && ObjectManager.Player.Gold > 1900 && ObjectManager.Player.Gold < 2550 && !boughtaegis)
+                {
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3105)).Send();
+                    Game.PrintChat("BOUGHT AEGIS");
+                    boughtaegis = true;
+                }
+                else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2550 && !boughtzekes)
+                {
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3050)).Send();
+                    Game.PrintChat("BOUGHT ZEKES");
+                    boughtzekes = true;
+                }
+
             }
 
         }

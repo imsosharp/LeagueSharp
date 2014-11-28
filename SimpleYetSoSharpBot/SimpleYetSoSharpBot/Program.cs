@@ -24,7 +24,6 @@ namespace SimpleYetSoSharp
         private static string[] deaths;
         private static int deathcounter = 0;
         private static double timedead;
-        private static double gamestart;
         private static List<Obj_AI_Hero> allies;
         private static int i = 0;
         private static bool boughtbots, boughtaegis, boughtzekes = false;
@@ -52,7 +51,6 @@ namespace SimpleYetSoSharp
 
         private static Vector3 followpos;
         private static Obj_AI_Hero follow;
-        private static double followtime;
 
         private static void Main(string[] args)
         {
@@ -112,9 +110,6 @@ namespace SimpleYetSoSharp
             }
 
             menu.AddToMainMenu();
-
-            followtime = Game.Time;
-
             Game.OnGameProcessPacket += Game_OnGameProcessPacket;
             Game.OnGameUpdate += Game_OnGameUpdate;
             BuyItems();
@@ -164,14 +159,6 @@ namespace SimpleYetSoSharp
                 timedead = Game.Time;
             }
 
-
-
-            if (Game.Time - followtime > 40 && followpos.Distance(follow.Position) <= 100)
-            {
-                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && ap.Contains(x.ChampionName));
-                followpos = follow.Position;
-                followtime = Game.Time;
-            }
 
             if (follow.IsDead)
             {

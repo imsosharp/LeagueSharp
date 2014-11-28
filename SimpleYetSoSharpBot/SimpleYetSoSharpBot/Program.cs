@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+This shit is copied from Maufeat and blm95 and it comes with no warranty that
+it will work as intended, or that it work at all.
+I also suck at disclaimers.
+hf spending your free IP ^_^
+*/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;

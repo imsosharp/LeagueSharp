@@ -55,23 +55,22 @@ namespace SimpleYetSoSharp
 
         private static void Game_OnGameLoad(EventArgs args)
         {
-            if (player.Level == 1)
+             if (player.Level == 1)
             {
-                int i = player.Level - 1;
                 SpellSlot abilitySlot;
-                if (abilityOrder[i] == 1)
+                if (abilityOrder[0] == 1)
                 {
                     abilitySlot = SpellSlot.Q;
                 }
-                else if (abilityOrder[i] == 2)
+                else if (abilityOrder[0] == 2)
                 {
                     abilitySlot = SpellSlot.W;
                 }
-                else if (abilityOrder[i] == 3)
+                else if (abilityOrder[0] == 3)
                 {
                     abilitySlot = SpellSlot.E;
                 }
-                else if (abilityOrder[i] == 4)
+                else if (abilityOrder[0] == 4)
                 {
                     abilitySlot = SpellSlot.R;
                 }

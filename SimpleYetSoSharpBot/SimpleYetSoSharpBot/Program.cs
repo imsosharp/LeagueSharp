@@ -332,7 +332,7 @@ namespace SimpleYetSoSharp
 
         public static void BuyItems()
         {
-            if (ObjectManager.Player.ChampionName == "Annie")
+            if (ObjectManager.Player.ChampionName == "Annie" || ObjectManager.Player.ChampionName == "Soraka")
             {
                 if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtItemOne)
                 {

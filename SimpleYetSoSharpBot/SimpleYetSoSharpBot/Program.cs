@@ -15,8 +15,14 @@ namespace SimpleYetSoSharp
 {
     internal class Program
     {
-		//edit this if you feel like it
-        private static string[] shityousaywhenyoudead = { "lulz", "lol", "omg", "noooooob", "help me", "fkin nooooobs", "TEAM WHERE YOU AT???", "WILL YOU HELP?", "HEEEEEEEEEEEELP", "OMG REPORT MY NOOB TEAM", "OMG MY TEAM SHOULD UNINSTALL", "MATCHMAKING SO UNFAIR", "gg", "I just want this game to end fking noobs" };
+		//edit this if you feel like it, disabled by default
+        private static string[] shityousaywhenyoudead = { "lulz", "lol", "omg", "noooooob", "help me", "fkin nooooobs", "TEAM WHERE YOU AT???", "WILL YOU HELP?", "HEEEEEEEEEEEELP", "/all OMG REPORT MY NOOB TEAM", "/all OMG MY TEAM SHOULD UNINSTALL", "/all MATCHMAKING SO UNFAIR", "/all gg", "/all I just want this game to end fking noobs" };
+        public static bool gameStartedTrigger = false;
+        public static int onDoubleKill(string championName);
+        public static int onTripleKill(string championName);
+        public static int onQuadraKill(string championName);
+        public static int onPentaKill(string championName);
+        public static int onEnemyTeamScoreIncrease();
         private static Spell Q;
         private static Spell W;
         private static Spell E;
@@ -154,6 +160,7 @@ namespace SimpleYetSoSharp
             Game.OnGameUpdate += Game_OnGameUpdate;
 			Game.OnGameEnd += OnGameEnd;
             BuyItems();
+            Game.PrintChat("SimpleYetSoSharpBot loaded!");
         }
 
 
@@ -176,6 +183,11 @@ namespace SimpleYetSoSharp
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
+            if (!gameStartedTrigger && !quietm)
+            {
+                Game.Say("/all gl hf");
+                gameStartedTrigger = false;
+            }
             follow =
                 ObjectManager.Get<Obj_AI_Hero>()
                     .First(x => !x.IsMe && x.IsAlly && menu.Item(x.ChampionName).GetValue<bool>()) ??
@@ -401,7 +413,11 @@ namespace SimpleYetSoSharp
         }
 		private static void OnGameEnd(EventArgs args)
 		{
-		Game.Say("gg");
+		Game.Say("/all gg");
 		}
+        public static void onGameStart()
+        {
+            Game.Say("/all gl hf");
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace SimpleYetSoSharp
         public static bool menuHacked = false;
         public static string tempfollow = "";
         public static bool stopdoingshit = false;
-        public static bool enableHPB = true;
+        public static bool enableHPB = false;
 
 
         //list of known adcs to follow
@@ -334,7 +334,7 @@ namespace SimpleYetSoSharp
                     E.Cast(ts.Target);
                 }
             }
-            if ((follow.IsDead || ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 < menu.Item("hpb").GetValue<Slider>().Value))
+            if ((follow.IsDead || ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 < menu.Item("hpb").GetValue<Slider>().Value) && enableHPB)
             {
                 stopdoingshit = true;
                     var turret2 =

@@ -32,6 +32,9 @@ namespace SimpleYetSoSharp
         static int qOff, wOff, eOff, rOff = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
         public static bool quietm = true;
+        public static int adcs = 0;
+        public static bool menuHacked = false;
+        public static string tempfollow = "";
 
 
         //list of known adcs to follow
@@ -128,11 +131,21 @@ namespace SimpleYetSoSharp
             {
                 allies.Add(ally);
                 if (ad.Contains(ally.ChampionName))
+                {
                     menu.SubMenu("follower").AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
+                    adcs++;
+                }
                 else
                 {
                     menu.SubMenu("follower").AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(false));
                 }
+
+
+            }
+            if (adcs == 0 && !menuHacked)
+            {
+                tempfollow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe).ChampionName;
+                menu.SubMenu("follower").Item(tempfollow).SetValue(true);
             }
 
             menu.AddToMainMenu();
@@ -233,6 +246,11 @@ namespace SimpleYetSoSharp
        
         public static void doFollow()
         {
+            if (adcs == 0 && !menuHacked)
+            {
+                tempfollow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe).ChampionName;
+                menu.SubMenu("follower").Item(tempfollow).SetValue(true);
+            }
 			if (follow == null)
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);

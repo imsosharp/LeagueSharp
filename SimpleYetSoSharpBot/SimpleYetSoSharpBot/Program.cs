@@ -334,7 +334,7 @@ namespace SimpleYetSoSharp
                     E.Cast(ts.Target);
                 }
             }
-            if ((follow.IsDead || ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 < menu.Item("hpb").GetValue<Slider>().Value) && enableHPB)
+            if (enableHPB && follow.IsDead || (ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 < menu.Item("hpb").GetValue<Slider>().Value))
             {
                 stopdoingshit = true;
                     var turret2 =

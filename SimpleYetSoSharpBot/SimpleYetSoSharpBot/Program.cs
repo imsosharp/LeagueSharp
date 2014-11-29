@@ -239,7 +239,7 @@ namespace SimpleYetSoSharp
             }
                 if (follow.Distance(ObjectManager.Player.Position) > 600)
                 {
-                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
                 }
 
 				

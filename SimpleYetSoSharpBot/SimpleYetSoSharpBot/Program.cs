@@ -32,26 +32,7 @@ namespace SimpleYetSoSharp
         static int qOff, wOff, eOff, rOff = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
         public static bool quietm = true;
-        public static int adcs = 0;
-        public static bool menuHacked = false;
         public static string tempfollow = "";
-
-
-        //list of known adcs to follow
-        private static readonly string[] ad =
-        {
-            "Ashe", "Caitlyn", "Corki", "Draven", "Ezreal", "Graves", "KogMaw",
-            "MissFortune", "Quinn", "Sivir", "Tristana", "Twitch", "Varus", "Vayne", "Jinx", "Lucian", "Kalista", "Teemo", "Urgot"
-        };
-
-        private static readonly string[] ap =
-        {
-            "Ahri", "Akali", "Anivia", "Annie", "Brand", "Cassiopeia", "Diana",
-            "FiddleSticks", "Fizz", "Gragas", "Heimerdinger", "Karthus", "Kassadin", "Katarina", "Kayle", "Kennen",
-            "Leblanc", "Lissandra", "Lux", "Malzahar", "Mordekaiser", "Morgana", "Nidalee", "Orianna", "Ryze", "Sion",
-            "Swain", "Syndra", "Teemo", "TwistedFate", "Veigar", "Viktor", "Vladimir", "Xerath", "Ziggs", "Zyra",
-            "Velkoz"
-        };
 
         private static Vector3 followpos;
         private static Obj_AI_Hero follow;
@@ -130,23 +111,9 @@ namespace SimpleYetSoSharp
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
             {
                 allies.Add(ally);
-                if (ad.Contains(ally.ChampionName))
-                {
-                    menu.SubMenu("follower").AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
-                    adcs++;
-                }
-                else
-                {
-                    menu.SubMenu("follower").AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(false));
-                }
+                menu.SubMenu("follower").AddItem(new MenuItem(ally.ChampionName, ally.ChampionName).SetValue(true));
 
 
-            }
-            if (adcs == 0 && !menuHacked)
-            {
-                tempfollow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe).ChampionName;
-                menu.SubMenu("follower").Item(tempfollow).SetValue(true);
-                menuHacked = true;
             }
 
             menu.AddToMainMenu();
@@ -169,11 +136,7 @@ namespace SimpleYetSoSharp
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            follow =
-                ObjectManager.Get<Obj_AI_Hero>()
-                    .First(x => !x.IsMe && x.IsAlly && menu.Item(x.ChampionName).GetValue<bool>()) ??
-                ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && ap.Contains(x.ChampionName)) ??
-                ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe);
+            
             if (follow == null)
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
@@ -237,12 +200,7 @@ namespace SimpleYetSoSharp
 
         public static void doFollow()
         {
-            if (adcs == 0 && !menuHacked)
-            {
-                tempfollow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe).ChampionName;
-                menu.SubMenu("follower").Item(tempfollow).SetValue(true);
-                menuHacked = true;
-            }
+            
             if (follow == null)
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
@@ -250,6 +208,11 @@ namespace SimpleYetSoSharp
             if (follow.Distance(ObjectManager.Player.Position) > 600)
             {
                 ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
+            }
+            //Anti-AFK Test
+            if (Utility.InFountain() && (Game.Time > 45))
+            {
+                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1000);
             }
 
 

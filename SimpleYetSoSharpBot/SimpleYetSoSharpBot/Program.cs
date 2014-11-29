@@ -347,6 +347,8 @@ namespace SimpleYetSoSharp
                 if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtItemOne)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(2003)).Send();
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                     Game.PrintChat("Buying Boots");
                     boughtItemOne = true;
                 }
@@ -357,7 +359,14 @@ namespace SimpleYetSoSharp
                     boughtItemTwo = true;
                     boughtItemThree = false;
                 }
-                else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2800 && !boughtItemThree)
+                if (boughtItemTwo && ObjectManager.Player.Gold > 1600)
+                {
+                    Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3027)).Send();
+                    Game.PrintChat("Buying RoA");
+                    boughtItemThree = true;
+                    boughtItemTwo = false;
+                }
+                if (Utility.InShopRange() && ObjectManager.Player.Gold > 2800 && !boughtItemThree)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3027)).Send();
                     Game.PrintChat("Buying RoA");
@@ -370,6 +379,8 @@ namespace SimpleYetSoSharp
                     if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtItemOne)
                     {
                         Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
+                        Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(2003)).Send();
+                        Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                         Game.PrintChat("BOUGHT BOTS");
                         boughtItemOne = true;
                     }

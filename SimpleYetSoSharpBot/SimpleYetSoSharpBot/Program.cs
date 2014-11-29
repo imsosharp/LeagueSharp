@@ -371,7 +371,7 @@ namespace SimpleYetSoSharp
                     boughtItemTwo = true;
                     boughtItemThree = false;
                 }
-                if (boughtItemTwo && ObjectManager.Player.Gold > 1600)
+                if (Utility.InShopRange() && boughtItemTwo && ObjectManager.Player.Gold > 1600)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3027)).Send();
                     Game.PrintChat("Buying RoA");

@@ -23,6 +23,8 @@ namespace SimpleYetSoSharp
         private static Spell R;
         private static TargetSelector ts;
         private static Menu menu;
+        private static double foundturret;
+        private static Obj_AI_Turret turret;
         private static int deathcounter = 0;
         private static double timedead;
         private static List<Obj_AI_Hero> allies;
@@ -35,6 +37,8 @@ namespace SimpleYetSoSharp
         public static int adcs = 0;
         public static bool menuHacked = false;
         public static string tempfollow = "";
+        public static bool stopdoingshit = false;
+        public static bool enableHPB = true;
 
 
         //list of known adcs to follow
@@ -119,6 +123,8 @@ namespace SimpleYetSoSharp
             menu = new Menu("AutoPlay Bot", "syssb", true);
             menu.AddSubMenu(new Menu("Follow:", "follower"));
             menu.AddItem(new MenuItem("quiet", "Quiet mode").SetValue(quietm));
+            menu.AddItem(new MenuItem("hpbchoice", "Enable B if hp < %").SetValue(enableHPB));
+            menu.AddItem(new MenuItem("hpb", "B if hp < %").SetValue(new Slider(25, 0, 100)));
             if (ObjectManager.Player.ChampionName == "Soraka")
             {
                 menu.AddItem(new MenuItem("user", "Use R?").SetValue(true));
@@ -247,7 +253,7 @@ namespace SimpleYetSoSharp
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
             }
-            if (follow.Distance(ObjectManager.Player.Position) > 600)
+            if (follow.Distance(ObjectManager.Player.Position) > 600 && !stopdoingshit)
             {
                 ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
             }
@@ -328,6 +334,35 @@ namespace SimpleYetSoSharp
                     E.Cast(ts.Target);
                 }
             }
+            if ((follow.IsDead || ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 < menu.Item("hpb").GetValue<Slider>().Value))
+            {
+                stopdoingshit = true;
+                    var turret2 =
+                    ObjectManager.Get<Obj_AI_Turret>()
+                    .Where(x => x.Distance(ObjectManager.Player) < 3500 && x.IsAlly);
+                    if (turret2.Any())
+                    {
+                        turret = turret2.First();
+                        foundturret = Game.Time;
+                    }
+                if (stopdoingshit)
+                {
+                    ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, turret);
+                    if (ObjectManager.Player.Distance(turret) <= 350)
+                    {
+                        ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                    }
+                }
+            }
+            if (Utility.InFountain() && ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 == 100)
+            {
+                stopdoingshit = false;
+            }
+            if (Utility.InFountain() && ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 == 100)
+            {
+                stopdoingshit = false;
+            }
+            
         }
 
         public static void BuyItems()

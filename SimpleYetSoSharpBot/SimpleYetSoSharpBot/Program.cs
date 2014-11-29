@@ -213,7 +213,7 @@ namespace SimpleYetSoSharp
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
             }
-            if (follow.Distance(ObjectManager.Player.Position) > 600)
+            if (follow.Distance(ObjectManager.Player.Position) > 550 && (Game.Time > 60))
             {
                 ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
             }

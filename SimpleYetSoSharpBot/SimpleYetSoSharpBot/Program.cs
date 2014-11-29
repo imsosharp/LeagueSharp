@@ -48,7 +48,7 @@ namespace SimpleYetSoSharp
             {
                 System.Threading.Thread.Sleep(30000);
             }
-            if (Game.Time < 30)
+            if (Game.Time < 60000)
             {
                 System.Threading.Thread.Sleep(30000);
             }
@@ -218,7 +218,7 @@ namespace SimpleYetSoSharp
                 ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
             }
             //Anti-AFK Test
-            if (Utility.InFountain() && (Game.Time > 100))
+            if (Utility.InFountain() && (Game.Time > 60000))
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1500);
             }

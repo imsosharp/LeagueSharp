@@ -136,7 +136,7 @@ namespace SimpleYetSoSharp
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            follow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe);
+            
             if (follow == null)
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);

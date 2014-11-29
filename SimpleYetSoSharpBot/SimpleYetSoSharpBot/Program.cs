@@ -348,7 +348,7 @@ namespace SimpleYetSoSharp
                 if (stopdoingshit)
                 {
                     ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, turret);
-                    if (ObjectManager.Player.Distance(turret) <= 350)
+                    while (ObjectManager.Player.Distance(turret) <= 350)
                     {
                         ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
                     }

@@ -233,6 +233,10 @@ namespace SimpleYetSoSharp
        
         public static void doFollow()
         {
+			if (follow == null)
+            {
+                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
+            }
                 if (follow.Distance(ObjectManager.Player.Position) > 600)
                 {
                     ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);

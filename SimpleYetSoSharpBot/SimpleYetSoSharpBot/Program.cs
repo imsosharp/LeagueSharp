@@ -212,7 +212,7 @@ namespace SimpleYetSoSharp
             //Anti-AFK Test
             if (Utility.InFountain() && (Game.Time > 45))
             {
-                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1000);
+                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1400);
             }
 
 

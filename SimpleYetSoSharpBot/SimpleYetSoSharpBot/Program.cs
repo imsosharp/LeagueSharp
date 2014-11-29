@@ -44,6 +44,10 @@ namespace SimpleYetSoSharp
 
         private static void Game_OnGameLoad(EventArgs args)
         {
+            if (Game.Time < 30)
+            {
+                System.Threading.Thread.Sleep(30000);
+            }
             if (player.Level == 1)
             {
                 SpellSlot abilitySlot;
@@ -304,27 +308,29 @@ namespace SimpleYetSoSharp
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                     Game.PrintChat("Buying Boots");
                     boughtItemOne = true;
+                    Game.PrintChat(Game.Time.ToString());
+                    System.Threading.Thread.Sleep(1500);
                 }
                 if (Utility.InShopRange() && ObjectManager.Player.Gold > 1200 && ObjectManager.Player.Gold < 2800 && !boughtItemTwo)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3010)).Send();
                     Game.PrintChat("Buying Catalyst");
                     boughtItemTwo = true;
-                    boughtItemThree = false;
+                    System.Threading.Thread.Sleep(1500);
                 }
                 if (Utility.InShopRange() && boughtItemTwo && ObjectManager.Player.Gold > 1600)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3027)).Send();
                     Game.PrintChat("Buying RoA");
-                    boughtItemThree = true;
                     boughtItemTwo = false;
+                    System.Threading.Thread.Sleep(1500);
                 }
                 if (Utility.InShopRange() && ObjectManager.Player.Gold > 2800)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3027)).Send();
                     Game.PrintChat("Buying RoA");
-                    boughtItemThree = true;
                     boughtItemTwo = false;
+                    System.Threading.Thread.Sleep(1500);
                 }
             }
             else
@@ -336,18 +342,21 @@ namespace SimpleYetSoSharp
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                     Game.PrintChat("BOUGHT BOTS");
                     boughtItemOne = true;
+                    System.Threading.Thread.Sleep(1500);
                 }
                 if (Utility.InShopRange() && ObjectManager.Player.Gold > 1900 && ObjectManager.Player.Gold < 2550 && !boughtItemTwo)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3105)).Send();
                     Game.PrintChat("BOUGHT AEGIS");
                     boughtItemTwo = true;
+                    System.Threading.Thread.Sleep(1500);
                 }
                 else if (Utility.InShopRange() && ObjectManager.Player.Gold > 2550 && !boughtItemThree)
                 {
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3050)).Send();
                     Game.PrintChat("BOUGHT ZEKES");
                     boughtItemThree = true;
+                    System.Threading.Thread.Sleep(1500);
                 }
             }
 

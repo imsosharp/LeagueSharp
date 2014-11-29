@@ -146,6 +146,7 @@ namespace SimpleYetSoSharp
             {
                 tempfollow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe).ChampionName;
                 menu.SubMenu("follower").Item(tempfollow).SetValue(true);
+                menuHacked = true;
             }
 
             menu.AddToMainMenu();
@@ -250,6 +251,7 @@ namespace SimpleYetSoSharp
             {
                 tempfollow = ObjectManager.Get<Obj_AI_Hero>().First(x => x.IsAlly && !x.IsMe).ChampionName;
                 menu.SubMenu("follower").Item(tempfollow).SetValue(true);
+                menuHacked = true;
             }
 			if (follow == null)
             {

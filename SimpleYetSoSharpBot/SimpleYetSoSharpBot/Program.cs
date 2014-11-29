@@ -353,6 +353,10 @@ namespace SimpleYetSoSharp
                         ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
                     }
                 }
+                if (foundturret - Game.Time >= 50)
+                {
+                    stopdoingshit = false;
+                }
             }
             if (Utility.InFountain() && (ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 >= 70))
             {

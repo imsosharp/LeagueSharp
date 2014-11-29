@@ -304,6 +304,7 @@ namespace SimpleYetSoSharp
                     Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                     Game.PrintChat("Buying Boots");
                     boughtItemOne = true;
+                    Game.PrintChat(Game.Time.ToString());
                 }
                 if (Utility.InShopRange() && ObjectManager.Player.Gold > 1200 && ObjectManager.Player.Gold < 2800 && !boughtItemTwo)
                 {

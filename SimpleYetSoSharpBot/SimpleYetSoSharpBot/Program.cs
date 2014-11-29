@@ -210,9 +210,9 @@ namespace SimpleYetSoSharp
                 ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
             }
             //Anti-AFK Test
-            if (Utility.InFountain() && (Game.Time > 45))
+            if (Utility.InFountain() && (Game.Time > 100))
             {
-                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1400);
+                follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1500);
             }
 
 

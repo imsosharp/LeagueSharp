@@ -44,6 +44,10 @@ namespace SimpleYetSoSharp
 
         private static void Game_OnGameLoad(EventArgs args)
         {
+            if (Game.Time == null)
+            {
+                System.Threading.Thread.Sleep(30000);
+            }
             if (Game.Time < 30)
             {
                 System.Threading.Thread.Sleep(30000);

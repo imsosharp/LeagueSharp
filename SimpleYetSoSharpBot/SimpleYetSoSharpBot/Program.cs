@@ -31,9 +31,7 @@ namespace SimpleYetSoSharp
         static Obj_AI_Hero player = ObjectManager.Player;
         static int qOff, wOff, eOff, rOff = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        public static bool lowhealth = false;
         public static bool quietm = true;
-        public static bool isEnabled = true;
 
 
         //list of known adcs to follow
@@ -108,7 +106,6 @@ namespace SimpleYetSoSharp
             ts = new TargetSelector(1025, TargetSelector.TargetingMode.AutoPriority);
             // things you will say when you die
             menu = new Menu("AutoPlay Bot", "syssb", true);
-            menu.AddItem(new MenuItem("on", "Activate it!").SetValue(isEnabled));
             menu.AddSubMenu(new Menu("Follow:", "follower"));
             menu.AddItem(new MenuItem("quiet", "Quiet mode").SetValue(quietm));
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
@@ -220,9 +217,6 @@ namespace SimpleYetSoSharp
        
         public static void doFollow()
         {
-            
-            if (isEnabled)
-            {
                 if (follow.Distance(ObjectManager.Player.Position) > 600)
                 {
                     ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, followpos);
@@ -271,7 +265,6 @@ namespace SimpleYetSoSharp
                         E.Cast(ts.Target);
                     }
                 }
-            }
         }
 
         public static void BuyItems()
@@ -301,8 +294,6 @@ namespace SimpleYetSoSharp
             }
             else
             {
-                if (isEnabled)
-                {
                     if (Utility.InFountain() && ObjectManager.Player.Gold == 475 && !boughtItemOne)
                     {
                         Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
@@ -321,8 +312,6 @@ namespace SimpleYetSoSharp
                         Game.PrintChat("BOUGHT ZEKES");
                         boughtItemThree = true;
                     }
-
-                }
             }
 
         }

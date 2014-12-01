@@ -7,6 +7,7 @@ hf spending your free IP ^_^
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -82,14 +83,7 @@ namespace SimpleYetSoSharp
             allies = new List<Obj_AI_Hero>();
 
 
-            if (ObjectManager.Player.ChampionName == "Soraka")
-            {
-                Q = new Spell(SpellSlot.Q, 970);
-                W = new Spell(SpellSlot.W, 550);
-                E = new Spell(SpellSlot.E, 925);
-                R = new Spell(SpellSlot.R);
-            }
-            else if (ObjectManager.Player.ChampionName == "Annie")
+            if (ObjectManager.Player.ChampionName == "Annie")
             {
                 Q = new Spell(SpellSlot.Q, 650);
                 W = new Spell(SpellSlot.W, 625);
@@ -108,14 +102,7 @@ namespace SimpleYetSoSharp
             menu = new Menu("AutoPlay Bot", "syssb", true);
             menu.AddSubMenu(new Menu("Follow:", "follower"));
             menu.AddItem(new MenuItem("quiet", "Quiet mode").SetValue(quietm));
-            if (ObjectManager.Player.ChampionName == "Soraka")
-            {
-                menu.AddItem(new MenuItem("user", "Use R?").SetValue(true));
-                menu.AddItem(new MenuItem("usew", "Use W?").SetValue(true));
-                menu.AddItem(new MenuItem("allyhpw", "Ally % HP for W").SetValue(new Slider(30, 0, 93)));
-                menu.AddItem(new MenuItem("wabovehp", "Use W when my hp > x%").SetValue(new Slider(20, 0, 99)));
-                menu.AddItem(new MenuItem("allyhpr", "Ally % HP for R").SetValue(new Slider(30, 0, 50)));
-            }
+            
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsAlly && !x.IsMe))
             {
                 allies.Add(ally);
@@ -208,6 +195,7 @@ namespace SimpleYetSoSharp
 
         public static void doFollow()
         {
+			findSillyGoat();
             
             if (follow == null)
             {
@@ -222,41 +210,7 @@ namespace SimpleYetSoSharp
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) > 1500);
             }
-
-
-            if (ObjectManager.Player.ChampionName == "Soraka")
-            {
-                if (W.IsReady() && menu.Item("usew").GetValue<bool>() &&
-                ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 >
-                menu.Item("wabovehp").GetValue<Slider>().Value)
-                {
-                    if (follow.Health / follow.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
-                    follow.Distance(ObjectManager.Player.Position) < 550 &&
-                    ObjectManager.Player.Health / ObjectManager.Player.MaxHealth * 100 >
-                    menu.Item("wabovehp").GetValue<Slider>().Value)
-                    {
-                        W.Cast(follow);
-                        if (R.IsReady())
-                        {
-                            R.Cast();
-                        }
-                    }
-                    else if (follow.Health / follow.MaxHealth * 100 < menu.Item("allyhpw").GetValue<Slider>().Value &&
-                    follow.Distance(ObjectManager.Player.Position) > 550)
-                    {
-                        ObjectManager.Player.IssueOrder(GameObjectOrder.MoveTo, follow.Position);
-                    }
-                }
-                if (ts.Target.Distance(ObjectManager.Player) < Q.Range && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-                {
-                    Q.Cast(ts.Target);
-                }
-                if (ts.Target.Distance(ObjectManager.Player) < E.Range && E.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
-                {
-                    E.Cast(ts.Target);
-                }
-            }
-            else if (ObjectManager.Player.ChampionName == "Annie")
+			if (ObjectManager.Player.ChampionName == "Annie")
             {
                 if (ts.Target.Distance(ObjectManager.Player) < Q.Range && Q.IsReady() && !Utility.UnderTurret(ObjectManager.Player, true))
                 {

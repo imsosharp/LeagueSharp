@@ -24,13 +24,13 @@ namespace QuickSimpleYetSoSharpPositionRevealer
         }
         private static void printPos()
         {
-            while (Game.Time > 15)
+            while (myHero.CanMove)
             {
                 if (myHero.Position.X != null && myHero.Position.Y != null && myHero.Position.Z != null)
                 {
                     if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z))
                     {
-                        INODIWPY = "Your champion's current position is X: " + myHero.Position.X + " Y: " + myHero.Position.Y + " Z: " + myHero.Position.Z;
+                        INODIWPY = "Your champion's current position is X: " + myHero.Position.X.ToString() + " Y: " + myHero.Position.Y.ToString() + " Z: " + myHero.Position.Z.ToString();
                         Game.PrintChat(INODIWPY);
 
                         LastX = myHero.Position.X;

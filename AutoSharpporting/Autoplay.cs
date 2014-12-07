@@ -19,7 +19,6 @@ namespace Support
     {
         private static Obj_AI_Hero bot = ObjectManager.Player;
         private static Obj_AI_Hero carry = null;
-        private static void doAutoplay;
         private static Vector3 fountainpos;
         private static Vector3 lanepos;
         private static Vector3 orbwalkingpos1;

@@ -82,7 +82,7 @@ namespace Support
         /// </summary>
         private void InitTargetSelector()
         {
-            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.Closest);
+            TargetSelector = new TargetSelector(Player.AttackRange, TargetSelector.TargetingMode.AutoPriority);
         }
 
         /// <summary>
@@ -90,12 +90,15 @@ namespace Support
         /// </summary>
         private void InitPluginEvents()
         {
+            Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             BeforeEnemyAttack += OnBeforeEnemyAttack;
             Orbwalking.BeforeAttack += OnBeforeAttack;
             Orbwalking.AfterAttack += OnAfterAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
+            Game.OnGameSendPacket += OnSendPacket;
+            Game.OnGameProcessPacket += OnProcessPacket;
             OnLoad(new EventArgs());
         }
 
@@ -232,7 +235,7 @@ namespace Support
         /// </summary>
         private void InitConfig()
         {
-            Config = new Menu("AutoSharpporting: " + Player.ChampionName, Player.ChampionName, true);
+            Config = new Menu("Support: " + Player.ChampionName, Player.ChampionName, true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
             SimpleTs.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
 
@@ -472,7 +475,27 @@ namespace Support
             return Config.Item(item + ChampionName).GetValue<T>();
         }
 
+        /// <summary>
+        ///     OnProcessPacket
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnProcessPacket logic
+        /// </remarks>
+        /// <param name="args"></param>
+        public virtual void OnProcessPacket(GamePacketEventArgs args)
+        {
+        }
 
+        /// <summary>
+        ///     OnSendPacket
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnSendPacket logic
+        /// </remarks>
+        /// <param name="args"></param>
+        public virtual void OnSendPacket(GamePacketEventArgs args)
+        {
+        }
 
         /// <summary>
         ///     OnPossibleToInterrupt
@@ -497,6 +520,16 @@ namespace Support
         {
         }
 
+        /// <summary>
+        ///     OnUpdate
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement Update logic
+        /// </remarks>
+        /// <param name="args">EventArgs</param>
+        public virtual void OnUpdate(EventArgs args)
+        {
+        }
 
         /// <summary>
         ///     OnBeforeEnemyAttack

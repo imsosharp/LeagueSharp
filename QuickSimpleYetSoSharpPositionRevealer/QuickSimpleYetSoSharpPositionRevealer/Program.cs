@@ -16,7 +16,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;         
+            Game.OnGameUpdate += OnGameLoad;      
         }
         private static void OnGameLoad(EventArgs args)
         {

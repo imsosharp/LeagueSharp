@@ -20,15 +20,15 @@ namespace QuickSimpleYetSoSharpPositionRevealer
             {
                 if (myHero.Position.X != null && myHero.Position.Y != null && myHero.Position.Z != null)
                 {
-                    Game.PrintChat("myHero.Position not null");
                     if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z))
                     {
-                        INODIWPY = "Your champion's current position is X: " + myHero.Position.X.ToString("F") + " Y: " + myHero.Position.Y.ToString("F") + " Z: " + myHero.Position.Z.ToString("F");
-                        Game.PrintChat(INODIWPY);
-
                         LastX = myHero.Position.X;
                         LastY = myHero.Position.Y;
                         LastZ = myHero.Position.Z;
+                        INODIWPY = "Your champion's current position is X: " + LastX.ToString("F") + " Y: " + LastY.ToString("F") + " Z: " + LastZ.ToString("F");
+                        Game.PrintChat(INODIWPY);
+
+                        
                     }
                 }
             }

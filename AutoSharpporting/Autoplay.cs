@@ -33,7 +33,7 @@ namespace Support
             Game.OnGameEnd += OnGameEnd;
             CustomEvents.Unit.OnLevelUp += OnLevelUp;
         }
-        public void OnUpdate(EventArgs args)
+        public virtual void OnUpdate(EventArgs args)
         {
             doAutoplay();
         }

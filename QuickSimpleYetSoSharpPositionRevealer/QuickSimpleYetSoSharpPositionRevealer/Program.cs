@@ -16,17 +16,18 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            
+            while (1 == 1)
+            {
                 if (LastX != myHero.Position.X || LastY != myHero.Position.Y || LastZ != myHero.Position.Z)
-                    {
-                        LastX = myHero.Position.X;
-                        LastY = myHero.Position.Y;
-                        LastZ = myHero.Position.Z;
-                        INODIWPY = "Your champion's current position is X: " + LastX.ToString("R") + " Y: " + LastY.ToString("R") + " Z: " + LastZ.ToString("R");
-                        Game.PrintChat(INODIWPY);
-
-                        
-                    }
+                {
+                    LastX = myHero.Position.X;
+                    LastY = myHero.Position.Y;
+                    LastZ = myHero.Position.Z;
+                    INODIWPY = "Your champion's current position is X: " + LastX.ToString("R") + " Y: " + LastY.ToString("R") + " Z: " + LastZ.ToString("R");
+                    Game.PrintChat(INODIWPY);
+                }
+                System.Threading.Thread.Sleep(3000);
+            }
         }
     }
 }

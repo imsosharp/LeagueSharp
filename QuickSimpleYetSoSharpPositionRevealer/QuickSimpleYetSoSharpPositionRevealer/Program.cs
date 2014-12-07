@@ -24,7 +24,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
         {
             while(true)
             {
-                Game.PrintChat(myHero.Position.ToString());
+                Game.PrintChat("Your champion's current position is X: {0} Y: {1} Z: {2}", myHero.Position.X.ToString(), myHero.Position.Y.ToString(), myHero.Position.Z.ToString());
             }
         }
     }

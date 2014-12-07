@@ -1,0 +1,6 @@
+This assembly is fully h3h3's work. I take no credit over it. The only thing I did was adding a class that makes it follow whoever is on botlane, and walk around staying in the frontline trying to use spells & AAs as instructed by the original assembly.
+
+This assembly is a work in progress.
+
+You can find the original assembly here:
+https://github.com/h3h3/LeagueSharp/

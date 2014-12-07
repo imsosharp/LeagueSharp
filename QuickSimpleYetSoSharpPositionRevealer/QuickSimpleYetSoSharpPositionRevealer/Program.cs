@@ -16,8 +16,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            while (true)
-            {
+            
                 if (LastX != myHero.Position.X || LastY != myHero.Position.Y || LastZ != myHero.Position.Z)
                     {
                         LastX = myHero.Position.X;
@@ -28,7 +27,6 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
                         
                     }
-            }
         }
     }
 }

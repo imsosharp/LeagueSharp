@@ -38,7 +38,7 @@ namespace Support.Plugins
         {
             Q = new Spell(SpellSlot.Q, 650);
             W = new Spell(SpellSlot.W, 625);
-            E = new Spell(SpellSlot.E);
+            E = new Spell(SpellSlot.E, 0);
             R = new Spell(SpellSlot.R, 600);
 
             Q.SetTargetted(250, 1400);
@@ -49,22 +49,20 @@ namespace Support.Plugins
 
 
 
-
-
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "Combo.Q"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target, false);
                 }
-                if (W.CastCheck(Target, "Combo.W"))
+                if (W.CastCheck(Target, "ComboW"))
                 {
                     W.Cast(Target, true);
                 }
 
-                if (R.CastCheck(Target, "Combo.R"))
+                if (R.CastCheck(Target, "ComboR"))
                 {
                     R.Cast(Target, true);
                 }
@@ -78,9 +76,9 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("Combo.Q", "Use Q", true);
-            config.AddBool("Combo.W", "Use W", true);
-            config.AddBool("Combo.R", "Use R", true);
+            config.AddBool("ComboQ", "Use Q", true);
+            config.AddBool("ComboW", "Use W", true);
+            config.AddBool("ComboR", "Use R", true);
         }
     }
 }

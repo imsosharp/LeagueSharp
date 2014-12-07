@@ -18,9 +18,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
         {
             while (true)
             {
-                if (myHero.Position.X != null && myHero.Position.Y != null && myHero.Position.Z != null)
-                {
-                    if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z))
+                if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z))
                     {
                         LastX = myHero.Position.X;
                         LastY = myHero.Position.Y;
@@ -30,7 +28,6 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
                         
                     }
-                }
             }
         }
     }

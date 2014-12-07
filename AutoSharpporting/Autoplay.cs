@@ -15,7 +15,7 @@ using SharpDX;
 
 namespace Support
 {
-    class Autoplay
+    internal class Autoplay
     {
         private static Obj_AI_Hero bot = ObjectManager.Player;
         private static Obj_AI_Hero carry = null;

@@ -25,7 +25,7 @@ namespace Support
         private static Vector3 orbwalkingpos2;
         
 
-        public static Autoplay()
+        public Autoplay()
         {
             Game.OnGameUpdate += OnGameUpdate;
             Game.OnGameSendPacket += OnGameSendPacket;

@@ -14,9 +14,9 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            Game.OnGameStart += OnGameStart;            
+            CustomEvents.Game.OnGameLoad += OnGameLoad;         
         }
-        private static void OnGameStart(EventArgs args)
+        private static void OnGameLoad(EventArgs args)
         {
             spamPos();
         }

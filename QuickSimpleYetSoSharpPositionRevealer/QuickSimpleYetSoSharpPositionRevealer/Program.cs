@@ -16,7 +16,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            Game.OnGameUpdate += OnGameLoad;      
+            CustomEvents.Game.OnGameLoad += OnGameLoad;      
         }
         private static void OnGameLoad(EventArgs args)
         {
@@ -24,7 +24,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
         }
         private static void printPos()
         {
-            while (true)
+            while (Game.Time > 15000)
             {
                 if (myHero.Position.X != null && myHero.Position.Y != null && myHero.Position.Z != null)
                 {

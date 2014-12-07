@@ -33,23 +33,23 @@ namespace Support
             Game.OnGameEnd += OnGameEnd;
             CustomEvents.Unit.OnLevelUp += OnLevelUp;
         }
-        public static void OnUpdate(EventArgs args)
+        public void OnUpdate(EventArgs args)
         {
             doAutoplay();
         }
-        public static void OnSendPacket(GamePacketEventArgs args)
+        public void OnSendPacket(GamePacketEventArgs args)
         {
 
         }
-        public static void OnProcessPacket(GamePacketEventArgs args)
+        public void OnProcessPacket(GamePacketEventArgs args)
         {
 
         }
-        public static void OnLevelUp(Obj_AI_Base sender, CustomEvents.Unit.OnLevelUpEventArgs args)
+        public void OnLevelUp(Obj_AI_Base sender, CustomEvents.Unit.OnLevelUpEventArgs args)
         {
 
         }
-        public static void OnGameEnd(EventArgs args)
+        public void OnGameEnd(EventArgs args)
         {
 
         }

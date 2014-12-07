@@ -68,6 +68,10 @@ namespace Support.Plugins
                 {
                     R.Cast(Target, true);
                 }
+                if (E.IsReady())
+                {
+                    E.Cast();
+                }
             }
         }
 

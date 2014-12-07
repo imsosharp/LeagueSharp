@@ -26,10 +26,14 @@ namespace QuickSimpleYetSoSharpPositionRevealer
         {
             while (true)
             {
-                if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z))
+                if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z) && !(myHero.Position == null));
                 {
                     INODIWPY = "Your champion's current position is X: " + myHero.Position.X.ToString() + " Y: " + myHero.Position.Y.ToString() + " Z: " + myHero.Position.Z.ToString();
                     Game.PrintChat(INODIWPY);
+
+                    LastX = myHero.Position.X;
+                    LastY = myHero.Position.Y;
+                    LastZ = myHero.Position.Z;
                 }
             }
         }

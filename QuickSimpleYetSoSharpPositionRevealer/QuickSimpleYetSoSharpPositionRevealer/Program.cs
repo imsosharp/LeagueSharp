@@ -16,11 +16,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;      
-        }
-        private static void OnGameLoad(EventArgs args)
-        {
-            printPos();
+            printPos();    
         }
         private static void printPos()
         {

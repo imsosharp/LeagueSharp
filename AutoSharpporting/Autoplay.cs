@@ -27,21 +27,21 @@ namespace Support
 
         public Autoplay()
         {
-            Game.OnGameUpdate += OnGameUpdate;
-            Game.OnGameSendPacket += OnGameSendPacket;
-            Game.OnGameProcessPacket += OnGameProcessPacket;
+            Game.OnGameUpdate += OnUpdate;
+            Game.OnGameSendPacket += OnSendPacket;
+            Game.OnGameProcessPacket += OnProcessPacket;
             Game.OnGameEnd += OnGameEnd;
             CustomEvents.Unit.OnLevelUp += OnLevelUp;
         }
-        public static void OnGameUpdate(EventArgs args)
+        public static void OnUpdate(EventArgs args)
         {
             doAutoplay();
         }
-        public static void OnGameSendPacket(GamePacketEventArgs args)
+        public static void OnSendPacket(GamePacketEventArgs args)
         {
 
         }
-        public static void OnGameProcessPacket(GamePacketEventArgs args)
+        public static void OnProcessPacket(GamePacketEventArgs args)
         {
 
         }

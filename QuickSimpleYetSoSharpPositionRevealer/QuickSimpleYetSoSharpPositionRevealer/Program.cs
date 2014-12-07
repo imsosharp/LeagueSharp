@@ -12,7 +12,6 @@ namespace QuickSimpleYetSoSharpPositionRevealer
     {
         private static Obj_AI_Hero myHero = ObjectManager.Player;
         private static float LastX, LastY, LastZ = 0;
-        private static string INODIWPY = "";
 
         static void Main(string[] args)
         {

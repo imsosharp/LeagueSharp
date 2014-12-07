@@ -24,7 +24,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
         }
         private static void printPos()
         {
-            while (Game.Time > 15000)
+            while (Game.Time > 15)
             {
                 if (myHero.Position.X != null && myHero.Position.Y != null && myHero.Position.Z != null)
                 {

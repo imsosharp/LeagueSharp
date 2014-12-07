@@ -51,6 +51,7 @@ namespace Support
                     }
 
                     Helpers.PrintMessage(ObjectManager.Player.ChampionName + " not supported");
+                    Helpers.PrintMessage("Debug: " + type.ToString());
                 }
                 catch (Exception e)
                 {

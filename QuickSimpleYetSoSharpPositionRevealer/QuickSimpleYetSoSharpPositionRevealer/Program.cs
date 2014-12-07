@@ -16,6 +16,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
+            Game.PrintChat("Loaded");
             while (myHero.CanMove)
             {
                 Game.PrintChat("myHero.CanMove true");

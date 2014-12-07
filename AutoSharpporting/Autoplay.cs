@@ -18,9 +18,13 @@ namespace Support
     class Autoplay
     {
         private static Obj_AI_Hero bot = ObjectManager.Player;
-        private static Obj_AI_Hero carry;
-
-
+        private static Obj_AI_Hero carry = null;
+        private static void doAutoplay;
+        private static Vector3 fountainpos;
+        private static Vector3 lanepos;
+        private static Vector3 orbwalkingpos1;
+        private static Vector3 orbwalkingpos2;
+        
 
         public static void Autoplay()
         {
@@ -32,7 +36,7 @@ namespace Support
         }
         public static void OnGameUpdate(EventArgs args)
         {
-
+            doAutoplay();
         }
         public static void OnGameSendPacket(GamePacketEventArgs args)
         {
@@ -53,7 +57,29 @@ namespace Support
 
         private static void doAutoplay()
         {
-            
+            lanepos.X = 11014; lanepos.Y = 1313; lanepos.Z = 50; //in front of botlane turret
+            fountainpos.X = 424; fountainpos.Y = 396; fountainpos.Z = 182; //middle of fountain
+            if (carry == null)
+            {
+                bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
+                if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
+                {
+                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 4000) == null))
+                    {
+                    carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 4000);
+                    }
+                }
+            }
+            if (carry != null)
+            {
+                orbwalkingpos1.X = carry.Position.X + 150; orbwalkingpos1.Y = carry.Position.Y + 150; orbwalkingpos1.Z = carry.Position.Z;
+                orbwalkingpos2.X = carry.Position.X - 150; orbwalkingpos2.Y = carry.Position.Y - 150; orbwalkingpos2.Z = carry.Position.Z;
+                if (carry.Distance(bot.Position) > 500)
+                {
+                    bot.IssueOrder(GameObjectOrder.MoveTo, carry.Position);
+                }
+            }
+
         }
 
     }

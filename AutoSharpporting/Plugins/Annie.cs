@@ -38,7 +38,7 @@ namespace Support.Plugins
         {
             Q = new Spell(SpellSlot.Q, 650);
             W = new Spell(SpellSlot.W, 625);
-            E = new Spell(SpellSlot.E, 0);
+            E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R, 600);
 
             Q.SetTargetted(250, 1400);

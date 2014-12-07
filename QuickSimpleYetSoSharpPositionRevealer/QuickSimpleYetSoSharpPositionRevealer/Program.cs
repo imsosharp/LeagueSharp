@@ -12,6 +12,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
     {
         private static Obj_AI_Hero myHero = ObjectManager.Player;
         private static float LastX, LastY, LastZ = 0;
+        private static string INODIWPY = "";
 
         static void Main(string[] args)
         {
@@ -27,10 +28,8 @@ namespace QuickSimpleYetSoSharpPositionRevealer
             {
                 if (!(LastX == myHero.Position.X) && !(LastY == myHero.Position.Y) && !(LastZ == myHero.Position.Z))
                 {
-                    Game.PrintChat("Your champion's current position is X: {0} Y: {1} Z: {2}", myHero.Position.X, myHero.Position.Y, myHero.Position.Z);
-                    LastX = myHero.Position.X;
-                    LastY = myHero.Position.Y;
-                    LastZ = myHero.Position.Z;
+                    INODIWPY = "Your champion's current position is X: " + myHero.Position.X.ToString() + " Y: " + myHero.Position.Y.ToString() + " Z: " + myHero.Position.Z.ToString();
+                    Game.PrintChat(INODIWPY);
                 }
             }
         }

@@ -16,10 +16,8 @@ namespace QuickSimpleYetSoSharpPositionRevealer
 
         static void Main(string[] args)
         {
-            Game.PrintChat("Loaded");
-            while (myHero.CanMove)
+            while (myHero.Level >= 1)
             {
-                Game.PrintChat("myHero.CanMove true");
                 if (myHero.Position.X != null && myHero.Position.Y != null && myHero.Position.Z != null)
                 {
                     Game.PrintChat("myHero.Position not null");

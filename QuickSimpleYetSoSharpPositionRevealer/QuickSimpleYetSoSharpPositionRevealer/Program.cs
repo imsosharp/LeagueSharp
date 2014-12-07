@@ -25,7 +25,7 @@ namespace QuickSimpleYetSoSharpPositionRevealer
                 LastX = myHero.Position.X;
                 LastY = myHero.Position.Y;
                 LastZ = myHero.Position.Z;
-                Game.PrintChat("<font color='#FF0011'>Your champion's current position is</font> <font color='#07D100'>X:</font> " + LastX.ToString("R") + " <font color='#FF0011'>Y:</font> " + LastY.ToString("R") + " <font color='#0018D1'>Z:</font> " + LastZ.ToString("R"));
+                Game.PrintChat("<font color='#FF0011'>Your champion's current position is X:</font> " + LastX.ToString("R") + " <font color='#07D100'>Y:</font> " + LastY.ToString("R") + " <font color='#0018D1'>Z:</font> " + LastZ.ToString("R"));
             }
         }
     }

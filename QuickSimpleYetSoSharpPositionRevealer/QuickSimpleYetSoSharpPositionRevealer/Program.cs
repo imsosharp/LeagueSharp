@@ -25,8 +25,8 @@ namespace QuickSimpleYetSoSharpPositionRevealer
                         LastX = myHero.Position.X;
                         LastY = myHero.Position.Y;
                         LastZ = myHero.Position.Z;
-                        INODIWPY = "Your champion's current position is X: " + LastX.ToString("F") + " Y: " + LastY.ToString("F") + " Z: " + LastZ.ToString("F");
-                        Game.PrintChat(INODIWPY);
+                        INODIWPY = "Your champion's current position is X: " + LastX.ToString("R") + " Y: " + LastY.ToString("R") + " Z: " + LastZ.ToString("R");
+                        Game.PrintChat("Displaced");
 
                         
                     }

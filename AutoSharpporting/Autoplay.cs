@@ -21,7 +21,8 @@ namespace Support
         private static Obj_AI_Hero carry = null;
         private static Obj_AI_Hero tempcarry = null;
         private static Obj_AI_Turret nearestAllyTurret = null;
-        private static Vector3 fountainpos;
+        private static Vector3 bluefountainpos;
+        private static Vector3 purplefountainpos;
         private static Vector3 lanepos;
         private static Random rand = new Random(42 * DateTime.Now.Millisecond);
         private static int randint = rand.Next(0, 150);
@@ -53,7 +54,8 @@ namespace Support
         private static void doAutoplay()
         {
             lanepos.X = 12557; lanepos.Y = 2578; lanepos.Z = 51; //in front of botlane turret
-            fountainpos.X = 424; fountainpos.Y = 396; fountainpos.Z = 182; //middle of fountain
+            bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
+            purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) chosen = blue;
             if (bot.Team == GameObjectTeam.Chaos) chosen = purple;
             if (carry == null && tempcarry == null)
@@ -72,8 +74,8 @@ namespace Support
                 frontline.X = carry.Position.X + chosen;
                 frontline.Y = carry.Position.Y + chosen;
                 frontline.Z = carry.Position.Z;
-                orbwalkingpos1.X = carry.Position.X + randint; orbwalkingpos1.Y = carry.Position.Y - randint; orbwalkingpos1.Z = carry.Position.Z;
-                orbwalkingpos2.X = carry.Position.X - randint; orbwalkingpos2.Y = carry.Position.Y + randint; orbwalkingpos2.Z = carry.Position.Z;
+                orbwalkingpos1.X = frontline.X + randint; orbwalkingpos1.Y = frontline.Y - randint; orbwalkingpos1.Z = frontline.Z;
+                orbwalkingpos2.X = frontline.X - randint; orbwalkingpos2.Y = frontline.Y + randint; orbwalkingpos2.Z = frontline.Z;
                 if (carry.Distance(bot.Position) > 600 && !(Utility.UnderTurret(carry, true)))
                 {
                     bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
@@ -85,7 +87,7 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if (carry.IsDead || carry.Distance(bot.Position) > 6000 || bot.HealthPercentage() < 25)
+                if (carry.IsDead || carry.Distance(bluefountainpos) < 2000 || carry.Distance(purplefountainpos) < 2000 || bot.HealthPercentage() < 25)
                 {
                     if (ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly) != null)
                     {

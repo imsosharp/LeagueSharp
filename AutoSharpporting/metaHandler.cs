@@ -22,6 +22,13 @@ namespace Support
         static int[] shopList = { 3047, 1011, 3134, 3068, 3024, 3025, 3071, 3082, 3143, 3005, 0 }; //list of items to buy
         public static void doChecks()
         {
+            if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
+            {
+                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
+                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(2003)).Send();
+                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
+                System.Threading.Thread.Sleep(1500);
+            }
             if ((qlvl + wlvl + elvl + rlvl) < Autoplay.bot.Level)
             {
                 int i = Autoplay.bot.Level - 1;

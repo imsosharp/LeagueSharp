@@ -83,7 +83,8 @@ namespace SimpleYetSoSharp
             allies = new List<Obj_AI_Hero>();
 
 
-            if (ObjectManager.Player.ChampionName == "Annie")
+            if (ObjectManager.Player.ChampionName == "Soraka
+            ")
             {
                 Q = new Spell(SpellSlot.Q, 650);
                 W = new Spell(SpellSlot.W, 625);

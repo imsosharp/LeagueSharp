@@ -101,17 +101,21 @@ namespace Support
                 }
                 if (carry.IsDead || carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000 || bot.HealthPercentage().CompareTo(100) > 75)
                 {
-                    if (ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly) != null)
+                    nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly);
+                    if (nearestAllyTurret != null)
                     {
                         tempcarry = carry;
                         carry = null;
-                        nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly);
+                        
                         bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
+                        Util.Helpers.PrintMessage("moving to nearest turret");
+
                         
                         
                     }
                     if (bot.Distance(nearestAllyTurret) < 400)
                     {
+                        Util.Helpers.PrintMessage("Trying to recall");
                         Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
                         System.Threading.Thread.Sleep(10000);
                     }
@@ -119,10 +123,11 @@ namespace Support
                 }
                 if (bot.Distance(nearestAllyTurret) < 400)
                 {
+                    Util.Helpers.PrintMessage("Trying to recall");
                     Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
                     System.Threading.Thread.Sleep(10000);
                 }
-                if (bot.Distance(nearestAllyTurret) < 250 && bot.HealthPercentage().CompareTo(100) < 0)
+                if (bot.Distance(nearestAllyTurret) < 400 && bot.HealthPercentage().CompareTo(100) < 0)
                 {
                     tempcarry = carry;
                 }

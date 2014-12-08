@@ -195,8 +195,6 @@ namespace SimpleYetSoSharp
 
         public static void doFollow()
         {
-			findSillyGoat();
-            
             if (follow == null)
             {
                 follow = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);

@@ -97,10 +97,7 @@ namespace Support
                         carry = null;
                         isRecalling = true;
                         nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly);
-                        if (bot.Distance(nearestAllyTurret) > 100)
-                        {
-                            bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
-                        }
+                        bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
                         
                         
                     }

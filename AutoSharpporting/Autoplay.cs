@@ -71,7 +71,7 @@ namespace Support
                     }
                 }
             }
-            if (carry != null && !(bot.HealthPercentage() < 25))
+            if (carry != null && !(bot.HealthPercentage().CompareTo(100) > 75))
             {
                 frontline.X = carry.Position.X + chosen;
                 frontline.Y = carry.Position.Y + chosen;
@@ -89,7 +89,7 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if (carry.IsDead || carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000 || bot.HealthPercentage() < 25)
+                if (carry.IsDead || carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000 || bot.HealthPercentage().CompareTo(100) > 75)
                 {
                     if (ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly) != null)
                     {
@@ -101,11 +101,19 @@ namespace Support
                         
                         
                     }
+                    if (bot.Distance(nearestAllyTurret) < 250 && isRecalling == true)
+                    {
+                        ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                    }
                     
                 }
                 if (bot.Distance(nearestAllyTurret) < 250 && isRecalling == true)
                 {
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                }
+                if (bot.Distance(nearestAllyTurret) < 250 && bot.HealthPercentage().CompareTo(100) < 0)
+                {
+                    tempcarry = carry;
                 }
 
                 if (Utility.InFountain())

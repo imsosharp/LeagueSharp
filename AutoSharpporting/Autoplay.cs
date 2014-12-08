@@ -19,6 +19,8 @@ namespace Support
     {
         public static Obj_AI_Hero bot = ObjectManager.Player;
         private static Obj_AI_Hero carry = null;
+        private static Obj_AI_Hero tempcarry = null;
+        private static Obj_AI_Turret nearestAllyTurret = null;
         private static Vector3 fountainpos;
         private static Vector3 lanepos;
         private static Vector3 orbwalkingpos1;
@@ -63,6 +65,29 @@ namespace Support
                 if (carry.Distance(bot.Position) > 500)
                 {
                     bot.IssueOrder(GameObjectOrder.MoveTo, carry.Position);
+                }
+                if (carry.IsDead || carry.Distance(bot.Position) > 6000)
+                {
+                    if (ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly) != null)
+                    {
+                        tempcarry = carry;
+                        carry = null;
+                        nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly);
+                        if (bot.Distance(nearestAllyTurret) > 100)
+                        {
+                            bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
+                        }
+                        else 
+                        {
+                            ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                        }
+                        if (Utility.InFountain())
+                        {
+                            metaHandler.doChecks();
+                            carry = tempcarry;
+                        }
+                    }
+                    
                 }
             }
         }

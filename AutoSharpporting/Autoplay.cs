@@ -43,7 +43,7 @@ namespace Support
 
         private static void doAutoplay()
         {
-            lanepos.X = 11014; lanepos.Y = 1313; lanepos.Z = 50; //in front of botlane turret
+            lanepos.X = 12557; lanepos.Y = 2578; lanepos.Z = 51; //in front of botlane turret
             fountainpos.X = 424; fountainpos.Y = 396; fountainpos.Z = 182; //middle of fountain
             if (carry == null)
             {

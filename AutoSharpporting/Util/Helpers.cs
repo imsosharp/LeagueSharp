@@ -58,7 +58,7 @@ namespace Support.Util
                     {
                         var rawVersion =
                             c.DownloadString(
-                                "https://raw.githubusercontent.com/h3h3/LeagueSharp/master/Support/Properties/AssemblyInfo.cs");
+                                "https://raw.githubusercontent.com/imsosharp/LeagueSharp/master/AutoSharpporting/Properties/AssemblyInfo.cs");
                         var match =
                             new Regex(@"\[assembly\: AssemblyVersion\(""(\d{1,})\.(\d{1,})\.(\d{1,})\.(\d{1,})""\)\]")
                                 .Match
@@ -71,17 +71,17 @@ namespace Support.Util
                                     match.Groups[3],
                                     match.Groups[4]));
 
-                            if (gitVersion > Program.Version)
+                            if (gitVersion != Program.Version)
                             {
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                Game.PrintChat("<font color='#15C3AC'>AutoSharpporting:</font> <font color='#FF0000'>" +
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                Game.PrintChat("<font color='#15C3AC'>AutoSharpporting:</font> <font color='#FF0000'>" +
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                Game.PrintChat("<font color='#15C3AC'>AutoSharpporting:</font> <font color='#FF0000'>" +
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                Game.PrintChat("<font color='#15C3AC'>AutoSharpporting:</font> <font color='#FF0000'>" +
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
-                                Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FF0000'>" +
+                                Game.PrintChat("<font color='#15C3AC'>AutoSharpporting:</font> <font color='#FF0000'>" +
                                                "OUTDATED - Please Update to Version: " + gitVersion + "</font>");
                             }
                         }
@@ -96,7 +96,7 @@ namespace Support.Util
 
         public static void PrintMessage(string message)
         {
-            Game.PrintChat("<font color='#15C3AC'>Support:</font> <font color='#FFFFFF'>" + message + "</font>");
+            Game.PrintChat("<font color='#15C3AC'>AutoSharpporting:</font> <font color='#FFFFFF'>" + message + "</font>");
         }
 
         public static bool EnemyInRange(int numOfEnemy, float range)

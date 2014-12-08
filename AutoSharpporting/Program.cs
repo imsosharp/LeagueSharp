@@ -39,6 +39,7 @@ namespace Support
 
             CustomEvents.Game.OnGameLoad += a =>
             {
+                Helpers.UpdateCheck();
                 try
                 {
                     var type = Type.GetType("Support.Plugins." + ObjectManager.Player.ChampionName);

@@ -98,7 +98,7 @@ namespace Support
                         {
                             bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
                         }
-                        else 
+                        if (bot.Distance(nearestAllyTurret) < 100)
                         {
                             ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
                         }

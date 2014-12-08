@@ -34,7 +34,6 @@ namespace Support
         private static Vector3 safepos;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
-        private static bool isRecalling = false;
         
 
         public Autoplay()
@@ -95,21 +94,22 @@ namespace Support
                     {
                         tempcarry = carry;
                         carry = null;
-                        isRecalling = true;
                         nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly);
                         bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
                         
                         
                     }
-                    if (bot.Distance(nearestAllyTurret) < 250 && isRecalling == true)
+                    if (bot.Distance(nearestAllyTurret) < 250)
                     {
                         ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                        System.Threading.Thread.Sleep(10000);
                     }
                     
                 }
-                if (bot.Distance(nearestAllyTurret) < 250 && isRecalling == true)
+                if (bot.Distance(nearestAllyTurret) < 250)
                 {
                     ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                    System.Threading.Thread.Sleep(10000);
                 }
                 if (bot.Distance(nearestAllyTurret) < 250 && bot.HealthPercentage().CompareTo(100) < 0)
                 {
@@ -122,7 +122,6 @@ namespace Support
                     if (tempcarry != null)
                     {
                         carry = tempcarry;
-                        isRecalling = false;
                     }
                 }
             }

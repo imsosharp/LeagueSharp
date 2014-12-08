@@ -71,7 +71,7 @@ namespace Support
                     }
                 }
             }
-            if (carry != null && !(bot.HealthPercentage().CompareTo(100) > 75))
+            if (carry != null && !(bot.HealthPercentage().CompareTo(100) < 0))
             {
                 frontline.X = carry.Position.X + chosen;
                 frontline.Y = carry.Position.Y + chosen;
@@ -122,7 +122,6 @@ namespace Support
                     if (tempcarry != null)
                     {
                         carry = tempcarry;
-                        tempcarry = null;
                         isRecalling = false;
                     }
                 }

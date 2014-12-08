@@ -110,14 +110,14 @@ namespace Support
                         
                         
                     }
-                    if (bot.Distance(nearestAllyTurret) < 250)
+                    if (bot.Distance(nearestAllyTurret) < 400)
                     {
                         Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
                         System.Threading.Thread.Sleep(10000);
                     }
                     
                 }
-                if (bot.Distance(nearestAllyTurret) < 250)
+                if (bot.Distance(nearestAllyTurret) < 400)
                 {
                     Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
                     System.Threading.Thread.Sleep(10000);

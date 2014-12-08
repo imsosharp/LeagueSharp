@@ -21,22 +21,19 @@
      
     using namespace std;
     const char* LoLProcess = "League of Legends.exe";
-    HWND LoLWindow;
     bool pressedf5 = false;
     bool isAlive(const char* pN);
     void emulatef5();
      
     int main(char* envp[])
     {
-            cout << "quick simple yet so sharp auto f5 tool, now with 120 percent more memory leak!" << endl;
+            cout << "quick simple yet soplusplus auto f5 tool, now with 120 percent more memory leak!" << endl;
             cout << endl;
             while (1)
             {
 					Sleep(5000);
                     if (isAlive(LoLProcess) && !pressedf5)
                     {
-                            LoLWindow = FindWindow(NULL, TEXT("League of Legends (TM) Client"));
-                            SetForegroundWindow(LoLWindow);
                             Sleep(30000); //I think we have to wait for game to load? idk, change as needed.
                             cout << "Pressed F5 :)" << endl;
                             emulatef5();

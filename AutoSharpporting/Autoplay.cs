@@ -56,7 +56,7 @@ namespace Support
             fountainpos.X = 424; fountainpos.Y = 396; fountainpos.Z = 182; //middle of fountain
             if (bot.Team == GameObjectTeam.Order) chosen = blue;
             if (bot.Team == GameObjectTeam.Chaos) chosen = purple;
-            if (carry == null)
+            if (carry == null && tempcarry != null)
             {
                 bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
                 if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))

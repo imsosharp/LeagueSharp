@@ -104,6 +104,7 @@ namespace Support
                         {
                             metaHandler.doChecks();
                             carry = tempcarry;
+                            tempcarry = null;
                         }
                     }
                     

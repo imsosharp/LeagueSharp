@@ -18,7 +18,7 @@ namespace Support
     internal class Autoplay
     {
         public static Obj_AI_Hero bot = ObjectManager.Player;
-        private static Obj_AI_Hero carry = null;
+        public static Obj_AI_Hero carry = null;
         private static Obj_AI_Hero tempcarry = null;
         private static Obj_AI_Turret nearestAllyTurret = null;
         private static Vector3 bluefountainpos;
@@ -34,6 +34,7 @@ namespace Support
         private static Vector3 safepos;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
+        private static bool isRecalling = false;
         
 
         public Autoplay()
@@ -88,29 +89,37 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if (carry.IsDead || carry.Distance(bluefountainpos) < 2000 || carry.Distance(purplefountainpos) < 2000 || bot.HealthPercentage() < 25)
+                if (carry.IsDead || carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000 || bot.HealthPercentage() < 25)
                 {
                     if (ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly) != null)
                     {
                         tempcarry = carry;
                         carry = null;
+                        isRecalling = true;
                         nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly);
                         if (bot.Distance(nearestAllyTurret) > 100)
                         {
                             bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
                         }
-                        if (bot.Distance(nearestAllyTurret) < 100)
-                        {
-                            ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
-                        }
-                        if (Utility.InFountain())
-                        {
-                            metaHandler.doChecks();
-                            carry = tempcarry;
-                            tempcarry = null;
-                        }
+                        
+                        
                     }
                     
+                }
+                if (bot.Distance(nearestAllyTurret) < 250 && isRecalling == true)
+                {
+                    ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                }
+
+                if (Utility.InFountain())
+                {
+                    metaHandler.doChecks();
+                    if (tempcarry != null)
+                    {
+                        carry = tempcarry;
+                        tempcarry = null;
+                        isRecalling = false;
+                    }
                 }
             }
         }

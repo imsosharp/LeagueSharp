@@ -29,6 +29,7 @@ namespace Support
         private static int blue = 200;
         private static int purple = -200;
         private static int chosen = 0;
+        private static int safe = 0;
         private static Vector3 frontline;
         private static Vector3 safepos;
         private static Vector3 orbwalkingpos1;
@@ -56,8 +57,8 @@ namespace Support
             lanepos.X = 12557; lanepos.Y = 2578; lanepos.Z = 51; //in front of botlane turret
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) chosen = blue;
-            if (bot.Team == GameObjectTeam.Chaos) chosen = purple;
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; }
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; }
             if (carry == null && tempcarry == null)
             {
                 bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
@@ -82,8 +83,8 @@ namespace Support
                 }
                 if (Utility.UnderTurret(bot, true))
                 {
-                    safepos.X = (bot.Position.X + chosen);
-                    safepos.Y = (bot.Position.Y + chosen);
+                    safepos.X = (bot.Position.X + safe);
+                    safepos.Y = (bot.Position.Y + safe);
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }

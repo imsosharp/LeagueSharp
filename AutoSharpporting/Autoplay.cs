@@ -67,7 +67,7 @@ namespace Support
                     }
                 }
             }
-            if (carry != null)
+            if (carry != null && !(bot.HealthPercentage() < 25))
             {
                 frontline.X = carry.Position.X + chosen;
                 frontline.Y = carry.Position.Y + chosen;

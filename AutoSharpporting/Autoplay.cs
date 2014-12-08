@@ -72,6 +72,9 @@ namespace Support
             }
             if (carry == null && tempcarry == null)
             {
+                if (Utility.InFountain() && ((bot.Health / bot.MaxHealth) * 100) > 80)
+                {
+
                 bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
                 if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
                 {
@@ -79,6 +82,8 @@ namespace Support
                     {
                     carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 4000 && x.IsAlly);
                     }
+                }
+
                 }
             }
             if (carry != null)

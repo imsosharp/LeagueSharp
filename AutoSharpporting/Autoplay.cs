@@ -59,6 +59,17 @@ namespace Support
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; }
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; }
+            if (carry == null)
+            {
+                if (Utility.InFountain())
+                {
+                    metaHandler.doChecks();
+                    if (tempcarry != null)
+                    {
+                        carry = tempcarry;
+                    }
+                }
+            }
             if (carry == null && tempcarry == null)
             {
                 bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
@@ -116,14 +127,7 @@ namespace Support
                     tempcarry = carry;
                 }
 
-                if (Utility.InFountain())
-                {
-                    metaHandler.doChecks();
-                    if (tempcarry != null)
-                    {
-                        carry = tempcarry;
-                    }
-                }
+                
             }
         }
             

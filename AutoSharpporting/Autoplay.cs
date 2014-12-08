@@ -66,7 +66,7 @@ namespace Support
                 {
                     bot.IssueOrder(GameObjectOrder.MoveTo, carry.Position);
                 }
-                if (carry.IsDead || carry.Distance(bot.Position) > 6000)
+                if (carry.IsDead || carry.Distance(bot.Position) > 6000 || bot.HealthPercentage() < 25)
                 {
                     if (ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 6000 && x.IsAlly) != null)
                     {

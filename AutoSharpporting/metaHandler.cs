@@ -15,16 +15,16 @@ using SharpDX;
 
 namespace Support
 {
-    internal class Autoplay
+    internal class metaHandler
     {
         static int qlvl, wlvl, elvl, rlvl, buyIndex = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
         static int[] shopList = { 3047, 1011, 3134, 3068, 3024, 3025, 3071, 3082, 3143, 3005, 0 }; //list of items to buy
         public static void doChecks()
         {
-            if ((qlvl + wlvl + elvl + rlvl) < bot.Level)
+            if ((qlvl + wlvl + elvl + rlvl) < Autoplay.bot.Level)
             {
-                int i = bot.Level - 1;
+                int i = Autoplay.bot.Level - 1;
                 SpellSlot abilitySlot;
                 if (abilityOrder[i] == 1)
                 {
@@ -71,7 +71,7 @@ namespace Support
 
         public static bool hasItem(int id)
         {
-            return Items.HasItem(id, bot);
+            return Items.HasItem(id, Autoplay.bot);
         }
         public static void buyItem(int id)
         {

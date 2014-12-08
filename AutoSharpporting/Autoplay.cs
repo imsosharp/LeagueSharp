@@ -59,7 +59,7 @@ namespace Support
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; }
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; }
-            if (carry == null)
+            if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
                 {
@@ -81,7 +81,7 @@ namespace Support
                     }
                 }
             }
-            if (carry != null && !(bot.HealthPercentage().CompareTo(100) < 0))
+            if (carry != null)
             {
                 frontline.X = carry.Position.X + chosen;
                 frontline.Y = carry.Position.Y + chosen;
@@ -112,14 +112,14 @@ namespace Support
                     }
                     if (bot.Distance(nearestAllyTurret) < 250)
                     {
-                        ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                        Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
                         System.Threading.Thread.Sleep(10000);
                     }
                     
                 }
                 if (bot.Distance(nearestAllyTurret) < 250)
                 {
-                    ObjectManager.Player.Spellbook.CastSpell(SpellSlot.Recall);
+                    Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
                     System.Threading.Thread.Sleep(10000);
                 }
                 if (bot.Distance(nearestAllyTurret) < 250 && bot.HealthPercentage().CompareTo(100) < 0)

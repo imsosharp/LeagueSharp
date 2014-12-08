@@ -2,7 +2,7 @@
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{EBB49FC8-C349-43CF-83C8-BCC153E14140}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -11,6 +11,10 @@
     <AssemblyName>QuickSimpleYetSoSharpPositionRevealer</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PreBuildEvent />
+    <PostBuildEvent />
+    <PlatformTarget>x86</PlatformTarget>
+    <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -33,13 +37,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LeagueSharp">
-      <HintPath>..\..\..\..\..\..\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>C:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>..\..\..\..\..\..\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>C:\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>..\..\..\..\..\..\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>C:\LeagueSharp\\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

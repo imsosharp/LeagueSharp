@@ -17,7 +17,7 @@ namespace Support
 {
     internal class Autoplay
     {
-        private static Obj_AI_Hero bot = ObjectManager.Player;
+        public static Obj_AI_Hero bot = ObjectManager.Player;
         private static Obj_AI_Hero carry = null;
         private static Vector3 fountainpos;
         private static Vector3 lanepos;
@@ -32,7 +32,7 @@ namespace Support
         }
         private static void OnUpdate(EventArgs args)
         {
-            doChecks();
+            metaHandler.doChecks();
             doAutoplay();
         }
         

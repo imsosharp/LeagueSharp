@@ -83,7 +83,7 @@ namespace Support
                     carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 4000 && x.IsAlly);
                     }
                 }
-
+                    
                 }
             }
             if (carry != null)
@@ -93,10 +93,11 @@ namespace Support
                 frontline.Z = carry.Position.Z;
                 orbwalkingpos1.X = frontline.X + randint; orbwalkingpos1.Y = frontline.Y - randint; orbwalkingpos1.Z = frontline.Z;
                 orbwalkingpos2.X = frontline.X - randint; orbwalkingpos2.Y = frontline.Y + randint; orbwalkingpos2.Z = frontline.Z;
-                if ((carry.Distance(bot.Position) > 600 || frontline.X != carry.Position.X + chosen) && !(Utility.UnderTurret(carry, true)))
+                if (carry.Distance(bot.Position) > 600 && !(Utility.UnderTurret(carry, true)))
                 {
                     bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
                 }
+
                 if (Utility.UnderTurret(bot, true))
                 {
                     safepos.X = (bot.Position.X + safe);

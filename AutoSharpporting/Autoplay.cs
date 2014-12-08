@@ -64,7 +64,7 @@ namespace Support
                 if (Utility.InFountain())
                 {
                     metaHandler.doChecks();
-                    if (tempcarry != null)
+                    if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
                     }
@@ -126,7 +126,6 @@ namespace Support
                 {
                     Util.Helpers.PrintMessage("Trying to recall");
                     Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
-                    System.Threading.Thread.Sleep(10000);
                 }
             }
         }

@@ -105,7 +105,7 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if ((carry.IsDead || carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000 || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
+                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) && bot.Distance(carry) > 3000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
                 {
                     nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot) < 6000 && x.IsAlly);
                     if (nearestAllyTurret != null)

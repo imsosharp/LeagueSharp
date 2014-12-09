@@ -139,7 +139,7 @@ namespace Support
                     bot.Spellbook.CastSpell(SpellSlot.Recall);
                 }
             }
-            if (bot.UnderTurret(false) && carry == null && !Utility.InFountain())
+            if (bot.UnderTurret(false) && carry == null && tempcarry != null && !Utility.InFountain())
             {
                 Util.Helpers.PrintMessage("hide on bush");
                 bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);

@@ -55,11 +55,10 @@ namespace Support
 
         private static void doAutoplay()
         {
-            lanepos.X = 12557; lanepos.Y = 2578; lanepos.Z = 51; //in front of botlane turret
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; }
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; }
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F;}
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
@@ -139,6 +138,11 @@ namespace Support
                     //Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send(); //disabled packet casting
                     bot.Spellbook.CastSpell(SpellSlot.Recall);
                 }
+            }
+            if (bot.UnderTurret(false) && carry == null && !Utility.InFountain())
+            {
+                Util.Helpers.PrintMessage("hide on bush");
+                bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
             }
         }
             

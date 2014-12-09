@@ -19,7 +19,7 @@ namespace Support
     {
         static int qlvl, wlvl, elvl, rlvl, buyIndex = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        static int[] shopList = { 3047, 1011, 3134, 3068, 3024, 3025, 3071, 3082, 3143, 3005, 0 }; //list of items to buy
+        static int[] shopList = { 3270, 3222, 3092, 3041, 2045, 3190, 0 }; //list of items to buy
         public static void doChecks()
         {
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)

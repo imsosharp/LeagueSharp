@@ -66,13 +66,27 @@ namespace Support.Plugins
                 {
                     R.Cast(Target, true);
                 }
-                if (E.IsReady())
-                {
-                    E.Cast();
-                }
+                Cast_E();
             }
         }
 
+        private void Cast_E()
+        {
+            if (GetPassiveStacks() < 4)
+                E.Cast();
+        }
+
+        //sosharp love xSalice
+        private int GetPassiveStacks()
+        {
+            var buffs = Autoplay.bot.Buffs.Where(buff => (buff.Name.ToLower() == "pyromania" || buff.Name.ToLower() == "pyromania_particle"));
+            var buffInstances = buffs as BuffInstance[] ?? buffs.ToArray();
+            if (!buffInstances.Any())
+                return 0;
+            var buf = buffInstances.First();
+            var count = buf.Count >= 4 ? 4 : buf.Count;
+            return buf.Name.ToLower() == "pyromania_particle" ? 4 : count;
+        }
 
         public override void ComboMenu(Menu config)
         {

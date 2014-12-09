@@ -32,6 +32,7 @@ namespace Support
         private static int safe = 0;
         private static Vector3 frontline;
         private static Vector3 safepos;
+        private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
         
@@ -57,8 +58,8 @@ namespace Support
             lanepos.X = 12557; lanepos.Y = 2578; lanepos.Z = 51; //in front of botlane turret
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; }
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; }
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; }
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; }
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
@@ -79,9 +80,9 @@ namespace Support
                 }
                 if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
                 {
-                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 4000 && x.IsAlly) == null))
+                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot) < 4000 && x.IsAlly) == null))
                     {
-                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(ObjectManager.Player) < 4000 && x.IsAlly);
+                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot) < 4000 && x.IsAlly);
                     }
                 }
             }
@@ -129,8 +130,14 @@ namespace Support
             {
                 if (bot.UnderTurret(false))
                 {
+                    Util.Helpers.PrintMessage("hide on bush");
+                    bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
+                }
+                if (bot.Position == saferecall || bot.Distance(saferecall) < 100)
+                {
                     Util.Helpers.PrintMessage("Trying to recall");
-                    Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send();
+                    //Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send(); //disabled packet casting
+                    bot.Spellbook.CastSpell(SpellSlot.Recall);
                 }
             }
         }

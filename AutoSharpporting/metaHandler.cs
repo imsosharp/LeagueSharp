@@ -19,13 +19,12 @@ namespace Support
     {
         static int qlvl, wlvl, elvl, rlvl, buyIndex = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        static int[] shopList = { 3270, 3222, 3092, 3041, 2045, 3190, 0 }; //list of items to buy
+        public static int[] shopList = { 3041, 3020, 3028, 3174, 3222, 3092, 2045, 3190, 0 }; //default
         public static void doChecks()
         {
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
                 Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(2003)).Send();
                 Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                 System.Threading.Thread.Sleep(1500);
             }

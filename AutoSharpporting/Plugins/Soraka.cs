@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Copyright 2014 - 2014 Support
-// Kayle.cs is part of Support.
+// Soraka.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -25,16 +25,16 @@ using ActiveGapcloser = Support.Util.ActiveGapcloser;
 
 #endregion
 
-namespace Support.Disabled
+namespace Support.Plugins
 {
-    public class Kayle : PluginBase
+    public class Soraka : PluginBase
     {
-        public Kayle()
+        public Soraka()
         {
-            Q = new Spell(SpellSlot.Q, 650);
-            W = new Spell(SpellSlot.W, 900);
-            E = new Spell(SpellSlot.E, 525);
-            R = new Spell(SpellSlot.R, 900);
+            Q = new Spell(SpellSlot.Q, 950);
+            W = new Spell(SpellSlot.W, 450);
+            E = new Spell(SpellSlot.E, 925);
+            R = new Spell(SpellSlot.R);
         }
 
         public override void OnUpdate(EventArgs args)
@@ -54,21 +54,6 @@ namespace Support.Disabled
                 }
 
                 if (R.CastCheck(Target, "ComboR"))
-                {
-                }
-            }
-
-            if (HarassMode)
-            {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                }
-
-                if (W.CastCheck(Target, "HarassW"))
-                {
-                }
-
-                if (E.CastCheck(Target, "HarassE"))
                 {
                 }
             }
@@ -131,13 +116,6 @@ namespace Support.Disabled
             config.AddBool("ComboR", "Use R", true);
             config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 0, 5);
             config.AddSlider("ComboHealthR", "Health to Ult", 20, 1, 100);
-        }
-
-        public override void HarassMenu(Menu config)
-        {
-            config.AddBool("HarassQ", "Use Q", true);
-            config.AddBool("HarassW", "Use W", true);
-            config.AddBool("HarassE", "Use E", true);
         }
 
         public override void MiscMenu(Menu config)

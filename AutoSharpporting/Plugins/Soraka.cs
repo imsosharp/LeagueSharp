@@ -17,10 +17,10 @@
 
 #region
 
-using System;
 using LeagueSharp;
 using LeagueSharp.Common;
 using Support.Util;
+using System;
 using ActiveGapcloser = Support.Util.ActiveGapcloser;
 
 #endregion
@@ -35,6 +35,36 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 925);
             R = new Spell(SpellSlot.R);
+
+            Q.SetSkillshot(0.5f, 300, 1750, false, SkillshotType.SkillshotCircle);
+            E.SetSkillshot(0.5f, 70f, 1750, false, SkillshotType.SkillshotCircle);
+        }
+
+        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+            var unit = gapcloser.Sender;
+
+            if (ConfigValue<bool>("GapcloserQ") && unit.IsValidTarget(Q.Range) && Q.IsReady())
+                Q.Cast(unit, UsePackets);
+
+            if (ConfigValue<bool>("GapcloserE") && unit.IsValidTarget(E.Range) && E.IsReady())
+                E.Cast(unit, UsePackets);
+        }
+
+        public override void OnPossibleToInterrupt(Obj_AI_Base target, InterruptableSpell spell)
+        {
+            if (!ConfigValue<bool>("InterruptE") ||
+                spell.DangerLevel < InterruptableDangerLevel.High ||
+                target.IsAlly)
+                return;
+
+            if (!target.IsValidTarget(E.Range))
+                return;
+
+            if (!E.IsReady())
+                return;
+
+            E.Cast(target, UsePackets);
         }
 
         public override void OnUpdate(EventArgs args)
@@ -43,92 +73,88 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                }
-
-                if (W.CastCheck(Target, "ComboW"))
-                {
+                    Q.Cast(Target, UsePackets);
                 }
 
                 if (E.CastCheck(Target, "ComboE"))
                 {
+                    E.Cast(Target, UsePackets);
                 }
+            }
 
-                if (R.CastCheck(Target, "ComboR"))
+            if (HarassMode)
+            {
+                if (Q.CastCheck(Target, "Harass.Q"))
                 {
+                    Q.Cast(Target, UsePackets);
+                }
+
+                if (E.CastCheck(Target, "Harass.E"))
+                {
+                    E.Cast(Target, UsePackets);
+                }
+            }
+
+            AutoW();
+
+            AutoR();
+        }
+
+        private void AutoW()
+        {
+            if (W.IsReady() && ConfigValue<bool>("AutoW"))
+            {
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("AutoWPercent").Value, W.Range);
+
+                if (Player.IsRecalling() ||
+                    ally.IsRecalling() ||
+                    Utility.InFountain())
+                    return;
+
+                if (ally != null)
+                {
+                    W.CastOnUnit(ally);
                 }
             }
         }
 
-        public override void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        private void AutoR()
         {
-        }
-
-        public override void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
-        {
-        }
-
-        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
+            if (R.IsReady() && ConfigValue<bool>("AutoR"))
             {
-            }
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("AutoRPercent").Value, R.Range);
 
-            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
-            {
-            }
-
-            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
-            {
-            }
-
-            if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
-            {
-            }
-        }
-
-        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
-                return;
-
-            if (Q.CastCheck(unit, "InterruptQ"))
-            {
-            }
-
-            if (W.CastCheck(unit, "InterruptW"))
-            {
-            }
-
-            if (E.CastCheck(unit, "InterruptE"))
-            {
-            }
-
-            if (R.CastCheck(unit, "InterruptR"))
-            {
+                if (ally != null)
+                {
+                    W.CastOnUnit(ally);
+                }
             }
         }
 
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
-            config.AddBool("ComboR", "Use R", true);
-            config.AddSlider("ComboCountR", "Targets in range to Ult", 2, 0, 5);
-            config.AddSlider("ComboHealthR", "Health to Ult", 20, 1, 100);
+        }
+
+        public override void HarassMenu(Menu config)
+        {
+            config.AddBool("Harass.Q", "Use Q", true);
+            config.AddBool("Harass.E", "Use E", true);
         }
 
         public override void MiscMenu(Menu config)
         {
             config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
             config.AddBool("GapcloserE", "Use E to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", true);
 
-            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
-            config.AddBool("InterruptW", "Use W to Interrupt Spells", true);
+            config.AddBool("AutoW", "Auto use W", true);
+            config.AddSlider("AutoWPercent", "W Percent", 50, 1, 100);
+
+            config.AddBool("AutoR", "Auto use R", true);
+            config.AddSlider("AutoRPercent", "R Percent", 15, 1, 100);
+
             config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
-            config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
         }
     }
 }

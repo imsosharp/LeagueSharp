@@ -84,12 +84,12 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.CastCheck(Target, "Harass.Q"))
+                if (Q.CastCheck(Target, "HarassQ"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (E.CastCheck(Target, "Harass.E"))
+                if (E.CastCheck(Target, "HarassE"))
                 {
                     E.Cast(Target, UsePackets);
                 }
@@ -124,10 +124,11 @@ namespace Support.Plugins
             {
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("AutoRPercent").Value, R.Range);
 
-                if (ally != null)
+                if (ally != null || (Player.Health / Player.MaxHealth) * 100 < ConfigValue<Slider>("AutoRPercent").Value)
                 {
-                    W.CastOnUnit(ally);
+                    R.Cast();
                 }
+
             }
         }
 
@@ -139,8 +140,8 @@ namespace Support.Plugins
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("Harass.Q", "Use Q", true);
-            config.AddBool("Harass.E", "Use E", true);
+            config.AddBool("HarassQ", "Use Q", true);
+            config.AddBool("HarassE", "Use E", true);
         }
 
         public override void MiscMenu(Menu config)

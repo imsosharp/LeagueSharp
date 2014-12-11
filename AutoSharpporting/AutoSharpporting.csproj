@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autoplay.cs" />
+    <Compile Include="metaHandler.cs" />
     <Compile Include="Util\AntiGapcloser.cs" />
     <Compile Include="Util\AutoBushRevealer.cs" />
     <Compile Include="Util\DamageBoostDatabase.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="Evade\SpellDatabase.cs" />
     <Compile Include="Evade\Utils.cs" />
     <Compile Include="Util\Extensions.cs" />
-	<Compile Include="Plugins\Annie.cs" />
+    <Compile Include="Plugins\Annie.cs" />
     <Compile Include="Plugins\Alistar.cs" />
     <Compile Include="Plugins\Blitzcrank.cs" />
     <Compile Include="Plugins\Braum.cs" />

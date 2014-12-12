@@ -16,6 +16,9 @@ namespace Tibbuhs
         private static Spell W;
         private static Spell E;
         private static Spell R;
+        private static SpellSlot Flash;
+        private static PredictionInput FlashTibbers_pi;
+        private static PredictionOutput FlashTibbers_po;
         private static Menu menu;
         private static Orbwalking.Orbwalker orbw;
         private static TargetSelector ts;
@@ -36,6 +39,7 @@ namespace Tibbuhs
             W.SetSkillshot(600, (float)(50 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
             R = new Spell(SpellSlot.R, 600);
             R.SetSkillshot(250, 200, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash", true);
             SpellList.Add(Q); SpellList.Add(W); SpellList.Add(E); SpellList.Add(R);
             #endregion
 
@@ -47,12 +51,7 @@ namespace Tibbuhs
             menu.AddSubMenu(new Menu("Laning settings", "farm"));
             menu.AddSubMenu(new Menu("Teamfight settings", "combo"));
             menu.AddSubMenu(new Menu("Defensive settings", "defense"));
-            var misc = new Menu("Misc settings", "misc", false);
-            menu.AddSubMenu(misc);
-            var interruptspells = new Menu("Interrupt Spells", "interruptablespells", false);
-            misc.AddSubMenu(interruptspells);
-            menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
-            menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
+            menu.AddSubMenu(new Menu("Misc settings", "misc"));
 
             menu.SubMenu("farm").AddItem(new MenuItem("Qlasthit", "Use Q Lasthit")).SetValue(true);
             menu.SubMenu("farm").AddItem(new MenuItem("Qstunlasthit", "Use Q stun to Lasthit")).SetValue(false);
@@ -77,12 +76,19 @@ namespace Tibbuhs
             menu.SubMenu("defense").AddItem(new MenuItem("Wstungapcloser", "Use W stun as a gapcloser")).SetValue(true);
             menu.SubMenu("defense").AddItem(new MenuItem("Eenemies", "Use E when enemies near you")).SetValue(true);
             menu.SubMenu("defense").AddItem(new MenuItem("Eenemiesrange", "Use E when enemies closer than")).SetValue(new Slider(250, 0, 1250));
+
+
+            menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
+            menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
+            menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime")).SetValue(new Slider(3, 1, 5));
+            menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
             #endregion
 
             #region Events
             Game.OnGameUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
+            AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             #endregion
         }
         #endregion
@@ -140,6 +146,13 @@ namespace Tibbuhs
         }
         #endregion
 
+        #region AntiGapcloser
+        private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
+        {
+
+        }
+        #endregion
+
 
 
         #region Laning
@@ -157,6 +170,19 @@ namespace Tibbuhs
             Cast_W();
             Cast_E("combo");
             Cast_R();
+            if (menu.Item("FlashTibbersanytime").GetValue<bool>())
+            {
+                FlashTibbers_pi.Aoe = true; FlashTibbers_pi.Collision = false; FlashTibbers_pi.Delay = 250; FlashTibbers_pi.Range = 1000; FlashTibbers_pi.Speed = float.MaxValue; FlashTibbers_pi.Type = SkillshotType.SkillshotCircle; FlashTibbers_pi.Radius = 100;
+                FlashTibbers_po = Prediction.GetPrediction(FlashTibbers_pi);
+                var flashtibbers_hitcount = FlashTibbers_po.AoeTargetsHitCount;
+                var flashtibbers_hitchance = FlashTibbers_po.Hitchance;
+                var flashtibbers_targetpos = FlashTibbers_po.UnitPosition;
+                if (flashtibbers_hitcount > menu.Item("FlashTibbersanytimemin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium)
+                {
+                    Player.Spellbook.CastSpell(Flash, flashtibbers_targetpos);
+                    R.Cast(flashtibbers_targetpos, UsePackets());
+                }
+            }
         }
         #endregion
 
@@ -269,16 +295,26 @@ namespace Tibbuhs
                     if (E.IsReady()) E.Cast();
                 }
             }
-
         }
         #endregion
 
         #region Casting R
         private static void Cast_R()
         {
-            var flashrange = R.Range + 400.0f;
+            if (menu.Item("FlashTibbers").GetValue<bool>())
+            {
+                FlashTibbers_pi.Aoe = true; FlashTibbers_pi.Collision = false; FlashTibbers_pi.Delay = 250; FlashTibbers_pi.Range = 1000; FlashTibbers_pi.Speed = float.MaxValue; FlashTibbers_pi.Type = SkillshotType.SkillshotCircle; FlashTibbers_pi.Radius = 100;
+                FlashTibbers_po = Prediction.GetPrediction(FlashTibbers_pi);
+                var flashtibbers_hitcount = FlashTibbers_po.AoeTargetsHitCount;
+                var flashtibbers_hitchance = FlashTibbers_po.Hitchance;
+                var flashtibbers_targetpos = FlashTibbers_po.UnitPosition;
+                if (flashtibbers_hitcount > menu.Item("FlashTibbersmin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium)
+                {
+                    Player.Spellbook.CastSpell(Flash, flashtibbers_targetpos);
+                    R.Cast(flashtibbers_targetpos, UsePackets());
+                }
+            }
             var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
-            var flashtibberstarget = SimpleTs.GetTarget(flashrange, SimpleTs.DamageType.Magical);
             var minTargets = menu.Item("flashtibbersmin").GetValue<int>();
             if (menu.Item("RcomboOnlyOn4Stacks").GetValue<bool>())
             {
@@ -298,10 +334,6 @@ namespace Tibbuhs
             else
             {
                 R.Cast(target, UsePackets());
-            }
-            if (menu.Item("FlashTibbers").GetValue<bool>())
-            {
-                //todo
             }
         }
         #endregion

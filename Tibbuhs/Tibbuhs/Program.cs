@@ -89,7 +89,7 @@ namespace Tibbuhs
             menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
             var Extras = menu.AddSubMenu(new Menu("Extras", "Extras"));
-            new PotionManager(Extras);
+            new Tibbuhs.PotionManager(Extras);
             #endregion
 
             #region Events

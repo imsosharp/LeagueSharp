@@ -28,6 +28,7 @@ namespace Tibbuhs
         private static Orbwalking.Orbwalker orbw;
         private static TargetSelector ts;
         private static Obj_AI_Hero Player = ObjectManager.Player;
+        private static Vector3 PredictedTibbers;
         #endregion
         static void Main(string[] args)
         {
@@ -374,11 +375,11 @@ namespace Tibbuhs
                 FlashTibbers_po = Prediction.GetPrediction(FlashTibbers_pi);
                 var flashtibbers_hitcount = FlashTibbers_po.AoeTargetsHitCount;
                 var flashtibbers_hitchance = FlashTibbers_po.Hitchance;
-                var flashtibbers_targetpos = FlashTibbers_po.UnitPosition;
-                if (flashtibbers_hitcount > menu.Item("FlashTibbersmin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium)
+                PredictedTibbers = FlashTibbers_po.UnitPosition;
+                if (flashtibbers_hitcount > menu.Item("FlashTibbersmin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium && !(R.WillHit(PredictedTibbers, Player.Position)))
                 {
-                    Player.Spellbook.CastSpell(Flash, flashtibbers_targetpos);
-                    R.Cast(flashtibbers_targetpos, UsePackets());
+                    Player.Spellbook.CastSpell(Flash, PredictedTibbers);
+                    R.Cast(PredictedTibbers, UsePackets());
                 }
             }
             var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
@@ -403,6 +404,22 @@ namespace Tibbuhs
                 R.Cast(target, UsePackets());
             }
         }
+/* Endif
+        private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe && args.SData.Name == "SummonerFlash")
+            {
+                var LastFlashTime = Environment.TickCount;
+                if (Environment.TickCount - LastFlashTime < 300)
+                {
+                    if (Q.WillHit(PredictedTibbers, Player.Position))
+                    {
+                    R.Cast(PredictedTibbers, UsePackets());
+                    }
+                }
+            }
+        }
+ */
         #endregion
 
         #region Utility

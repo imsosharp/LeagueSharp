@@ -1,5 +1,5 @@
 ﻿//Part of the opensource Marksman# project by Kortatu, xQx & legacy
-//which can be found here https://github.com/Esk0r/LeagueSharp/blob/master/Marksman/PotionManager.cs
+//which can be found here http://www.joduska.me/forum/topic/977-marksman/
 
 using System;
 using System.Collections.Generic;

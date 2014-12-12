@@ -17,6 +17,8 @@ namespace Tibbuhs
         private static Spell E;
         private static Spell R;
         private static SpellSlot Flash;
+        private static SpellSlot Ignite; //not used
+        private static SpellSlot Exhaust; //not used
         private static PredictionInput FlashTibbers_pi;
         private static PredictionOutput FlashTibbers_po;
         private static Menu menu;
@@ -40,6 +42,8 @@ namespace Tibbuhs
             R = new Spell(SpellSlot.R, 600);
             R.SetSkillshot(250, 200, float.MaxValue, false, SkillshotType.SkillshotCircle);
             Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash", true);
+            Ignite = ObjectManager.Player.GetSpellSlot("SummonerDot", true);
+            Ignite = ObjectManager.Player.GetSpellSlot("SummonerExhaust", true);
             SpellList.Add(Q); SpellList.Add(W); SpellList.Add(E); SpellList.Add(R);
             #endregion
 
@@ -73,9 +77,10 @@ namespace Tibbuhs
 
 
 
-            menu.SubMenu("defense").AddItem(new MenuItem("Wstungapcloser", "Use W stun as a gapcloser")).SetValue(true);
+            menu.SubMenu("defense").AddItem(new MenuItem("Wstunescape", "Use W stun to escape")).SetValue(true);
+            menu.SubMenu("defense").AddItem(new MenuItem("Wstunescaperange", "Max W stun escape range")).SetValue(new Slider(250, 0, (int)W.Range));
             menu.SubMenu("defense").AddItem(new MenuItem("Eenemies", "Use E when enemies near you")).SetValue(true);
-            menu.SubMenu("defense").AddItem(new MenuItem("Eenemiesrange", "Use E when enemies closer than")).SetValue(new Slider(250, 0, 1250));
+            menu.SubMenu("defense").AddItem(new MenuItem("Eenemiesrange", "Use E when enemies closer than")).SetValue(new Slider(600, 0, 1250));
 
 
             menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
@@ -293,10 +298,19 @@ namespace Tibbuhs
         private static void Cast_W()
         {
             var target = SimpleTs.GetTarget(W.Range, SimpleTs.DamageType.Magical);
+            var Wstunescaperange = menu.Item("Wstungapescaperange").GetValue<int>();
+            var closestThreat = ObjectManager.Get<Obj_AI_Hero>().First(ct => !ct.IsMe && ct.Distance(Player) < Wstunescaperange && ct.IsEnemy);
             //#TODO work on better targeting, like not wasting Q on tanks.
-            if (target != null)
+            if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
             {
-                W.Cast(target, UsePackets());
+                if (target != null)
+                {
+                    W.Cast(target, UsePackets());
+                }
+            }
+            if (menu.Item("Wstungapescape").GetValue<bool>())
+            {
+                W.Cast(closestThreat);
             }
         }
         #endregion
@@ -304,6 +318,14 @@ namespace Tibbuhs
         #region Casting E
         private static void Cast_E(string mode)
         {
+            var defenseEenemies = menu.Item("Eenemies").GetValue<bool>();
+            var defenseEenemiesrange = menu.Item("Eenemiesrange").GetValue<int>();
+            var closestEnemy = ObjectManager.Get<Obj_AI_Hero>().First(ce => !ce.IsMe && ce.Distance(Player) < defenseEenemiesrange && ce.IsEnemy);
+            if (closestEnemy != null && defenseEenemies && E.IsReady())
+            {
+                E.Cast();
+            }
+
             if(mode == "farm" && !PassiveStacker() && (menu.Item("Elanestuncharge").GetValue<bool>()))
             {
                 if(GetPassiveStacks() < 4)

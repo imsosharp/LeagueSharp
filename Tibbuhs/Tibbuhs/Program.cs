@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -12,6 +13,7 @@ namespace Tibbuhs
 {
     class Program
     {
+        #region Definitions
         private static List<Spell> SpellList = new List<Spell>();
         private static Spell Q;
         private static Spell W;
@@ -26,6 +28,7 @@ namespace Tibbuhs
         private static Orbwalking.Orbwalker orbw;
         private static TargetSelector ts;
         private static Obj_AI_Hero Player = ObjectManager.Player;
+        #endregion
         static void Main(string[] args)
         {
             if (Player.BaseSkinName != "Annie") return;
@@ -103,7 +106,7 @@ namespace Tibbuhs
             Drawing.OnDraw += Drawing_OnDraw;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            Game.PrintChat("Tibbuhs is SoSharp loaded!");
+            Game.PrintChat("Tibbers is SoSharp v.{0} loaded!", Assembly.GetExecutingAssembly().GetName().Version);
             #endregion
         }
         #endregion

@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 
 namespace Tibbuhs
 {
-    internal class PotionManager
+    class PotionManager
     {
         private Menu ExtrasMenu;
         private enum PotionType

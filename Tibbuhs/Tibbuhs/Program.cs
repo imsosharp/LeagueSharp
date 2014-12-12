@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Color = System.Drawing.Color;
 
 namespace Tibbuhs
 {
@@ -55,6 +56,7 @@ namespace Tibbuhs
             menu.AddSubMenu(new Menu("Laning settings", "farm"));
             menu.AddSubMenu(new Menu("Teamfight settings", "combo"));
             menu.AddSubMenu(new Menu("Defensive settings", "defense"));
+            menu.AddSubMenu(new Menu("Drawings", "drawings"));
             menu.AddSubMenu(new Menu("Misc settings", "misc"));
 
             menu.SubMenu("farm").AddItem(new MenuItem("Qlasthit", "Use Q Lasthit")).SetValue(true);
@@ -82,6 +84,11 @@ namespace Tibbuhs
             menu.SubMenu("defense").AddItem(new MenuItem("Eenemies", "Use E when enemies near you")).SetValue(true);
             menu.SubMenu("defense").AddItem(new MenuItem("Eenemiesrange", "Use E when enemies closer than")).SetValue(new Slider(600, 0, 1250));
 
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawQ", "Draw Q range")).SetValue(true);
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawW", "Draw W range")).SetValue(true);
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawR", "Draw R range")).SetValue(true);
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawDMG", "Draw full-combo DMG")).SetValue(true);
+
 
             menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
@@ -96,6 +103,7 @@ namespace Tibbuhs
             Drawing.OnDraw += Drawing_OnDraw;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Game.PrintChat("Tibbuhs is SoSharp loaded!");
             #endregion
         }
         #endregion
@@ -125,7 +133,9 @@ namespace Tibbuhs
         #region OnDraw
         private static void Drawing_OnDraw(EventArgs args)
         {
-
+            if (menu.Item("drawQ").GetValue<bool>()) Utility.DrawCircle(Player.Position, Q.Range, System.Drawing.Color.Red);
+            if (menu.Item("drawW").GetValue<bool>()) Utility.DrawCircle(Player.Position, W.Range, System.Drawing.Color.Green);
+            if (menu.Item("drawR").GetValue<bool>()) Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Blue);
         }
         #endregion
 

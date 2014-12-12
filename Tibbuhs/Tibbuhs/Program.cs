@@ -87,10 +87,8 @@ namespace Tibbuhs
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime")).SetValue(new Slider(3, 1, 5));
             menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
+            menu.SubMenu("misc").AddItem(new MenuItem("UseMarksmanPotionManager", "Use Marksman# Potion Manager")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
-            var Extras = new Menu("Extras","Extras",false);
-            new PotionManager(Extras);
-            menu.AddSubMenu(Extras);
             #endregion
 
             #region Events
@@ -114,6 +112,13 @@ namespace Tibbuhs
                 Combo();
             }
             PassiveStacker();
+            Cast_W();
+            if (menu.Item("UseMarksmanPotionManager").GetValue<bool>())
+            {
+                var Extras = new Menu("Extras", "Extras", false);
+                new PotionManager(Extras);
+                menu.AddSubMenu(Extras);
+            }
         }
         #endregion
 

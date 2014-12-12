@@ -81,6 +81,7 @@ namespace Tibbuhs
             menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime")).SetValue(new Slider(3, 1, 5));
+            menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
             #endregion
 
@@ -149,7 +150,30 @@ namespace Tibbuhs
         #region AntiGapcloser
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-
+            if (gapcloser.Sender.IsAlly || gapcloser.Sender == Player || !(menu.Item("AntiGapcloser").GetValue<bool>())) return;
+            if (GetPassiveStacks() == 4)
+            {
+                if (Q.IsReady())
+                {
+                    Q.Cast(gapcloser.Sender, UsePackets());
+                }
+                else if (W.IsReady() && W.InRange(gapcloser.Sender.Position))
+                {
+                    W.Cast(gapcloser.Sender, UsePackets());
+                }
+            }
+            if (GetPassiveStacks() == 3)
+            {
+                if (E.IsReady()) E.Cast(UsePackets());
+                if (Q.IsReady())
+                {
+                    Q.Cast(gapcloser.Sender, UsePackets());
+                }
+                else if (W.IsReady() && W.InRange(gapcloser.Sender.Position))
+                {
+                    W.Cast(gapcloser.Sender, UsePackets());
+                }
+            }
         }
         #endregion
 

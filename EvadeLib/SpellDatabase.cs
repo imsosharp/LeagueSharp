@@ -23,7 +23,7 @@ using LeagueSharp;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     public static class SpellDatabase
     {

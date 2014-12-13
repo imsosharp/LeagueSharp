@@ -23,7 +23,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     internal static class Config
     {
@@ -139,11 +139,12 @@ namespace EvadeLib
             Menu.AddSubMenu(misc);
 
             Menu.AddItem(
-                new MenuItem("Enabled", "Enabled").SetValue(false)));
+                new MenuItem("Enabled", "Enabled").SetValue(new KeyBind("K".ToCharArray()[0], KeyBindType.Toggle, true)));
 
             Menu.AddItem(
                 new MenuItem("OnlyDangerous", "Dodge only dangerous").SetValue(new KeyBind(32, KeyBindType.Press)));
 
+            Menu.AddToMainMenu();
         }
     }
 }

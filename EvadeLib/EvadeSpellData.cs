@@ -21,7 +21,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     public enum SpellValidTargets
     {

@@ -23,7 +23,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     internal class EvadeSpellDatabase
     {

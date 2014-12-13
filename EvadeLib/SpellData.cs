@@ -20,7 +20,7 @@ using LeagueSharp;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     public class SpellData
     {

@@ -25,7 +25,7 @@ using SharpDX;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     public enum CollisionObjectTypes
     {

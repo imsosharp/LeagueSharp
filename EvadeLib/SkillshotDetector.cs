@@ -24,7 +24,7 @@ using SharpDX;
 
 #endregion
 
-namespace EvadeLib
+namespace Evade
 {
     internal static class SkillshotDetector
     {

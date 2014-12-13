@@ -65,8 +65,10 @@ namespace Tibbuhs
 
             menu.SubMenu("farm").AddItem(new MenuItem("Qlasthit", "Use Q Lasthit")).SetValue(true);
             menu.SubMenu("farm").AddItem(new MenuItem("Qstunlasthit", "Use Q stun to Lasthit")).SetValue(false);
-            menu.SubMenu("farm").AddItem(new MenuItem("Qstunharass", "Use Q Harass")).SetValue(true);
+            menu.SubMenu("farm").AddItem(new MenuItem("Qharass", "Use Q Harass")).SetValue(true);
             menu.SubMenu("farm").AddItem(new MenuItem("Qstunharass", "Use Q stun to Harass")).SetValue(true);
+            menu.SubMenu("farm").AddItem(new MenuItem("AAharass", "Use AA Harass when target stunned")).SetValue(true);
+            menu.SubMenu("farm").AddItem(new MenuItem("Wharass", "Use W Harass when target stunned")).SetValue(true);
             menu.SubMenu("farm").AddItem(new MenuItem("Qharassmana", "Use Q to harass when %mana more than")).SetValue(new Slider(25, 0, 100));
             menu.SubMenu("farm").AddItem(new MenuItem("Elanestuncharge", "Charge E stun in lane")).SetValue(true);
             menu.SubMenu("farm").AddItem(new MenuItem("lanetoggle", "Active:")).SetValue((new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
@@ -278,9 +280,13 @@ namespace Tibbuhs
                     if (target != null)
                     {
                         Q.Cast(target, UsePackets());
-                        if (Orbwalking.CanAttack())
+                        if (Orbwalking.CanAttack() && menu.Item("AAharass").GetValue<bool>())
                         {
                             orbw.ForceTarget(target);
+                        }
+                        if (W.InRange(target.Position) && menu.Item("Wharass").GetValue<bool>()) 
+                        {
+                            W.Cast(target);
                         }
                     }
                 }

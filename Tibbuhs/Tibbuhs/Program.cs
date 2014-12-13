@@ -97,6 +97,8 @@ namespace Tibbuhs
             menu.SubMenu("combo").AddItem(new MenuItem("RcomboOnlyOn4Stacks", "Only summon Tibbers if can stun")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbers", "Flash-Tibbers to stun")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbersmin", "Flash-Tibbers only if it will hit X enemies")).SetValue(new Slider(3,1,5));
+            menu.SubMenu("combo").AddItem(new MenuItem("UseZHONYA", "Use Zhonya on Low-health No spells ready")).SetValue(true);
+            menu.SubMenu("combo").AddItem(new MenuItem("ZHONYAminhealth", "Zhonya on %hp")).SetValue(new Slider(20, 0, 100));
             menu.SubMenu("combo").AddItem(new MenuItem("combotoggle", "Active:")).SetValue((new KeyBind(32, KeyBindType.Press)));
 
 
@@ -493,6 +495,15 @@ namespace Tibbuhs
         #region Endif OnProcessSpellCast
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
+            var UseZHONYA = menu.Item("UseZhonya").GetValue<bool>();
+            var ZHONYAminhealth = menu.Item("ZHONYAminhealth").GetValue<int>();
+            if(!sender.IsMe && args.Target.IsMe && UseZHONYA)
+            {
+                if (menu.Item("combotoggle").GetValue<KeyBind>().Active && !R.IsReady() && !Q.IsReady() && !W.IsReady() && (Player.Health / Player.MaxHealth * 100 < ZHONYAminhealth) && ZHONYA.IsReady())
+                {
+                    ZHONYA.Cast();
+                }
+            }
             if (sender.IsMe && args.SData.Name == "SummonerFlash")
             {
                 var LastFlashTime = Environment.TickCount;

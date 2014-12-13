@@ -293,7 +293,7 @@ namespace Tibbuhs
                 Cast_Q("combo", qtarget);
                 Cast_W(wtarget);
             }
-            if (menu.SubMenu("combo").Item("Rifcantkill").GetValue<bool>())
+            if (menu.Item("Rifcantkill").GetValue<bool>())
             {
                 R.Cast(combotarget, UsePackets());
             }
@@ -304,7 +304,7 @@ namespace Tibbuhs
                 var flashtibbers_hitcount = FlashTibbers_po.AoeTargetsHitCount;
                 var flashtibbers_hitchance = FlashTibbers_po.Hitchance;
                 var flashtibbers_targetpos = FlashTibbers_po.UnitPosition;
-                if (GetPassiveStacks() == 4 && flashtibbers_hitcount > menu.Item("FlashTibbersanytimemin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium && Player.Distance(FlashTibbers_po.UnitPosition) > R.Range)
+                if (GetPassiveStacks() == 4 && Player.Spellbook.CanUseSpell(Flash) == SpellState.Ready && flashtibbers_hitcount > menu.Item("FlashTibbersanytimemin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium && Player.Distance(FlashTibbers_po.UnitPosition) > R.Range)
                 {
                     Player.Spellbook.CastSpell(Flash, flashtibbers_targetpos);
                     R.Cast(flashtibbers_targetpos, UsePackets());

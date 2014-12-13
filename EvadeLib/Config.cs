@@ -144,7 +144,6 @@ namespace Evade
             Menu.AddItem(
                 new MenuItem("OnlyDangerous", "Dodge only dangerous").SetValue(new KeyBind(32, KeyBindType.Press)));
 
-            Menu.AddToMainMenu();
         }
     }
 }

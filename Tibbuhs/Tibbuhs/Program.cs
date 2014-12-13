@@ -90,6 +90,7 @@ namespace Tibbuhs
             menu.SubMenu("combo").AddItem(new MenuItem("Wcombomin", "Only use W if it will hit X enemies")).SetValue(new Slider(1, 1, 5));
             menu.SubMenu("combo").AddItem(new MenuItem("Wstuncombo", "Only use W if stun ready")).SetValue(false);
             menu.SubMenu("combo").AddItem(new MenuItem("Ecombostuncharge", "Charge E stun in teamfights")).SetValue(true);
+            menu.SubMenu("combo").AddItem(new MenuItem("Rifcantkill", "Summon tibbers even if full combo can't kill")).SetValue(false);
             menu.SubMenu("combo").AddItem(new MenuItem("RcomboOnlyOn4Stacks", "Only summon Tibbers if can stun")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbers", "Flash-Tibbers to stun")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbersmin", "Flash-Tibbers only if it will hit X enemies")).SetValue(new Slider(3,1,5));
@@ -141,7 +142,6 @@ namespace Tibbuhs
                 Combo();
             }
             PassiveStacker();
-            Cast_W();
             if (menu.Item("UseMarksmanPotionManager").GetValue<bool>())
             {
                 var Extras = new Menu("Extras", "Extras", false);
@@ -264,7 +264,8 @@ namespace Tibbuhs
         #region Laning
         private static void Laning()
         {
-            Cast_Q("farm");
+            var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+            Cast_Q("farm", target);
             Cast_E("farm");
         }
         #endregion
@@ -275,10 +276,28 @@ namespace Tibbuhs
         //#TODO actual combo calculations T_T EDIT: ComboDmg();
         //Player.Spellbook.CastSpell(Ignite);
         //DFG.Cast(target, UsePackets());
-            Cast_R();
-            Cast_Q("combo");
-            Cast_W();
+
+
             Cast_E("combo");
+            var combotarget = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+            var qtarget = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
+            var wtarget = SimpleTs.GetTarget(W.Range, SimpleTs.DamageType.Magical);
+            var combodmg = ComboDmg(combotarget);
+            if (combodmg >= combotarget.Health)
+            {
+                Cast_R();
+                Cast_Q("combo", combotarget);
+                Cast_W(combotarget);
+            }
+            else
+            {
+                Cast_Q("combo", qtarget);
+                Cast_W(wtarget);
+            }
+            if (menu.SubMenu("combo").Item("Rifcantkill").GetValue<bool>())
+            {
+                R.Cast(combotarget, UsePackets());
+            }
             if (menu.Item("FlashTibbersanytime").GetValue<bool>())
             {
                 FlashTibbers_pi.Aoe = true; FlashTibbers_pi.Collision = false; FlashTibbers_pi.Delay = 250; FlashTibbers_pi.Range = 1000; FlashTibbers_pi.Speed = float.MaxValue; FlashTibbers_pi.Type = SkillshotType.SkillshotCircle; FlashTibbers_pi.Radius = 100;
@@ -322,9 +341,8 @@ namespace Tibbuhs
         #endregion
 
         #region Casting Q
-        private static void Cast_Q(string mode)
+        private static void Cast_Q(string mode, Obj_AI_Hero target)
         {
-            var target = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
             #region Q Farm Mode
             if (mode == "farm")
             {
@@ -378,9 +396,8 @@ namespace Tibbuhs
         #endregion
 
         #region Casting W
-        private static void Cast_W()
+        private static void Cast_W(Obj_AI_Hero target)
         {
-            var target = SimpleTs.GetTarget(W.Range, SimpleTs.DamageType.Magical);
             var Wstunescaperange = menu.Item("Wstungapescaperange").GetValue<int>();
             var closestThreat = ObjectManager.Get<Obj_AI_Hero>().First(ct => !ct.IsMe && ct.Distance(Player) < Wstunescaperange && ct.IsEnemy);
             if (menu.Item("combotoggle").GetValue<KeyBind>().Active)

@@ -29,6 +29,7 @@ namespace Tibbuhs
         private static TargetSelector ts;
         private static Obj_AI_Hero Player = ObjectManager.Player;
         private static Vector3 PredictedTibbers;
+        private static Items.Item DFG, ZHONYA;
         #endregion
         static void Main(string[] args)
         {
@@ -46,10 +47,19 @@ namespace Tibbuhs
             W.SetSkillshot(600, (float)(50 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
             R = new Spell(SpellSlot.R, 600);
             R.SetSkillshot(250, 200, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash", true);
-            Ignite = ObjectManager.Player.GetSpellSlot("SummonerDot", true);
-            Ignite = ObjectManager.Player.GetSpellSlot("SummonerExhaust", true);
+            //4.21 summoner spells fix.
+            if (SpellSlot.Summoner1.ToString().ToLower().Contains("flash")) Flash = SpellSlot.Summoner1;
+            if (SpellSlot.Summoner1.ToString().ToLower().Contains("dot")) Ignite = SpellSlot.Summoner1;
+            if (SpellSlot.Summoner1.ToString().ToLower().Contains("exhaust")) Exhaust = SpellSlot.Summoner1;
+            if (SpellSlot.Summoner2.ToString().ToLower().Contains("flash")) Flash = SpellSlot.Summoner2;
+            if (SpellSlot.Summoner2.ToString().ToLower().Contains("dot")) Ignite = SpellSlot.Summoner2;
+            if (SpellSlot.Summoner2.ToString().ToLower().Contains("exhaust")) Exhaust = SpellSlot.Summoner2;
+            //Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash", true);
+            //Ignite = ObjectManager.Player.GetSpellSlot("SummonerDot", true);
+            //Exhaust = ObjectManager.Player.GetSpellSlot("SummonerExhaust", true);
             SpellList.Add(Q); SpellList.Add(W); SpellList.Add(E); SpellList.Add(R);
+            DFG = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3188, 750) : new Items.Item(3128, 750);
+            ZHONYA = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3090, float.MaxValue) : new Items.Item(3157, float.MaxValue);
             #endregion
 
             #region Menu
@@ -76,8 +86,8 @@ namespace Tibbuhs
 
             menu.SubMenu("combo").AddItem(new MenuItem("Qcombo", "Use Q in teamfights")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Use W in teamfights")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Only use W if it will hit X enemies")).SetValue(new Slider(1, 1, 5));
-            menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Only use W if stun ready")).SetValue(false);
+            menu.SubMenu("combo").AddItem(new MenuItem("Wcombomin", "Only use W if it will hit X enemies")).SetValue(new Slider(1, 1, 5));
+            menu.SubMenu("combo").AddItem(new MenuItem("Wstuncombo", "Only use W if stun ready")).SetValue(false);
             menu.SubMenu("combo").AddItem(new MenuItem("Ecombostuncharge", "Charge E stun in teamfights")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("RcomboOnlyOn4Stacks", "Only summon Tibbers if can stun")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbers", "Flash-Tibbers to stun")).SetValue(true);
@@ -101,6 +111,7 @@ namespace Tibbuhs
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime")).SetValue(new Slider(3, 1, 5));
             menu.SubMenu("misc").AddItem(new MenuItem("autotibbers", "AutoTibbers on flash")).SetValue(true);
+            menu.SubMenu("misc").AddItem(new MenuItem("tibbersinterrupt", "Use Tibbers to interrupt dangerous spells")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("UseMarksmanPotionManager", "Use Marksman# Potion Manager")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
@@ -163,17 +174,51 @@ namespace Tibbuhs
                 {
                     W.Cast(target, UsePackets());
                 }
+                else if (spell.DangerLevel == InterruptableDangerLevel.High && menu.Item("tibbersinterrupt").GetValue<bool>())
+                {
+                    R.Cast(target, UsePackets());
+                }
             }
             if (GetPassiveStacks() == 3)
             {
                 if (E.IsReady()) E.Cast(UsePackets());
-                if (Q.IsReady())
+                if (GetPassiveStacks() == 4)
                 {
+                    if (Q.IsReady())
+                    {
+                        Q.Cast(target, UsePackets());
+                    }
+                    else if (W.IsReady() && W.InRange(target.Position))
+                    {
+                        W.Cast(target, UsePackets());
+                    }
+                    else if (spell.DangerLevel == InterruptableDangerLevel.High && menu.Item("tibbersinterrupt").GetValue<bool>())
+                    {
+                        R.Cast(target, UsePackets());
+                    }
+                }
+            }
+            if (GetPassiveStacks() == 2)
+            {
+                if (E.IsReady() && Q.IsReady()) 
+                {
+                    E.Cast(UsePackets());
                     Q.Cast(target, UsePackets());
                 }
-                else if (W.IsReady() && W.InRange(target.Position))
+                if (GetPassiveStacks() == 4)
                 {
-                    W.Cast(target, UsePackets());
+                    if (Q.IsReady())
+                    {
+                        Q.Cast(target, UsePackets());
+                    }
+                    else if (W.IsReady() && W.InRange(target.Position))
+                    {
+                        W.Cast(target, UsePackets());
+                    }
+                    else if (spell.DangerLevel == InterruptableDangerLevel.High && menu.Item("tibbersinterrupt").GetValue<bool>())
+                    {
+                        R.Cast(target, UsePackets());
+                    }
                 }
             }
         }
@@ -182,7 +227,8 @@ namespace Tibbuhs
         #region AntiGapcloser
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            if (gapcloser.Sender.IsAlly || gapcloser.Sender == Player || !(menu.Item("AntiGapcloser").GetValue<bool>())) return;
+            var target = gapcloser.Sender;
+            if (target.IsAlly || target.IsMe || !(menu.Item("AntiGapcloser").GetValue<bool>())) return;
             if (GetPassiveStacks() == 4)
             {
                 if (Q.IsReady())
@@ -197,13 +243,16 @@ namespace Tibbuhs
             if (GetPassiveStacks() == 3)
             {
                 if (E.IsReady()) E.Cast(UsePackets());
-                if (Q.IsReady())
+                if (GetPassiveStacks() == 4)
                 {
-                    Q.Cast(gapcloser.Sender, UsePackets());
-                }
-                else if (W.IsReady() && W.InRange(gapcloser.Sender.Position))
-                {
-                    W.Cast(gapcloser.Sender, UsePackets());
+                    if (Q.IsReady())
+                    {
+                        Q.Cast(gapcloser.Sender, UsePackets());
+                    }
+                    else if (W.IsReady() && W.InRange(gapcloser.Sender.Position))
+                    {
+                        W.Cast(gapcloser.Sender, UsePackets());
+                    }
                 }
             }
         }
@@ -452,13 +501,18 @@ namespace Tibbuhs
 
         private static double SpellDmg(Obj_AI_Hero target, SpellSlot spell)
         {
-            var spelldamage = ObjectManager.Player.GetSpellDamage(target, spell);
+            var spelldamage = Player.GetSpellDamage(target, spell);
             return spelldamage;
         }
 
-        private static double ComboDmg()
+        private static double ComboDmg(Obj_AI_Hero target)
         {
-            return 0.0d;
+            var combodmg = 0.0d;
+            if (Q.IsReady()) combodmg += SpellDmg(target, SpellSlot.Q);
+            if (W.IsReady()) combodmg += SpellDmg(target, SpellSlot.W);
+            if (R.IsReady()) combodmg += SpellDmg(target, SpellSlot.R);
+            if (DFG.IsReady()) combodmg += Player.GetItemDamage(target, Damage.DamageItems.Dfg);
+            return combodmg;
         }
 
         private static bool HaveMana(int minMana)

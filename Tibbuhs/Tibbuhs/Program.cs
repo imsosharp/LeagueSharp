@@ -47,16 +47,17 @@ namespace Tibbuhs
             W.SetSkillshot(600, (float)(50 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
             R = new Spell(SpellSlot.R, 600);
             R.SetSkillshot(250, 200, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            //4.21 summoner spells fix.
+            /* nvm
             if (SpellSlot.Summoner1.ToString().ToLower().Contains("flash")) Flash = SpellSlot.Summoner1;
             if (SpellSlot.Summoner1.ToString().ToLower().Contains("dot")) Ignite = SpellSlot.Summoner1;
             if (SpellSlot.Summoner1.ToString().ToLower().Contains("exhaust")) Exhaust = SpellSlot.Summoner1;
             if (SpellSlot.Summoner2.ToString().ToLower().Contains("flash")) Flash = SpellSlot.Summoner2;
             if (SpellSlot.Summoner2.ToString().ToLower().Contains("dot")) Ignite = SpellSlot.Summoner2;
             if (SpellSlot.Summoner2.ToString().ToLower().Contains("exhaust")) Exhaust = SpellSlot.Summoner2;
-            //Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash", true);
-            //Ignite = ObjectManager.Player.GetSpellSlot("SummonerDot", true);
-            //Exhaust = ObjectManager.Player.GetSpellSlot("SummonerExhaust", true);
+             */
+            Flash = Player.GetSpellSlot("SummonerFlash", true);
+            Ignite = Player.GetSpellSlot("SummonerDot", true);
+            Exhaust = Player.GetSpellSlot("SummonerExhaust", true);
             SpellList.Add(Q); SpellList.Add(W); SpellList.Add(E); SpellList.Add(R);
             DFG = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3188, 750) : new Items.Item(3128, 750);
             ZHONYA = Utility.Map.GetMap()._MapType == Utility.Map.MapType.TwistedTreeline ? new Items.Item(3090, float.MaxValue) : new Items.Item(3157, float.MaxValue);
@@ -271,7 +272,9 @@ namespace Tibbuhs
         #region Combo
         private static void Combo()
         {
-        //#TODO actual combo calculations T_T
+        //#TODO actual combo calculations T_T EDIT: ComboDmg();
+        //Player.Spellbook.CastSpell(Ignite);
+        //DFG.Cast(target, UsePackets());
             Cast_R();
             Cast_Q("combo");
             Cast_W();

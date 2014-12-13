@@ -410,7 +410,7 @@ namespace Tibbuhs
                 R.Cast(target, UsePackets());
             }
         }
-        //Endif
+        #region Endif OnProcessSpellCast
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && args.SData.Name == "SummonerFlash")
@@ -420,11 +420,15 @@ namespace Tibbuhs
                 {
                     if (R.WillHit(PredictedTibbers, Player.Position))
                     {
-                    R.Cast(PredictedTibbers, UsePackets());
+                        if (menu.Item("autotibbers").GetValue<bool>())
+                        {
+                            R.Cast(PredictedTibbers, UsePackets());
+                        }
                     }
                 }
             }
         }
+        #endregion
         #endregion
 
         #region Utility

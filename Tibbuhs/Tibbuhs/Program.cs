@@ -273,9 +273,6 @@ namespace Tibbuhs
         #region Combo
         private static void Combo()
         {
-        //#TODO actual combo calculations T_T EDIT: ComboDmg();
-        //Player.Spellbook.CastSpell(Ignite);
-        //DFG.Cast(target, UsePackets());
 
 
             Cast_E("combo");
@@ -288,6 +285,8 @@ namespace Tibbuhs
                 Cast_R();
                 Cast_Q("combo", combotarget);
                 Cast_W(combotarget);
+                DFG.Cast(combotarget);
+                Player.Spellbook.CastSpell(Ignite);
             }
             else
             {
@@ -532,6 +531,7 @@ namespace Tibbuhs
             if (W.IsReady()) combodmg += SpellDmg(target, SpellSlot.W);
             if (R.IsReady()) combodmg += SpellDmg(target, SpellSlot.R);
             if (DFG.IsReady()) combodmg += Player.GetItemDamage(target, Damage.DamageItems.Dfg);
+            if (Player.Spellbook.CanUseSpell(Ignite) == SpellState.Ready) combodmg += Player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
             return combodmg;
         }
 

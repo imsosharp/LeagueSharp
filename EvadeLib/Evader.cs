@@ -26,7 +26,7 @@ using Paths = System.Collections.Generic.List<System.Collections.Generic.List<Cl
 
 #endregion
 
-namespace Evade
+namespace EvadeLib
 {
     public static class Evader
     {

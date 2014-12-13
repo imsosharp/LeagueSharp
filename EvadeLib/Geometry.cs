@@ -28,7 +28,7 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 #endregion
 
-namespace Evade
+namespace EvadeLib
 {
     /// <summary>
     /// Class that contains the geometry related methods.

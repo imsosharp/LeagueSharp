@@ -27,7 +27,7 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 #endregion
 
-namespace Evade
+namespace EvadeLib
 {
     public enum SkillShotType
     {

@@ -535,13 +535,13 @@ namespace Tibbuhs
             return combodmg;
         }
 
-        private static bool HaveMana(int minMana)
+        private static bool HaveMana(float minMana)
         {
-            if (((Player.Mana / Player.MaxMana) * 100) > (float)minMana)
+            if (((Player.Mana / Player.MaxMana) * 100) > minMana)
             {
                 return true;
             }
-            else return false;
+            return false;
         }
 
         private static bool UsePackets()

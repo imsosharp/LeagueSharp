@@ -271,7 +271,6 @@ namespace Tibbuhs
         private static void Cast_Q(string mode)
         {
             var target = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
-            //#TODO work on better targeting, like not wasting Q on tanks.
             #region Q Farm Mode
             if (mode == "farm")
             {
@@ -330,7 +329,6 @@ namespace Tibbuhs
             var target = SimpleTs.GetTarget(W.Range, SimpleTs.DamageType.Magical);
             var Wstunescaperange = menu.Item("Wstungapescaperange").GetValue<int>();
             var closestThreat = ObjectManager.Get<Obj_AI_Hero>().First(ct => !ct.IsMe && ct.Distance(Player) < Wstunescaperange && ct.IsEnemy);
-            //#TODO work on better targeting, like not wasting Q on tanks.
             if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
             {
                 if (target != null)

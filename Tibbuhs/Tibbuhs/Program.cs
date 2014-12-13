@@ -20,7 +20,7 @@ namespace Tibbuhs
         private static Spell E;
         private static Spell R;
         private static SpellSlot Flash;
-        private static SpellSlot Ignite; //not used
+        private static SpellSlot Ignite;
         private static SpellSlot Exhaust; //not used
         private static PredictionInput FlashTibbers_pi;
         private static PredictionOutput FlashTibbers_po;
@@ -492,7 +492,7 @@ namespace Tibbuhs
                 R.Cast(target, UsePackets());
             }
         }
-        #region Endif OnProcessSpellCast
+        #region OnProcessSpellCast
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var UseZHONYA = menu.Item("UseZhonya").GetValue<bool>();
@@ -504,6 +504,7 @@ namespace Tibbuhs
                     ZHONYA.Cast();
                 }
             }
+            #region Endif
             if (sender.IsMe && args.SData.Name == "SummonerFlash")
             {
                 var LastFlashTime = Environment.TickCount;
@@ -518,6 +519,7 @@ namespace Tibbuhs
                     }
                 }
             }
+            #endregion
         }
         #endregion
         #endregion

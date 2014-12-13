@@ -66,6 +66,9 @@ namespace Tibbuhs
             #region Menu
             menu = new Menu("Tibbers is SoSharp", "tibbuhs", true);
 
+            menu.AddSubMenu(new Menu("Orbwalker", "orbw"));
+            orbw = new Orbwalking.Orbwalker(menu.SubMenu("orbw"));
+
             menu.AddSubMenu(new Menu("Target Selector", "ts"));
             SimpleTs.AddToMenu(menu.SubMenu("ts"));
 

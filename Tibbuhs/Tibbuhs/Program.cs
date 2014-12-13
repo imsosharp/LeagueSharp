@@ -111,7 +111,7 @@ namespace Tibbuhs
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
-            Game.PrintChat("Tibbers is SoSharp v.{0} loaded!", Assembly.GetExecutingAssembly().GetName().Version);
+            //Game.PrintChat("Tibbers is SoSharp v.{0} loaded!", Assembly.GetExecutingAssembly().GetName().Version);
             #endregion
         }
         #endregion

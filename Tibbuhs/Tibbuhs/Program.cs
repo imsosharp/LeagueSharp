@@ -54,8 +54,9 @@ namespace Tibbuhs
 
             #region Menu
             menu = new Menu("Tibbers is SoSharp", "tibbuhs", true);
-            orbw = new Orbwalking.Orbwalker(menu.SubMenu("orbwalker"));
-            SimpleTs.AddToMenu(menu);
+
+            menu.AddSubMenu(new Menu("Target Selector", "ts"));
+            SimpleTs.AddToMenu(menu.SubMenu("ts"));
 
             menu.AddSubMenu(new Menu("Laning settings", "farm"));
             menu.AddSubMenu(new Menu("Teamfight settings", "combo"));
@@ -221,10 +222,11 @@ namespace Tibbuhs
         #region Combo
         private static void Combo()
         {
+        //#TODO actual combo calculations T_T
+            Cast_R();
             Cast_Q("combo");
             Cast_W();
             Cast_E("combo");
-            Cast_R();
             if (menu.Item("FlashTibbersanytime").GetValue<bool>())
             {
                 FlashTibbers_pi.Aoe = true; FlashTibbers_pi.Collision = false; FlashTibbers_pi.Delay = 250; FlashTibbers_pi.Range = 1000; FlashTibbers_pi.Speed = float.MaxValue; FlashTibbers_pi.Type = SkillshotType.SkillshotCircle; FlashTibbers_pi.Radius = 100;

@@ -97,6 +97,7 @@ namespace Tibbuhs
             menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime")).SetValue(new Slider(3, 1, 5));
+            menu.SubMenu("misc").AddItem(new MenuItem("autotibbers", "AutoTibbers on flash")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("UseMarksmanPotionManager", "Use Marksman# Potion Manager")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
@@ -107,6 +108,7 @@ namespace Tibbuhs
             Drawing.OnDraw += Drawing_OnDraw;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
+            Obj_AI_Hero.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
             Game.PrintChat("Tibbers is SoSharp v.{0} loaded!", Assembly.GetExecutingAssembly().GetName().Version);
             #endregion
         }
@@ -228,7 +230,7 @@ namespace Tibbuhs
                 var flashtibbers_hitcount = FlashTibbers_po.AoeTargetsHitCount;
                 var flashtibbers_hitchance = FlashTibbers_po.Hitchance;
                 var flashtibbers_targetpos = FlashTibbers_po.UnitPosition;
-                if (flashtibbers_hitcount > menu.Item("FlashTibbersanytimemin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium)
+                if (GetPassiveStacks() == 4 && flashtibbers_hitcount > menu.Item("FlashTibbersanytimemin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium && Player.Distance(FlashTibbers_po.UnitPosition) > R.Range)
                 {
                     Player.Spellbook.CastSpell(Flash, flashtibbers_targetpos);
                     R.Cast(flashtibbers_targetpos, UsePackets());
@@ -376,10 +378,14 @@ namespace Tibbuhs
                 var flashtibbers_hitcount = FlashTibbers_po.AoeTargetsHitCount;
                 var flashtibbers_hitchance = FlashTibbers_po.Hitchance;
                 PredictedTibbers = FlashTibbers_po.UnitPosition;
-                if (flashtibbers_hitcount > menu.Item("FlashTibbersmin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium && !(R.WillHit(PredictedTibbers, Player.Position)))
+                if (GetPassiveStacks() == 4 && flashtibbers_hitcount > menu.Item("FlashTibbersmin").GetValue<int>() && flashtibbers_hitchance >= HitChance.Medium && Player.Distance(FlashTibbers_po.UnitPosition) > R.Range)
                 {
                     Player.Spellbook.CastSpell(Flash, PredictedTibbers);
                     R.Cast(PredictedTibbers, UsePackets());
+                }
+                else if (Player.Distance(FlashTibbers_po.UnitPosition) < R.Range)
+                {
+                    R.Cast(FlashTibbers_po.UnitPosition, UsePackets());
                 }
             }
             var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
@@ -404,22 +410,21 @@ namespace Tibbuhs
                 R.Cast(target, UsePackets());
             }
         }
-/* Endif
+        //Endif
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && args.SData.Name == "SummonerFlash")
             {
                 var LastFlashTime = Environment.TickCount;
-                if (Environment.TickCount - LastFlashTime < 300)
+                if (Environment.TickCount - LastFlashTime < 1)
                 {
-                    if (Q.WillHit(PredictedTibbers, Player.Position))
+                    if (R.WillHit(PredictedTibbers, Player.Position))
                     {
                     R.Cast(PredictedTibbers, UsePackets());
                     }
                 }
             }
         }
- */
         #endregion
 
         #region Utility

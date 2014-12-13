@@ -117,6 +117,9 @@ namespace Tibbuhs
             menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
             menu.SubMenu("misc").AddItem(new MenuItem("UseMarksmanPotionManager", "Use Marksman# Potion Manager")).SetValue(false);
             menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
+
+            menu.AddToMainMenu();
+
             #endregion
 
             #region Events

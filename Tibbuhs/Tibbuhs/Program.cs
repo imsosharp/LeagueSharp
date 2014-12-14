@@ -141,12 +141,12 @@ namespace Tibbuhs
         #region OnGameUpdate
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (menu.Item("farmtoggle").GetValue<KeyBind>().Active)
+            if (menu.Item("farmtoggle").GetValue<KeyBind>().Active || orbw.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 Game.PrintChat("Farm toggle active, tell sosharp");
                 Laning();
             }
-            if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
+            if (menu.Item("combotoggle").GetValue<KeyBind>().Active || orbw.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 Game.PrintChat("Combo toggle active, tell sosharp");
                 Combo();

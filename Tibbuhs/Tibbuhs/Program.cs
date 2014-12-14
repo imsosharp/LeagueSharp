@@ -143,10 +143,12 @@ namespace Tibbuhs
         {
             if (menu.Item("farmtoggle").GetValue<KeyBind>().Active)
             {
+                Game.PrintChat("Farm toggle active");
                 Laning();
             }
             if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
             {
+                Game.PrintChat("Combo toggle active");
                 Combo();
             }
             PassiveStacker();
@@ -273,6 +275,7 @@ namespace Tibbuhs
         private static void Laning()
         {
             var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+            if (target == null) Game.PrintChat("Target null! tell sosharp");
             Cast_Q("farm", target);
             Cast_E("farm");
         }
@@ -287,6 +290,7 @@ namespace Tibbuhs
             var combotarget = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
             var qtarget = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
             var wtarget = SimpleTs.GetTarget(W.Range, SimpleTs.DamageType.Magical);
+            if (combotarget == null) Game.PrintChat("combo target null! tell sosharp");
             var combodmg = ComboDmg(combotarget);
             if (combodmg >= combotarget.Health)
             {

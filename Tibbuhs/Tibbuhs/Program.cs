@@ -143,12 +143,12 @@ namespace Tibbuhs
         {
             if (menu.Item("farmtoggle").GetValue<KeyBind>().Active)
             {
-                Game.PrintChat("Farm toggle active");
+                Game.PrintChat("Farm toggle active, tell sosharp");
                 Laning();
             }
             if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
             {
-                Game.PrintChat("Combo toggle active");
+                Game.PrintChat("Combo toggle active, tell sosharp");
                 Combo();
             }
             PassiveStacker();

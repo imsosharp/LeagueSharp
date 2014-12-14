@@ -86,7 +86,7 @@ namespace Tibbuhs
             menu.SubMenu("farm").AddItem(new MenuItem("Wharass", "Use W Harass when target stunned")).SetValue(true);
             menu.SubMenu("farm").AddItem(new MenuItem("Qharassmana", "Use Q to harass when %mana more than")).SetValue(new Slider(25, 0, 100));
             menu.SubMenu("farm").AddItem(new MenuItem("Elanestuncharge", "Charge E stun in lane")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("lanetoggle", "Active:")).SetValue((new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
+            menu.SubMenu("farm").AddItem(new MenuItem("lanetoggle", "Active:")).SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press));
 
             menu.SubMenu("combo").AddItem(new MenuItem("Qcombo", "Use Q in teamfights")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Use W in teamfights")).SetValue(true);
@@ -99,7 +99,7 @@ namespace Tibbuhs
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbersmin", "Flash-Tibbers only if it will hit X enemies")).SetValue(new Slider(3,1,5));
             menu.SubMenu("combo").AddItem(new MenuItem("UseZHONYA", "Use Zhonya on Low-health No spells ready")).SetValue(true);
             menu.SubMenu("combo").AddItem(new MenuItem("ZHONYAminhealth", "Zhonya on %hp")).SetValue(new Slider(20, 0, 100));
-            menu.SubMenu("combo").AddItem(new MenuItem("combotoggle", "Active:")).SetValue((new KeyBind(32, KeyBindType.Press)));
+            menu.SubMenu("combo").AddItem(new MenuItem("combotoggle", "Active:")).SetValue(new KeyBind(32, KeyBindType.Press));
 
 
 
@@ -566,7 +566,7 @@ namespace Tibbuhs
         private static bool UsePackets()
         {
             if (menu.Item("packets").GetValue<bool>()) return true;
-            else return false;
+            return false;
         }
         #endregion
 

@@ -23,6 +23,7 @@ namespace PastingSharp
         {
 
             menu = new Menu("PastingSharp", "pasting", true);
+            menu.AddItem(new MenuItem("sleep", "Pause between pastes").SetValue(new Slider(1, 0, 15)));
             menu.AddItem(new MenuItem("paste", "Paste")).SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Press));
             Game.PrintChat("PastingSharp loaded. Press P to paste.");
 
@@ -56,8 +57,11 @@ namespace PastingSharp
                     var linestoprintsize = contents.Count();
                     Array.Clear(linestoprint, 0, linestoprintsize);
                 }
-
-                System.Threading.Thread.Sleep(1000); //remove
+                var sleep = (menu.Item("sleep").GetValue<int>());
+                if (sleep != 0)
+                {
+                    System.Threading.Thread.Sleep(sleep);
+                }
             }
             
         }

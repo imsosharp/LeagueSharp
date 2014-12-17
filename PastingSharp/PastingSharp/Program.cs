@@ -11,14 +11,14 @@ namespace PastingSharp
 {
     public class Program
     {
-        public string contents = "";
-        public Menu menu;
-        public void Main(string[] args)
+        public static string contents = "";
+        public static Menu menu;
+        public static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
-        public void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad(EventArgs args)
         {
 
             menu = new Menu("PastingSharp", "pasting", true);
@@ -27,7 +27,7 @@ namespace PastingSharp
 
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
-        public void Game_OnGameUpdate(EventArgs args)
+        public static void Game_OnGameUpdate(EventArgs args)
         {
 
             if (forms.Clipboard.ContainsText())

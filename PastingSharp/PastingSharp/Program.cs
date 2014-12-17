@@ -11,8 +11,8 @@ namespace PastingSharp
 {
     public class Program
     {
-        string contents = "";
-        Menu menu;
+        public string contents = "";
+        public Menu menu;
         public void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
@@ -33,7 +33,7 @@ namespace PastingSharp
             }
             if (menu.Item("paste").GetValue<KeyBind>().Active)
             {
-                Game.PrintChat(contents);
+                Game.Say(contents);
             }
             
         }

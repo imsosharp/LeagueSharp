@@ -12,6 +12,7 @@ namespace PastingSharp
     public class Program
     {
         public static string contents = "";
+        public static string[] linestoprint;
         public static Menu menu;
         public static void Main(string[] args)
         {
@@ -33,11 +34,26 @@ namespace PastingSharp
             if (forms.Clipboard.ContainsText())
             {
                 contents = forms.Clipboard.GetText();
+                if (contents.Contains("\n"))
+                {
+                    var separator = new string[] {"\n"};
+                    linestoprint = contents.Split(separator,StringSplitOptions.None);
+                }
             }
 
             if (menu.Item("paste").GetValue<KeyBind>().Active)
             {
-                Game.Say(contents);
+                if (linestoprint.Count() <= 1)
+                {
+                    Game.Say(contents);
+                }
+                else
+                {
+                    foreach (string s in linestoprint)
+                    {
+                        Game.Say(s);
+                    }
+                }
             }
             
         }

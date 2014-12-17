@@ -43,7 +43,7 @@ namespace PastingSharp
 
             if (menu.Item("paste").GetValue<KeyBind>().Active)
             {
-                if (linestoprint.Count() <= 1)
+                if (linestoprint == null)
                 {
                     Game.Say(contents);
                 }
@@ -53,7 +53,11 @@ namespace PastingSharp
                     {
                         Game.Say(s);
                     }
+                    var linestoprintsize = contents.Count();
+                    Array.Clear(linestoprint, 0, linestoprintsize);
                 }
+
+                System.Threading.Thread.Sleep(1000); //remove
             }
             
         }

@@ -20,17 +20,21 @@ namespace PastingSharp
 
         public void Game_OnGameLoad(EventArgs args)
         {
-            Game.OnGameUpdate += Game_OnGameUpdate;
+
             menu = new Menu("PastingSharp", "pasting", true);
             menu.AddItem(new MenuItem("paste", "Paste")).SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Press));
             Game.PrintChat("PastingSharp loaded. Press P to paste.");
+
+            Game.OnGameUpdate += Game_OnGameUpdate;
         }
         public void Game_OnGameUpdate(EventArgs args)
         {
+
             if (forms.Clipboard.ContainsText())
             {
                 contents = forms.Clipboard.GetText();
             }
+
             if (menu.Item("paste").GetValue<KeyBind>().Active)
             {
                 Game.Say(contents);

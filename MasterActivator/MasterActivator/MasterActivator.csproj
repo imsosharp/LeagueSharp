@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GenericDamageLib.cs" />
+    <Compile Include="KurisuLib.cs" />
     <Compile Include="MActivator.cs" />
     <Compile Include="entity\MItem.cs" />
     <Compile Include="enumerator\ItemTypeId.cs" />

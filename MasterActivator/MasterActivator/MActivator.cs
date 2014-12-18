@@ -13,10 +13,11 @@ namespace MasterActivator
 {
     internal class MActivator
     {
-        private Menu Config;
+        internal Menu Config;
         private Obj_AI_Hero _player;
         private int playerHit;
         private bool gotHit = false;
+        private SpellSlot shieldSpellSlot;
         TargetSelector ts = new TargetSelector(600, TargetSelector.TargetingMode.AutoPriority);
 
         // leagueoflegends.wikia.com/
@@ -171,6 +172,28 @@ namespace MasterActivator
                         checkAndUse(barrier, "", incDmg);
                         checkAndUse(seraph, "", incDmg);
                         autoshields(incDmg);
+                    }
+                }
+                if (attacker.Type == GameObjectType.obj_AI_Hero && attacker.IsEnemy)
+                {
+                    var targetList = ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly).OrderBy(h => h.Distance(args.End));
+                    foreach (var a in targetList)
+                    {
+                        foreach (var spell in KurisuLib.CCList)
+                        {
+                            var shields = new MItem[] { titanswraith, blackshield, unbreakable, palecascade, bulwark, courage, eyeofstorm, inspire, helppix, prismaticbarrier, commandprotect, spellshield };
+                            foreach (var item in shields)
+                            {
+                                shieldSpellSlot = _player.GetSpellSlot(item.name);
+                            }
+                            if (spell.SDataName == args.SData.Name)
+                            {
+                                if (a.Distance(args.End) <= 250f && _player.Spellbook.CanUseSpell(shieldSpellSlot) == SpellState.Ready)
+                                        {
+                                            _player.Spellbook.CastSpell(shieldSpellSlot);
+                                        }
+                            }
+                        }
                     }
                 }
             }
@@ -624,12 +647,11 @@ namespace MasterActivator
                             {
                                 if (_player.Spellbook.CanUseSpell(spellSlot) == SpellState.Ready)
                                 {
-
                                     int minPercent = Config.Item(item.menuVariable + "MinHpPct").GetValue<Slider>().Value;
                                     int usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
                                     int manaPercent = Config.Item(item.menuVariable + "UseManaPct").GetValue<Slider>().Value;
                                     if (actualHeroManaPercent > manaPercent && actualHeroHpPercent <= usePercent &&
-                                        incDamagePercent >= minPercent && playerHit == _player.NetworkId && gotHit)
+                                    incDamagePercent >= minPercent && playerHit == _player.NetworkId && gotHit)
                                     {
                                         _player.Spellbook.CastSpell(item.abilitySlot, _player);
                                         gotHit = false;
@@ -968,6 +990,7 @@ namespace MasterActivator
 
             return cc;
         }
+
     }
 }
 

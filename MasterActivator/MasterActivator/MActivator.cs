@@ -33,7 +33,7 @@ namespace MasterActivator
         MItem muramana = new MItem("Muramana", "Muramana", "muramana", 3042, ItemTypeId.Buff);
         MItem seraph = new MItem("Seraph's Embrace", "Seraph's", "seraph", 3040, ItemTypeId.Deffensive);
         MItem zhonya = new MItem("Zhonya's Hourglass", "Zhonya's", "zhonya", 3157, ItemTypeId.Deffensive);
-        //Item banner = new Item("Randuin's Omen", "Randuin's", "randuin", 3143, 500);
+        MItem randuins = new MItem("Randuin's Omen", "Randuin's", "randuin", 3143, ItemTypeId.Slows, 500);
         //Item banner = new Item("Banner of Command", "BoCommand", "banner", 3060); // falta range
         MItem mountain = new MItem("Face of the Mountain", "FoMountain", "mountain", 3401, ItemTypeId.Deffensive, 700); // falta range
         //Item frost = new Item("Frost Queen's Claim", "Frost Queen's", "frost", 3092, 850);
@@ -597,6 +597,21 @@ namespace MasterActivator
                                         }
                                     }
                                 }
+
+                                else if (item.type == ItemTypeId.Slows)
+                                {
+                                    var userange = item.range - 50;
+                                    int enemyInRange = Utility.CountEnemysInRange(_player, (int)userange);
+                                    if (enemyInRange >= 1)
+                                    {
+                                        var usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
+                                        var playerHpPercent = (int)((_player.Health / _player.MaxHealth) * 100);
+                                        if (actualHeroHpPercent <= usePercent)
+                                        {
+                                            useItem(item.id);
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -816,6 +831,9 @@ namespace MasterActivator
             Config.SubMenu("deffensive").AddItem(new MenuItem("justPred", "Just Predicted")).SetValue(true);
             createMenuItem(solari, 45, "deffensive");
             createMenuItem(mountain, 45, "deffensive");
+
+            Config.AddSubMenu(new Menu("Slows", "slows"));
+            createMenuItem(randuins, 30, "slows", false, true);
 
             Config.AddSubMenu(new Menu("Auto Shield", "autoshield"));
             createMenuSpell(blackshield, 90, "autoshield", 40, true);

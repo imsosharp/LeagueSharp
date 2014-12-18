@@ -14,6 +14,7 @@ namespace MasterActivator.enumerator
         PurifierSpell = 7,
         ManaRegeneratorSpell = 8,
         OffensiveSpell = 9,
-        Ability = 10
+        Ability = 10,
+        Slows = 11
     }
 }

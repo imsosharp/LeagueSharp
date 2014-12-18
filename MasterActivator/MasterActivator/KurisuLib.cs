@@ -1,4 +1,4 @@
-﻿/* KurisuLib borrowed from Kurisu's Morgana with his permission
+﻿/* KurisuLib borrowed from Kurisu's Morgana
 Kurisu is a pretty cool bro and a good developer.
 You can find his github here:
 https://github.com/Kurisu44/

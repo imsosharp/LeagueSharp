@@ -388,7 +388,7 @@ namespace MasterActivator
                                         if ((item.type == ItemTypeId.DeffensiveSpell && actualHeroHpPercent <= usePercent && playerHit == hero.NetworkId && gotHit) ||
                                              (item.type == ItemTypeId.ManaRegeneratorSpell && actualHeroManaPercent <= usePercent))
                                         {
-                                            _player.SummonerSpellbook.CastSpell(spellSlot);
+                                            _player.Spellbook.CastSpell(spellSlot);
                                             gotHit = false;
                                         }
                                     }
@@ -477,14 +477,14 @@ namespace MasterActivator
                         var spellSlot = Utility.GetSpellSlot(_player, item.menuVariable);
                         if (spellSlot != SpellSlot.Unknown)
                         {
-                            if (_player.SummonerSpellbook.CanUseSpell(spellSlot) == SpellState.Ready)
+                            if (_player.Spellbook.CanUseSpell(spellSlot) == SpellState.Ready)
                             {
                                 if (item.type == ItemTypeId.DeffensiveSpell)
                                 {
                                     int usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
                                     if (actualHeroHpPercent <= usePercent && playerHit == _player.NetworkId && gotHit)
                                     {
-                                        _player.SummonerSpellbook.CastSpell(spellSlot);
+                                        _player.Spellbook.CastSpell(spellSlot);
                                         gotHit = false;
                                     }
                                 }
@@ -493,7 +493,7 @@ namespace MasterActivator
                                     int usePercent = Config.Item(item.menuVariable + "UseOnPercent").GetValue<Slider>().Value;
                                     if (actualHeroManaPercent <= usePercent && !Utility.InFountain())
                                     {
-                                        _player.SummonerSpellbook.CastSpell(spellSlot);
+                                        _player.Spellbook.CastSpell(spellSlot);
                                     }
                                 }
                                 else if (item.type == ItemTypeId.PurifierSpell)
@@ -503,7 +503,7 @@ namespace MasterActivator
                                     {
                                         if (checkCC(_player))
                                         {
-                                            _player.SummonerSpellbook.CastSpell(spellSlot);
+                                            _player.Spellbook.CastSpell(spellSlot);
                                         }
                                     }
                                 }
@@ -545,7 +545,7 @@ namespace MasterActivator
                                                 bool overIgnite = Config.Item("overIgnite").GetValue<bool>();
                                                 if ((!overIgnite && !target.HasBuff("summonerdot")) || overIgnite)
                                                 {
-                                                    _player.SummonerSpellbook.CastSpell(spellSlot, target);
+                                                    _player.Spellbook.CastSpell(spellSlot, target);
                                                     //Drawing.DrawText(pScreen[0], pScreen[1], System.Drawing.Color.Crimson, "Kill in " + aaleft);
                                                 }
 
@@ -586,7 +586,7 @@ namespace MasterActivator
 
                                                     if (b)
                                                     {
-                                                        _player.SummonerSpellbook.CastSpell(spellSlot, minion);
+                                                        _player.Spellbook.CastSpell(spellSlot, minion);
                                                     }
                                                 }
                                             }

@@ -78,50 +78,50 @@ namespace Tibbuhs
             menu.AddSubMenu(new Menu("Drawings", "drawings"));
             menu.AddSubMenu(new Menu("Misc settings", "misc"));
 
-            menu.SubMenu("farm").AddItem(new MenuItem("Qlasthit", "Use Q Lasthit")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("Qstunlasthit", "Use Q stun to Lasthit")).SetValue(false);
-            menu.SubMenu("farm").AddItem(new MenuItem("Qharass", "Use Q Harass")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("Qstunharass", "Use Q stun to Harass")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("AAharass", "Use AA Harass when target stunned")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("Wharass", "Use W Harass when target stunned")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("Qharassmana", "Use Q to harass when %mana more than")).SetValue(new Slider(25, 0, 100));
-            menu.SubMenu("farm").AddItem(new MenuItem("Elanestuncharge", "Charge E stun in lane")).SetValue(true);
-            menu.SubMenu("farm").AddItem(new MenuItem("lanetoggle", "Active:")).SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press));
+            menu.SubMenu("farm").AddItem(new MenuItem("Qlasthit", "Use Q Lasthit").SetValue(true));
+            menu.SubMenu("farm").AddItem(new MenuItem("Qstunlasthit", "Use Q stun to Lasthit").SetValue(false));
+            menu.SubMenu("farm").AddItem(new MenuItem("Qharass", "Use Q Harass").SetValue(true));
+            menu.SubMenu("farm").AddItem(new MenuItem("Qstunharass", "Use Q stun to Harass").SetValue(true));
+            menu.SubMenu("farm").AddItem(new MenuItem("AAharass", "Use AA Harass when target stunned").SetValue(true));
+            menu.SubMenu("farm").AddItem(new MenuItem("Wharass", "Use W Harass when target stunned").SetValue(true));
+            menu.SubMenu("farm").AddItem(new MenuItem("Qharassmana", "Use Q to harass when %mana more than").SetValue(new Slider(25, 0, 100)));
+            menu.SubMenu("farm").AddItem(new MenuItem("Elanestuncharge", "Charge E stun in lane").SetValue(true));
+            menu.SubMenu("farm").AddItem(new MenuItem("lanetoggle", "Active:").SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
 
-            menu.SubMenu("combo").AddItem(new MenuItem("Qcombo", "Use Q in teamfights")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Use W in teamfights")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("Wcombomin", "Only use W if it will hit X enemies")).SetValue(new Slider(1, 1, 5));
-            menu.SubMenu("combo").AddItem(new MenuItem("Wstuncombo", "Only use W if stun ready")).SetValue(false);
-            menu.SubMenu("combo").AddItem(new MenuItem("Ecombostuncharge", "Charge E stun in teamfights")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("Rifcantkill", "Summon tibbers even if full combo can't kill")).SetValue(false);
-            menu.SubMenu("combo").AddItem(new MenuItem("RcomboOnlyOn4Stacks", "Only summon Tibbers if can stun")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbers", "Flash-Tibbers to stun")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbersmin", "Flash-Tibbers only if it will hit X enemies")).SetValue(new Slider(3,1,5));
-            menu.SubMenu("combo").AddItem(new MenuItem("UseZHONYA", "Use Zhonya on Low-health No spells ready")).SetValue(true);
-            menu.SubMenu("combo").AddItem(new MenuItem("ZHONYAminhealth", "Zhonya on %hp")).SetValue(new Slider(20, 0, 100));
-            menu.SubMenu("combo").AddItem(new MenuItem("combotoggle", "Active:")).SetValue(new KeyBind(32, KeyBindType.Press));
-
-
-
-            menu.SubMenu("defense").AddItem(new MenuItem("Wstunescape", "Use W stun to escape")).SetValue(true);
-            menu.SubMenu("defense").AddItem(new MenuItem("Wstunescaperange", "Max W stun escape range")).SetValue(new Slider(250, 0, (int)W.Range));
-            menu.SubMenu("defense").AddItem(new MenuItem("Eenemies", "Use E when enemies near you")).SetValue(true);
-            menu.SubMenu("defense").AddItem(new MenuItem("Eenemiesrange", "Use E when enemies closer than")).SetValue(new Slider(600, 0, 1250));
-
-            menu.SubMenu("drawings").AddItem(new MenuItem("drawQ", "Draw Q range")).SetValue(true);
-            menu.SubMenu("drawings").AddItem(new MenuItem("drawW", "Draw W range")).SetValue(true);
-            menu.SubMenu("drawings").AddItem(new MenuItem("drawR", "Draw R range")).SetValue(true);
-            menu.SubMenu("drawings").AddItem(new MenuItem("drawDMG", "Draw full-combo DMG")).SetValue(true);
+            menu.SubMenu("combo").AddItem(new MenuItem("Qcombo", "Use Q in teamfights").SetValue(true));
+            menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Use W in teamfights").SetValue(true));
+            menu.SubMenu("combo").AddItem(new MenuItem("Wcombomin", "Only use W if it will hit X enemies").SetValue(new Slider(1, 1, 5)));
+            menu.SubMenu("combo").AddItem(new MenuItem("Wstuncombo", "Only use W if stun ready").SetValue(false));
+            menu.SubMenu("combo").AddItem(new MenuItem("Ecombostuncharge", "Charge E stun in teamfights").SetValue(true));
+            menu.SubMenu("combo").AddItem(new MenuItem("Rifcantkill", "Summon tibbers even if full combo can't kill").SetValue(false));
+            menu.SubMenu("combo").AddItem(new MenuItem("RcomboOnlyOn4Stacks", "Only summon Tibbers if can stun").SetValue(true));
+            menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbers", "Flash-Tibbers to stun").SetValue(true));
+            menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbersmin", "Flash-Tibbers only if it will hit X enemies").SetValue(new Slider(3,1,5)));
+            menu.SubMenu("combo").AddItem(new MenuItem("UseZHONYA", "Use Zhonya on Low-health No spells ready").SetValue(true));
+            menu.SubMenu("combo").AddItem(new MenuItem("ZHONYAminhealth", "Zhonya on %hp").SetValue(new Slider(20, 0, 100)));
+            menu.SubMenu("combo").AddItem(new MenuItem("combotoggle", "Active:").SetValue(new KeyBind(32, KeyBindType.Press)));
 
 
-            menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E")).SetValue(false);
-            menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible")).SetValue(true);
-            menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime")).SetValue(new Slider(3, 1, 5));
-            menu.SubMenu("misc").AddItem(new MenuItem("autotibbers", "AutoTibbers on flash")).SetValue(true);
-            menu.SubMenu("misc").AddItem(new MenuItem("tibbersinterrupt", "Use Tibbers to interrupt dangerous spells")).SetValue(true);
-            menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser")).SetValue(true);
-            menu.SubMenu("misc").AddItem(new MenuItem("UseMarksmanPotionManager", "Use Marksman# Potion Manager")).SetValue(false);
-            menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets")).SetValue(true);
+
+            menu.SubMenu("defense").AddItem(new MenuItem("Wstunescape", "Use W stun to escape").SetValue(true));
+            menu.SubMenu("defense").AddItem(new MenuItem("Wstunescaperange", "Max W stun escape range").SetValue(new Slider(250, 0, (int)W.Range)));
+            menu.SubMenu("defense").AddItem(new MenuItem("Eenemies", "Use E when enemies near you").SetValue(true));
+            menu.SubMenu("defense").AddItem(new MenuItem("Eenemiesrange", "Use E when enemies closer than").SetValue(new Slider(600, 0, 1250)));
+
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawQ", "Draw Q range").SetValue(true));
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawW", "Draw W range").SetValue(true));
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawR", "Draw R range").SetValue(true));
+            menu.SubMenu("drawings").AddItem(new MenuItem("drawDMG", "Draw full-combo DMG").SetValue(true));
+
+
+            menu.SubMenu("misc").AddItem(new MenuItem("passivestacker", "Always stack passive with E").SetValue(false));
+            menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytime", "Flash-Tibbers anytime it is possible").SetValue(true));
+            menu.SubMenu("misc").AddItem(new MenuItem("FlashTibbersanytimemin", "Min targets for Flash-Tibbers anytime").SetValue(new Slider(3, 1, 5)));
+            menu.SubMenu("misc").AddItem(new MenuItem("autotibbers", "AutoTibbers on flash").SetValue(true));
+            menu.SubMenu("misc").AddItem(new MenuItem("tibbersinterrupt", "Use Tibbers to interrupt dangerous spells").SetValue(true));
+            menu.SubMenu("misc").AddItem(new MenuItem("AntiGapcloser", "Anti-Gapcloser").SetValue(true));
+            menu.SubMenu("misc").AddItem(new MenuItem("UseMarksmanPotionManager", "Use Marksman# Potion Manager").SetValue(false));
+            menu.SubMenu("misc").AddItem(new MenuItem("packets", "Use Packets").SetValue(true));
 
             menu.AddToMainMenu();
 
@@ -141,12 +141,12 @@ namespace Tibbuhs
         #region OnGameUpdate
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (menu.Item("farmtoggle").GetValue<KeyBind>().Active || orbw.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+            if (menu.Item("farmtoggle").GetValue<KeyBind>().Active)
             {
                 Game.PrintChat("Farm toggle active, tell sosharp");
                 Laning();
             }
-            if (menu.Item("combotoggle").GetValue<KeyBind>().Active || orbw.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
             {
                 Game.PrintChat("Combo toggle active, tell sosharp");
                 Combo();

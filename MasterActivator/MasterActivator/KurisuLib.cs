@@ -16,7 +16,8 @@ namespace MasterActivator
         Unknown = 0,
         Line = 1,
         Circle = 2,
-        Cone = 3
+        Cone = 3,
+        Targeted = 4
     }
 
     public class KurisuLib
@@ -1568,7 +1569,15 @@ new KurisuLib
             #endregion
 
             #region GDList
-
+            GDList.Add(
+                new KurisuLib
+                {
+                    HeroName = "Syndra",
+                    SpellMenuName = "Unleashed Power",
+                    Slot = SpellSlot.R,
+                    DangerLevel = 3,
+                    SDataName = "SyndraR",
+                });
             #endregion
         }
     }

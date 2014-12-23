@@ -184,6 +184,7 @@ namespace MasterActivator
                             var shields = new MItem[] { titanswraith, blackshield, unbreakable, palecascade, bulwark, courage, eyeofstorm, inspire, helppix, prismaticbarrier, commandprotect, spellshield };
                             foreach (var item in shields)
                             {
+                                if (item != null)
                                 shieldSpellSlot = _player.GetSpellSlot(item.name);
                             }
                             if (spell.SDataName == args.SData.Name)
@@ -192,6 +193,23 @@ namespace MasterActivator
                                         {
                                             _player.Spellbook.CastSpell(shieldSpellSlot);
                                         }
+                            }
+                        }
+
+                        foreach (var spell in KurisuLib.GDList)
+                        {
+                            var shields = new MItem[] { titanswraith, blackshield, unbreakable, palecascade, bulwark, courage, eyeofstorm, inspire, helppix, prismaticbarrier, commandprotect, spellshield };
+                            foreach (var item in shields)
+                            {
+                                if (item != null)
+                                    shieldSpellSlot = _player.GetSpellSlot(item.name);
+                            }
+                            if (spell.SDataName == args.SData.Name)
+                            {
+                                if (a.Distance(args.End) <= 250f && _player.Spellbook.CanUseSpell(shieldSpellSlot) == SpellState.Ready)
+                                {
+                                    _player.Spellbook.CastSpell(shieldSpellSlot);
+                                }
                             }
                         }
                     }

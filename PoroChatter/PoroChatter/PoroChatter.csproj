@@ -7,8 +7,8 @@
     <ProjectGuid>{594921BE-2611-4F49-8AE2-0BBC8D5AA6FE}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PastingSharp</RootNamespace>
-    <AssemblyName>PastingSharp</AssemblyName>
+    <RootNamespace>PoroChatter</RootNamespace>
+    <AssemblyName>PoroChatter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

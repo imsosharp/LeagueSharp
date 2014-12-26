@@ -10,8 +10,6 @@ namespace PoroChatter
 {
     public class Program
     {
-        public static string contents = "";
-        public static string[] linestoprint;
         public static Menu menu;
         public static void Main(string[] args)
         {

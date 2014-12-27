@@ -14,8 +14,8 @@ namespace Support
 {
     internal class FollowInfo
     {
-            // Considered AFK after 20 seconds
-        private const int AFK_TIMESPAN = 20 * 1000;
+            // Considered AFK after 30 seconds
+        private const int AFK_TIMESPAN = 30 * 1000;
         // Holds previous known position of player
         public Vector3 PreviousPosition;
         // Holds previous time position was recorded

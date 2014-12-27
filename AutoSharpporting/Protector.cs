@@ -597,13 +597,13 @@ namespace Support
                             {
                                 var v = minion.ServerPosition.To2D() - skillshot.Unit.ServerPosition.To2D();
                                 if (minion.Name == "Seed" && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0 &&
-                                    minion.Distance(skillshot.Unit) < 800 && (minion.Team != ObjectManager.Player.Team))
+                                    minion.Distance(skillshot.Unit, false) < 800 && (minion.Team != ObjectManager.Player.Team))
                                 {
                                     var start = minion.ServerPosition.To2D();
                                     var end = skillshot.Unit.ServerPosition.To2D()
                                         .Extend(
                                             minion.ServerPosition.To2D(),
-                                            skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000);
+                                            skillshot.Unit.Distance(minion, false) > 200 ? 1300 : 1000);
 
                                     var skillshotToAdd = new Skillshot(
                                         skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,

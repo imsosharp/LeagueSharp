@@ -101,28 +101,26 @@ namespace Support.Util
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return ObjectManager.Player.CountEnemysInRange((int)range) >= numOfEnemy;
+            return Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
         }
-
         public static List<Obj_AI_Hero> AllyInRange(float range)
         {
-            return ObjectManager
-                .Get<Obj_AI_Hero>()
-                .Where(
-                    h =>
-                        ObjectManager.Player.Distance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid &&
-                        !h.IsDead)
-                .OrderBy(h => ObjectManager.Player.Distance(h.Position))
-                .ToList();
+            return
+            ObjectManager.Get<Obj_AI_Hero>()
+            .Where(
+            h =>
+            Geometry.Distance(ObjectManager.Player, h.Position) < range && h.IsAlly && !h.IsMe &&
+            h.IsValid && !h.IsDead)
+            .OrderBy(h => Geometry.Distance(ObjectManager.Player, h.Position))
+            .ToList();
         }
-
         public static Obj_AI_Hero AllyBelowHp(int percentHp, float range)
         {
             foreach (var ally in ObjectManager.Get<Obj_AI_Hero>())
             {
                 if (ally.IsMe)
                 {
-                    if (((ObjectManager.Player.Health/ObjectManager.Player.MaxHealth)*100) < percentHp)
+                    if (((ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100) < percentHp)
                     {
                         return ally;
                     }
@@ -130,13 +128,12 @@ namespace Support.Util
                 else if (ally.IsAlly)
                 {
                     if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range &&
-                        ((ally.Health/ally.MaxHealth)*100) < percentHp)
+                    ((ally.Health / ally.MaxHealth) * 100) < percentHp)
                     {
                         return ally;
                     }
                 }
             }
-
             return null;
         }
     }

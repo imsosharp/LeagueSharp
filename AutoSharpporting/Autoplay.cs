@@ -35,6 +35,16 @@ namespace Support
         private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
+        public static Dictionary<string, FollowInfo> _AfkTracker; //ly adam
+        public static List<Obj_AI_Hero> Allies
+        {
+            get
+            {
+                return ObjectManager
+                    .Get<Obj_AI_Hero>()
+                    .Where(hero => hero.Team == bot.Team && !hero.IsMe).ToList();
+            }
+        }
         
 
         public Autoplay()
@@ -51,6 +61,23 @@ namespace Support
         public void OnGameEnd(EventArgs args)
         {
 
+        }
+
+        public static Dictionary<string, FollowInfo> AfkTracker
+        {
+            get
+            {
+                if (_AfkTracker == null)
+                {
+                    _AfkTracker = new Dictionary<string, FollowInfo>();
+                    foreach (Obj_AI_Hero ally in Allies)
+                    {
+                        _AfkTracker.Add(ally.ChampionName, new FollowInfo(ally.Position, Environment.TickCount));
+                    }
+                }
+
+                return _AfkTracker;
+            }
         }
 
         private static void doAutoplay()

@@ -19,13 +19,17 @@ namespace Support
     {
         static int qlvl, wlvl, elvl, rlvl, buyIndex = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        public static int[] shopList = { 3041, 3020, 3028, 3174, 3222, 3092, 2045, 3190, 0 }; //default
+        //public static int[] shopList = { 3041, 3020, 3028, 3174, 3222, 3092, 2045, 3190, 0 }; //default
+        static ItemId[] shopList = new ItemId[] { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
+        
         public static void doChecks()
         {
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
                 //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
                 //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
+
+                Autoplay.bot.BuyItem(ItemId.Boots_of_Speed);
                 System.Threading.Thread.Sleep(1500);
             }
             if ((qlvl + wlvl + elvl + rlvl) < Autoplay.bot.Level)
@@ -60,7 +64,7 @@ namespace Support
             }
             if (Utility.InFountain())
             {
-                if (shopList[buyIndex] != 0)
+                /* if (shopList[buyIndex] != 0)
                 {
                     int thisItem = shopList[buyIndex];
                     if (!hasItem(thisItem))
@@ -71,13 +75,24 @@ namespace Support
                     {
                         buyIndex += 1;
                     }
+                } */
+                foreach (ItemId item in shopList)
+                {
+                    ItemId thisItem = shopList[buyIndex];
+                    if (!hasItem(item))
+                    {
+                        Autoplay.bot.BuyItem(item);
+                    }
+                    else
+                    {
+                        buyIndex += 1;
+                    }
                 }
             }
         }
-
-        public static bool hasItem(int id)
+        public static bool hasItem(ItemId item)
         {
-            return Items.HasItem(id, Autoplay.bot);
+            return Items.HasItem((int)item, Autoplay.bot);
         }
         public static void buyItem(int id)
         {

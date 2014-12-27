@@ -24,10 +24,6 @@ namespace Support
         
         public static void doChecks()
         {
-            if (Autoplay.AfkTracker[Autoplay.carry.ChampionName].IsAfk())
-            {
-                Autoplay.carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(Autoplay.bot, false) < float.MaxValue && x.IsAlly && !Autoplay.AfkTracker[Autoplay.carry.ChampionName].IsAfk());
-            }
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
                 //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();

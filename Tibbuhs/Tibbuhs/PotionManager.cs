@@ -106,7 +106,7 @@ namespace Tibbuhs
                     {
                         var healthSlot = GetPotionSlot(PotionType.Health);
                         if (!IsBuffActive(PotionType.Health))
-                            ObjectManager.Player.Spellbook.CastSpell(healthSlot.SpellSlot);
+                            healthSlot.UseItem();
                     }
                 }
                 if (ExtrasMenu.Item("ManaPotion").GetValue<bool>())
@@ -115,7 +115,7 @@ namespace Tibbuhs
                     {
                         var manaSlot = GetPotionSlot(PotionType.Mana);
                         if (!IsBuffActive(PotionType.Mana))
-                            ObjectManager.Player.Spellbook.CastSpell(manaSlot.SpellSlot);
+                            manaSlot.UseItem();
                     }
                 }
             }

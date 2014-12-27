@@ -44,7 +44,7 @@ namespace Support
         }
         private static void OnUpdate(EventArgs args)
         {
-            metaHandler.doChecks();
+            MetaHandler.doChecks();
             doAutoplay();
         }
         
@@ -63,7 +63,7 @@ namespace Support
             {
                 if (Utility.InFountain())
                 {
-                    metaHandler.doChecks();
+                   MetaHandler.doChecks();
                     if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
@@ -79,9 +79,9 @@ namespace Support
                 }
                 if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
                 {
-                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot) < 4000 && x.IsAlly) == null))
+                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly) == null))
                     {
-                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot) < 4000 && x.IsAlly);
+                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly);
                     }
                 }
             }
@@ -104,9 +104,9 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) && bot.Distance(carry) > 3000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
+                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) && bot.Distance(carry, false) > 3000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
                 {
-                    nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot) < 6000 && x.IsAlly);
+                    nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
                     if (nearestAllyTurret != null)
                     {
                         tempcarry = carry;

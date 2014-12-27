@@ -1,33 +1,41 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Nunu.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
+// 
+// Filename: Support/Support/Nunu.cs
+// Created:  16/11/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Plugins
 {
+    #region
+
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+
+    #endregion
+
     public class Nunu : PluginBase
     {
         private int LastLaugh { get; set; }
@@ -47,7 +55,9 @@ namespace Support.Plugins
             {
                 var packet = Packet.S2C.PlayEmote.Decoded(args.PacketData);
                 if (packet.NetworkId == Player.NetworkId && packet.EmoteId == (byte) Packet.Emotes.Laugh)
+                {
                     args.Process = false;
+                }
             }
         }
 
@@ -60,7 +70,9 @@ namespace Support.Plugins
                 {
                     var minion = MinionManager.GetMinions(Player.Position, Q.Range).FirstOrDefault();
                     if (minion.IsValidTarget(Q.Range))
+                    {
                         Q.CastOnUnit(minion, UsePackets);
+                    }
                 }
 
                 var allys = Helpers.AllyInRange(W.Range).OrderByDescending(h => h.FlatPhysicalDamageMod).ToList();
@@ -87,7 +99,9 @@ namespace Support.Plugins
                 {
                     var minion = MinionManager.GetMinions(Player.Position, Q.Range).FirstOrDefault();
                     if (minion.IsValidTarget(Q.Range))
+                    {
                         Q.CastOnUnit(minion, UsePackets);
+                    }
                 }
 
                 var allys = Helpers.AllyInRange(W.Range).OrderByDescending(h => h.FlatPhysicalDamageMod).ToList();
@@ -119,14 +133,18 @@ namespace Support.Plugins
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
+            {
                 return;
+            }
 
             if (E.CastCheck(gapcloser.Sender, "Gapcloser.E"))
             {
                 E.CastOnUnit(gapcloser.Sender, UsePackets);
 
                 if (W.IsReady())
+                {
                     W.CastOnUnit(Player, UsePackets);
+                }
             }
         }
 
@@ -148,7 +166,7 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddList("Misc.Laugh", "Laugh Emote", new[] {"OFF", "ON", "ON + Mute"});
+            config.AddList("Misc.Laugh", "Laugh Emote", new[] { "OFF", "ON", "ON + Mute" });
             config.AddBool("Misc.E.NoFace", "E NoFace Exploit", false);
         }
 

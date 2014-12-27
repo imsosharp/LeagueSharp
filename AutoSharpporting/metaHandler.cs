@@ -15,7 +15,7 @@ using SharpDX;
 
 namespace Support
 {
-    internal class metaHandler
+    internal class MetaHandler
     {
         static int qlvl, wlvl, elvl, rlvl, buyIndex = 0;
         static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
@@ -24,8 +24,8 @@ namespace Support
         {
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
-                Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
+                //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
+                //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
                 System.Threading.Thread.Sleep(1500);
             }
             if ((qlvl + wlvl + elvl + rlvl) < Autoplay.bot.Level)

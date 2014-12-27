@@ -63,7 +63,7 @@ namespace Support.Plugins
         {
         }
 
-        public override void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
         }
 

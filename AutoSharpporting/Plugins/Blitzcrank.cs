@@ -1,36 +1,44 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Blitzcrank.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
-using Collision = LeagueSharp.Common.Collision;
+// 
+// Filename: Support/Support/Blitzcrank.cs
+// Created:  05/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Plugins
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using Collision = LeagueSharp.Common.Collision;
+
+    #endregion
+
     public class Blitzcrank : PluginBase
     {
         public Blitzcrank()
@@ -48,16 +56,24 @@ namespace Support.Plugins
             get
             {
                 if (!Q.IsReady())
+                {
                     return true;
+                }
 
                 if (!ConfigValue<bool>("Misc.Q.Block"))
+                {
                     return false;
+                }
 
                 if (!Target.IsValidTarget())
+                {
                     return true;
+                }
 
                 if (Target.HasBuff("BlackShield"))
+                {
                     return true;
+                }
 
                 if (Helpers.AllyInRange(1200)
                     .Any(ally => ally.Distance(Target) < ally.AttackRange + ally.BoundingRadius))
@@ -106,7 +122,9 @@ namespace Support.Plugins
                     if (R.CastCheck(Target, "ComboR"))
                     {
                         if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
+                        {
                             R.Cast();
+                        }
                     }
                 }
 
@@ -147,7 +165,8 @@ namespace Support.Plugins
             if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) && !BlockQ &&
                 args.Caster == Target && args.Type == Packet.AttackTypePacket.TargetedAA)
             {
-                var collision = Collision.GetCollision(new List<Vector3> { args.Caster.Position },
+                var collision = Collision.GetCollision(
+                    new List<Vector3> { args.Caster.Position },
                     new PredictionInput { Delay = 0.25f, Radius = 70, Speed = 1800 });
 
                 if (collision.Count == 0)
@@ -157,16 +176,22 @@ namespace Support.Plugins
             }
         }
 
-        public override void OnAfterAttack(Obj_AI_Base unit, Obj_AI_Base target)
+        public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
             if (!unit.IsMe)
+            {
                 return;
+            }
 
             if (!target.IsValid<Obj_AI_Hero>() && !target.Name.ToLower().Contains("ward"))
+            {
                 return;
+            }
 
             if (!E.IsReady())
+            {
                 return;
+            }
 
             if (E.Cast())
             {
@@ -178,7 +203,9 @@ namespace Support.Plugins
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
+            {
                 return;
+            }
 
             if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
@@ -198,7 +225,9 @@ namespace Support.Plugins
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            {
                 return;
+            }
 
             if (E.CastCheck(unit, "InterruptE"))
             {

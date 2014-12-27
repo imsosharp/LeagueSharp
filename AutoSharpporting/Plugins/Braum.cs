@@ -1,37 +1,45 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Braum.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Support.Evade;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
+// 
+// Filename: Support/Support/Braum.cs
+// Created:  01/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Plugins
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Support.Evade;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using SpellData = LeagueSharp.SpellData;
+
+    #endregion
+
     public class Braum : PluginBase
     {
         public Braum()
@@ -52,7 +60,9 @@ namespace Support.Plugins
         private void CastShield(Vector3 v)
         {
             if (!E.IsReady())
+            {
                 return;
+            }
 
             E.Cast(v, UsePackets);
             IsShieldActive = true;
@@ -64,14 +74,20 @@ namespace Support.Plugins
             try
             {
                 if (!ConfigValue<bool>("Misc.Shield.Target"))
+                {
                     return;
+                }
 
                 if (Orbwalking.IsAutoAttack(spell.Name) &&
                     target.HealthPercentage() > ConfigValue<Slider>("Misc.Shield.Health").Value)
+                {
                     return;
+                }
 
                 if (spell.MissileSpeed > 2000 || spell.MissileSpeed == 0)
+                {
                     return;
+                }
 
                 // TODO: blacklist FiddleQ, FioraQ/R, LeonaE, VladQ, ZileanQ
 
@@ -93,7 +109,7 @@ namespace Support.Plugins
                     }
 
                     W.CastOnUnit(target, UsePackets);
-                    Utility.DelayAction.Add((int)jumpTime, () => CastShield(caster.Position));
+                    Utility.DelayAction.Add((int) jumpTime, () => CastShield(caster.Position));
                 }
             }
             catch (Exception e)
@@ -107,16 +123,17 @@ namespace Support.Plugins
             try
             {
                 if (!ConfigValue<bool>("Misc.Shield.Skill"))
+                {
                     return;
+                }
 
                 // get most dangerous skillshot
                 var max = skillshots.First();
-                foreach (
-                    var spell in
-                        skillshots.Where(
-                            s =>
-                                s.SpellData.Type == SkillShotType.SkillshotMissileLine ||
-                                s.SpellData.Type == SkillShotType.SkillshotMissileCone))
+                foreach (var spell in
+                    skillshots.Where(
+                        s =>
+                            s.SpellData.Type == SkillShotType.SkillshotMissileLine ||
+                            s.SpellData.Type == SkillShotType.SkillshotMissileCone))
                 {
                     if (spell.Unit.GetSpellDamage(target, spell.SpellData.SpellName) >
                         max.Unit.GetSpellDamage(target, max.SpellData.SpellName))
@@ -143,7 +160,7 @@ namespace Support.Plugins
                     }
 
                     W.CastOnUnit(target, UsePackets);
-                    Utility.DelayAction.Add((int)jumpTime, () => CastShield(max.Start.To3D()));
+                    Utility.DelayAction.Add((int) jumpTime, () => CastShield(max.Start.To3D()));
                 }
             }
             catch (Exception e)
@@ -187,7 +204,9 @@ namespace Support.Plugins
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            {
                 return;
+            }
 
             if (R.CastCheck(unit, "Interrupt.R"))
             {

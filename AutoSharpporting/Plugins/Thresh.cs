@@ -1,36 +1,44 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Thresh.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
-using Collision = LeagueSharp.Common.Collision;
+// 
+// Filename: Support/Support/Thresh.cs
+// Created:  06/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Plugins
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using Collision = LeagueSharp.Common.Collision;
+
+    #endregion
+
     public class Thresh : PluginBase
     {
         private const int QFollowTime = 3000;
@@ -62,8 +70,12 @@ namespace Support.Plugins
             try
             {
                 if (_qTarget != null)
+                {
                     if (Environment.TickCount - _qTick >= QFollowTime)
+                    {
                         _qTarget = null;
+                    }
+                }
 
                 if (ComboMode)
                 {
@@ -78,7 +90,9 @@ namespace Support.Plugins
                     if (Q.CastCheck(_qTarget, "ComboQFollow"))
                     {
                         if (FollowQ)
+                        {
                             Q.Cast();
+                        }
                     }
 
                     if (W.CastCheck(Target, "ComboW"))
@@ -101,7 +115,9 @@ namespace Support.Plugins
                     if (R.CastCheck(Target, "ComboR"))
                     {
                         if (Helpers.EnemyInRange(ConfigValue<Slider>("ComboCountR").Value, R.Range))
+                        {
                             R.Cast();
+                        }
                     }
                 }
 
@@ -138,11 +154,12 @@ namespace Support.Plugins
 
         public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
         {
-            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) &&
-                args.Caster == Target && args.Type == Packet.AttackTypePacket.TargetedAA)
+            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) && args.Caster == Target &&
+                args.Type == Packet.AttackTypePacket.TargetedAA)
             {
-                var collision = Collision.GetCollision(new List<Vector3> {args.Caster.Position},
-                    new PredictionInput {Delay = 0.5f, Radius = 70, Speed = 1900});
+                var collision = Collision.GetCollision(
+                    new List<Vector3> { args.Caster.Position },
+                    new PredictionInput { Delay = 0.5f, Radius = 70, Speed = 1900 });
 
                 if (collision.Count == 0)
                 {
@@ -154,7 +171,9 @@ namespace Support.Plugins
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
+            {
                 return;
+            }
 
             if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
@@ -165,7 +184,9 @@ namespace Support.Plugins
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            {
                 return;
+            }
 
             if (E.CastCheck(unit, "InterruptE"))
             {
@@ -211,28 +232,35 @@ namespace Support.Plugins
         private void EngageFriendLatern()
         {
             if (!W.IsReady())
+            {
                 return;
+            }
 
             var bestcastposition = new Vector3(0f, 0f, 0f);
 
-            foreach (var friend in ObjectManager.Get<Obj_AI_Hero>()
-                .Where(hero => hero.IsAlly && !hero.IsMe && hero.Distance(Player) <= W.Range + 300 &&
-                               hero.Distance(Player) <= W.Range - 300 && hero.Health/hero.MaxHealth*100 >= 20 &&
-                               Utility.CountEnemysInRange(150) >= 1))
+            foreach (var friend in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(
+                        hero =>
+                            hero.IsAlly && !hero.IsMe && hero.Distance(Player) <= W.Range + 300 &&
+                            hero.Distance(Player) <= W.Range - 300 && hero.Health / hero.MaxHealth * 100 >= 20 &&
+                            Utility.CountEnemysInRange(150) >= 1))
             {
                 var center = Player.Position;
                 const int points = 36;
                 var radius = W.Range;
-                const double slice = 2*Math.PI/points;
+                const double slice = 2 * Math.PI / points;
 
                 for (var i = 0; i < points; i++)
                 {
-                    var angle = slice*i;
-                    var newX = (int) (center.X + radius*Math.Cos(angle));
-                    var newY = (int) (center.Y + radius*Math.Sin(angle));
+                    var angle = slice * i;
+                    var newX = (int) (center.X + radius * Math.Cos(angle));
+                    var newY = (int) (center.Y + radius * Math.Sin(angle));
                     var p = new Vector3(newX, newY, 0);
                     if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
+                    {
                         bestcastposition = p;
+                    }
                 }
 
                 if (friend.Distance(ObjectManager.Player) <= W.Range)
@@ -243,7 +271,9 @@ namespace Support.Plugins
             }
 
             if (bestcastposition.Distance(new Vector3(0f, 0f, 0f)) >= 100)
+            {
                 W.Cast(bestcastposition, true);
+            }
         }
 
         /// <summary>
@@ -253,33 +283,42 @@ namespace Support.Plugins
         private void SafeFriendLatern()
         {
             if (!W.IsReady())
+            {
                 return;
+            }
 
             var bestcastposition = new Vector3(0f, 0f, 0f);
 
-            foreach (var friend in ObjectManager.Get<Obj_AI_Hero>()
-                .Where(hero => hero.IsAlly && !hero.IsMe && hero.Distance(ObjectManager.Player) <= W.Range + 300 &&
-                               hero.Distance(ObjectManager.Player) <= W.Range - 200 &&
-                               hero.Health/hero.MaxHealth*100 >= 20 && !hero.IsDead))
+            foreach (var friend in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(
+                        hero =>
+                            hero.IsAlly && !hero.IsMe && hero.Distance(ObjectManager.Player) <= W.Range + 300 &&
+                            hero.Distance(ObjectManager.Player) <= W.Range - 200 &&
+                            hero.Health / hero.MaxHealth * 100 >= 20 && !hero.IsDead))
             {
                 foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
                 {
                     if (friend == null || !(friend.Distance(enemy) <= 300))
+                    {
                         continue;
+                    }
 
                     var center = ObjectManager.Player.Position;
                     const int points = 36;
                     var radius = W.Range;
-                    const double slice = 2*Math.PI/points;
+                    const double slice = 2 * Math.PI / points;
 
                     for (var i = 0; i < points; i++)
                     {
-                        var angle = slice*i;
-                        var newX = (int) (center.X + radius*Math.Cos(angle));
-                        var newY = (int) (center.Y + radius*Math.Sin(angle));
+                        var angle = slice * i;
+                        var newX = (int) (center.X + radius * Math.Cos(angle));
+                        var newY = (int) (center.Y + radius * Math.Sin(angle));
                         var p = new Vector3(newX, newY, 0);
                         if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
+                        {
                             bestcastposition = p;
+                        }
                     }
 
                     if (friend.Distance(ObjectManager.Player) <= W.Range)
@@ -290,7 +329,9 @@ namespace Support.Plugins
                 }
 
                 if (bestcastposition.Distance(new Vector3(0f, 0f, 0f)) >= 100)
+                {
                     W.Cast(bestcastposition, true);
+                }
             }
         }
     }

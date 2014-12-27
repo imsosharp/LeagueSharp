@@ -1,33 +1,41 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Zyra.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
+// 
+// Filename: Support/Support/Zyra.cs
+// Created:  25/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Plugins
 {
+    #region
+
+    using System;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+
+    #endregion
+
     public class Zyra : PluginBase
     {
         public Zyra()
@@ -48,18 +56,20 @@ namespace Support.Plugins
 
         private bool ZyraisZombie()
         {
-            return Player.Spellbook.GetSpell(SpellSlot.Q).Name ==
-                   Player.Spellbook.GetSpell(SpellSlot.E).Name ||
-                   Player.Spellbook.GetSpell(SpellSlot.W).Name ==
-                   Player.Spellbook.GetSpell(SpellSlot.R).Name;
+            return Player.Spellbook.GetSpell(SpellSlot.Q).Name == Player.Spellbook.GetSpell(SpellSlot.E).Name ||
+                   Player.Spellbook.GetSpell(SpellSlot.W).Name == Player.Spellbook.GetSpell(SpellSlot.R).Name;
         }
 
         private void CastPassive()
         {
             if (!Passive.IsReady())
+            {
                 return;
+            }
             if (!Target.IsValidTarget(E.Range))
+            {
                 return;
+            }
             Passive.CastIfHitchanceEquals(Target, HitChance.High, UsePackets);
         }
 
@@ -75,7 +85,9 @@ namespace Support.Plugins
         private void CastW(Vector3 v)
         {
             if (!W.IsReady())
+            {
                 return;
+            }
 
             if (WCount == 1)
             {
@@ -162,7 +174,9 @@ namespace Support.Plugins
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            {
                 return;
+            }
 
             if (R.CastCheck(unit, "Interrupt.R"))
             {

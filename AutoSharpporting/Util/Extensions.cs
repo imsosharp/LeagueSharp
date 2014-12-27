@@ -1,33 +1,39 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Extensions.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
+// 
+// Filename: Support/Support/Extensions.cs
+// Created:  26/11/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Util
 {
+    #region
+
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+
+    #endregion
+
     public enum HeroType
     {
         Ap,
@@ -107,19 +113,17 @@ namespace Support.Util
 
         public static double HealthBuffer(this Obj_AI_Base hero, int buffer)
         {
-            return hero.Health - (hero.MaxHealth*buffer/100);
+            return hero.Health - (hero.MaxHealth * buffer / 100);
         }
 
-        public static void IssueOrderEx(this Obj_AI_Base hero, GameObjectOrder order, GameObject target,
+        public static void IssueOrderEx(this Obj_AI_Base hero,
+            GameObjectOrder order,
+            GameObject target,
             bool packet = false)
         {
             if (packet)
             {
-                var p = new Packet.C2S.Move.Struct
-                {
-                    MoveType = (byte) order,
-                    SourceNetworkId = hero.NetworkId
-                };
+                var p = new Packet.C2S.Move.Struct { MoveType = (byte) order, SourceNetworkId = hero.NetworkId };
 
                 switch (order)
                 {
@@ -169,20 +173,19 @@ namespace Support.Util
             return item != null && item.IsReady() && target.IsValidTarget(item.Range);
         }
 
-        public static bool CastCheck(this Spell spell, Obj_AI_Base target, string menu, bool range = true,
+        public static bool CastCheck(this Spell spell,
+            Obj_AI_Base target,
+            string menu,
+            bool range = true,
             bool team = true)
         {
-            return
-                spell.IsReady() &&
-                target.IsValidTarget(range ? spell.Range : float.MaxValue, team) &&
-                PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
+            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team) &&
+                   PluginBase.Config.Item(menu + ObjectManager.Player.ChampionName).GetValue<bool>();
         }
 
         public static bool CastCheck(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
         {
-            return
-                spell.IsReady() &&
-                target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
+            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
         }
 
         public static bool IsInRange(this Spell spell, Obj_AI_Base target)
@@ -224,7 +227,8 @@ namespace Support.Util
         public static void AddSlider(this Menu menu, string name, string displayName, int value, int min, int max)
         {
             menu.AddItem(
-                new MenuItem(name + ObjectManager.Player.ChampionName, displayName).SetValue(new Slider(value, min, max)));
+                new MenuItem(name + ObjectManager.Player.ChampionName, displayName).SetValue(
+                    new Slider(value, min, max)));
         }
 
         public static void AddObject(this Menu menu, string name, string displayName, object value)

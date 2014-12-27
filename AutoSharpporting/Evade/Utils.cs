@@ -1,33 +1,41 @@
 #region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Utils.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Collections.Generic;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
+// 
+// Filename: Support/Support/Utils.cs
+// Created:  05/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Evade
 {
+    #region
+
+    using System;
+    using System.Collections.Generic;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Color = System.Drawing.Color;
+
+    #endregion
+
     public static class Utils
     {
         public static List<Vector2> To2DList(this Vector3[] v)
@@ -80,7 +88,7 @@ namespace Support.Evade
                 }
             }
 
-            return (result == 0f) ? -1 : (int) (Environment.TickCount + (result - Game.Time)*1000);
+            return (result == 0f) ? -1 : (int) (Environment.TickCount + (result - Game.Time) * 1000);
         }
 
 

@@ -1,34 +1,41 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
+// Copyright 2014 Support
 // Janna.cs is part of Support.
+// 
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+// 
 // Support is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 // GNU General Public License for more details.
+// 
 // You should have received a copy of the GNU General Public License
 // along with Support. If not, see <http://www.gnu.org/licenses/>.
-
-#endregion
-
-#region
-
-using System;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
+// 
+// Filename: Support/Support/Janna.cs
+// Created:  01/10/2014
+// Date:     26/12/2014/16:23
+// Author:   h3h3
 
 #endregion
 
 namespace Support.Plugins
 {
+    #region
+
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+
+    #endregion
+
     public class Janna : PluginBase
     {
         private int LastQInterrupt { get; set; }
@@ -112,14 +119,16 @@ namespace Support.Plugins
             }
 
             if (!E.IsReady() || !E.IsInRange(sender) || IsUltChanneling)
+            {
                 return;
+            }
 
             // Boost Damage
             // Caster ally / target enemy hero
             if (sender.IsValid<Obj_AI_Hero>() && sender.IsAlly && !sender.IsMe)
             {
                 var spell = args.SData.Name;
-                var caster = (Obj_AI_Hero)sender;
+                var caster = (Obj_AI_Hero) sender;
 
                 if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.CountEnemysInRange(2000) > 0)
                 {
@@ -127,15 +136,21 @@ namespace Support.Plugins
                     {
                         case 1:
                             if (Player.ManaPercentage() > ConfigValue<Slider>("Mana.E.Priority.1").Value)
+                            {
                                 E.CastOnUnit(caster, UsePackets);
+                            }
                             break;
                         case 2:
                             if (Player.ManaPercentage() > ConfigValue<Slider>("Mana.E.Priority.2").Value)
+                            {
                                 E.CastOnUnit(caster, UsePackets);
+                            }
                             break;
                         case 3:
                             if (Player.ManaPercentage() > ConfigValue<Slider>("Mana.E.Priority.3").Value)
+                            {
                                 E.CastOnUnit(caster, UsePackets);
+                            }
                             break;
                     }
                 }
@@ -145,20 +160,26 @@ namespace Support.Plugins
         private void RangeAttackOnCreate(GameObject sender, EventArgs args)
         {
             if (!sender.IsValid<Obj_SpellMissile>() || IsUltChanneling)
+            {
                 return;
+            }
 
-            var missile = (Obj_SpellMissile)sender;
+            var missile = (Obj_SpellMissile) sender;
 
             // Caster ally hero / not me
-            if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly ||
-                missile.SpellCaster.IsMe || missile.SpellCaster.IsMelee())
+            if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsAlly || missile.SpellCaster.IsMe ||
+                missile.SpellCaster.IsMelee())
+            {
                 return;
+            }
 
             // Target enemy hero
             if (!missile.Target.IsValid<Obj_AI_Hero>() || !missile.Target.IsEnemy)
+            {
                 return;
+            }
 
-            var caster = (Obj_AI_Hero)missile.SpellCaster;
+            var caster = (Obj_AI_Hero) missile.SpellCaster;
 
             // only in SBTW mode
             if (E.IsReady() && E.IsInRange(caster) && (ComboMode || HarassMode) &&
@@ -171,17 +192,19 @@ namespace Support.Plugins
         private void TowerAttackOnCreate(GameObject sender, EventArgs args)
         {
             if (!E.IsReady() || !ConfigValue<bool>("Misc.E.Tower"))
+            {
                 return;
+            }
 
             if (sender.IsValid<Obj_SpellMissile>() && !IsUltChanneling)
             {
-                var missile = (Obj_SpellMissile)sender;
+                var missile = (Obj_SpellMissile) sender;
 
                 // Ally Turret -> Enemy Hero
                 if (missile.SpellCaster.IsValid<Obj_AI_Turret>() && missile.SpellCaster.IsAlly &&
                     missile.Target.IsValid<Obj_AI_Hero>() && missile.Target.IsEnemy)
                 {
-                    var turret = (Obj_AI_Turret)missile.SpellCaster;
+                    var turret = (Obj_AI_Turret) missile.SpellCaster;
 
                     if (E.IsInRange(turret))
                     {
@@ -194,7 +217,9 @@ namespace Support.Plugins
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             if (gapcloser.Sender.IsAlly)
+            {
                 return;
+            }
 
             if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
@@ -215,7 +240,9 @@ namespace Support.Plugins
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
             if ((spell.DangerLevel < InterruptableDangerLevel.High && unit.IsAlly))
+            {
                 return;
+            }
 
             if (Q.CastCheck(unit, "Interrupt.Q"))
             {
@@ -261,11 +288,10 @@ namespace Support.Plugins
 
             // build spell menu
             var dmg = config.AddSubMenu(new Menu("Use E on Spell", "Misc.E.Spell.Menu"));
-            foreach (
-                var spell in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(h => h.IsAlly && !h.IsMe)
-                        .SelectMany(hero => DamageBoostDatabase.Spells.Where(s => s.Champion == hero.ChampionName)))
+            foreach (var spell in
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(h => h.IsAlly && !h.IsMe)
+                    .SelectMany(hero => DamageBoostDatabase.Spells.Where(s => s.Champion == hero.ChampionName)))
             {
                 dmg.AddSlider("Misc.E.Spell." + spell.Spell, spell.Champion + " " + spell.Slot, spell.Priority, 0, 3);
             }

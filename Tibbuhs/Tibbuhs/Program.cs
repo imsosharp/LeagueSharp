@@ -70,7 +70,7 @@ namespace Tibbuhs
             orbw = new Orbwalking.Orbwalker(menu.SubMenu("orbw"));
 
             menu.AddSubMenu(new Menu("Target Selector", "ts"));
-            SimpleTs.AddToMenu(menu.SubMenu("ts"));
+            TargetSelector.AddToMenu(menu.SubMenu("ts"));
 
             menu.AddSubMenu(new Menu("Laning settings", "farm"));
             menu.AddSubMenu(new Menu("Teamfight settings", "combo"));
@@ -86,7 +86,6 @@ namespace Tibbuhs
             menu.SubMenu("farm").AddItem(new MenuItem("Wharass", "Use W Harass when target stunned").SetValue(true));
             menu.SubMenu("farm").AddItem(new MenuItem("Qharassmana", "Use Q to harass when %mana more than").SetValue(new Slider(25, 0, 100)));
             menu.SubMenu("farm").AddItem(new MenuItem("Elanestuncharge", "Charge E stun in lane").SetValue(true));
-            menu.SubMenu("farm").AddItem(new MenuItem("lanetoggle", "Active:").SetValue(new KeyBind("V".ToCharArray()[0], KeyBindType.Press)));
 
             menu.SubMenu("combo").AddItem(new MenuItem("Qcombo", "Use Q in teamfights").SetValue(true));
             menu.SubMenu("combo").AddItem(new MenuItem("Wcombo", "Use W in teamfights").SetValue(true));
@@ -99,7 +98,6 @@ namespace Tibbuhs
             menu.SubMenu("combo").AddItem(new MenuItem("FlashTibbersmin", "Flash-Tibbers only if it will hit X enemies").SetValue(new Slider(3,1,5)));
             menu.SubMenu("combo").AddItem(new MenuItem("UseZHONYA", "Use Zhonya on Low-health No spells ready").SetValue(true));
             menu.SubMenu("combo").AddItem(new MenuItem("ZHONYAminhealth", "Zhonya on %hp").SetValue(new Slider(20, 0, 100)));
-            menu.SubMenu("combo").AddItem(new MenuItem("combotoggle", "Active:").SetValue(new KeyBind(32, KeyBindType.Press)));
 
 
 
@@ -141,14 +139,12 @@ namespace Tibbuhs
         #region OnGameUpdate
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (menu.Item("farmtoggle").GetValue<KeyBind>().Active)
+            if (orbw.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear || orbw.ActiveMode == Orbwalking.OrbwalkingMode.LastHit || orbw.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                Game.PrintChat("Farm toggle active, tell sosharp");
                 Laning();
             }
-            if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
+            if (orbw.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
-                Game.PrintChat("Combo toggle active, tell sosharp");
                 Combo();
             }
             PassiveStacker();
@@ -274,7 +270,7 @@ namespace Tibbuhs
         #region Laning
         private static void Laning()
         {
-            var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+            var target = orbw.GetTarget() as Obj_AI_Base;
             if (target == null) Game.PrintChat("Target null! tell sosharp");
             Cast_Q("farm", target);
             Cast_E("farm");
@@ -287,9 +283,9 @@ namespace Tibbuhs
 
 
             Cast_E("combo");
-            var combotarget = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
-            var qtarget = SimpleTs.GetTarget(Q.Range, SimpleTs.DamageType.Magical);
-            var wtarget = SimpleTs.GetTarget(W.Range, SimpleTs.DamageType.Magical);
+            var combotarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
+            var qtarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+            var wtarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
             if (combotarget == null) Game.PrintChat("combo target null! tell sosharp");
             var combodmg = ComboDmg(combotarget);
             if (combodmg >= combotarget.Health)
@@ -352,7 +348,7 @@ namespace Tibbuhs
         #endregion
 
         #region Casting Q
-        private static void Cast_Q(string mode, Obj_AI_Hero target)
+        private static void Cast_Q(string mode, Obj_AI_Base target)
         {
             #region Q Farm Mode
             if (mode == "farm")
@@ -410,7 +406,7 @@ namespace Tibbuhs
         private static void Cast_W(Obj_AI_Hero target)
         {
             var Wstunescaperange = menu.Item("Wstungapescaperange").GetValue<int>();
-            var closestThreat = ObjectManager.Get<Obj_AI_Hero>().First(ct => !ct.IsMe && ct.Distance(Player) < Wstunescaperange && ct.IsEnemy);
+            var closestThreat = ObjectManager.Get<Obj_AI_Hero>().First(ct => !ct.IsMe && ct.Distance(Player, false) < Wstunescaperange && ct.IsEnemy);
             if (menu.Item("combotoggle").GetValue<KeyBind>().Active)
             {
                 if (target != null)
@@ -430,7 +426,7 @@ namespace Tibbuhs
         {
             var defenseEenemies = menu.Item("Eenemies").GetValue<bool>();
             var defenseEenemiesrange = menu.Item("Eenemiesrange").GetValue<int>();
-            var closestEnemy = ObjectManager.Get<Obj_AI_Hero>().First(ce => !ce.IsMe && ce.Distance(Player) < defenseEenemiesrange && ce.IsEnemy);
+            var closestEnemy = ObjectManager.Get<Obj_AI_Hero>().First(ce => !ce.IsMe && ce.Distance(Player, false) < defenseEenemiesrange && ce.IsEnemy);
             if (closestEnemy != null && defenseEenemies && E.IsReady())
             {
                 E.Cast();
@@ -474,7 +470,7 @@ namespace Tibbuhs
                     R.Cast(FlashTibbers_po.UnitPosition, UsePackets());
                 }
             }
-            var target = SimpleTs.GetTarget(R.Range, SimpleTs.DamageType.Magical);
+            var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
             var minTargets = menu.Item("flashtibbersmin").GetValue<int>();
             if (menu.Item("RcomboOnlyOn4Stacks").GetValue<bool>())
             {

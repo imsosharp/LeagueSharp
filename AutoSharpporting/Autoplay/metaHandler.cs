@@ -38,7 +38,6 @@ namespace Support
                 //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
 
                 Autoplay.bot.BuyItem(ItemId.Boots_of_Speed);
-                System.Threading.Thread.Sleep(1500);
             }
             if ((qlvl + wlvl + elvl + rlvl) < Autoplay.bot.Level)
             {

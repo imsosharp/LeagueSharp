@@ -66,9 +66,18 @@ namespace Support
                 if (Utility.InFountain())
                 {
                     MetaHandler.doChecks();
-                    if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
+                    if (tempcarry != null)
                     {
                         carry = tempcarry;
+                    }
+                    if (Utility.InFountain() && ((bot.Health / bot.MaxHealth) * 100) > 80 && carry != null)
+                    {
+
+                        bot.IssueOrder(GameObjectOrder.MoveTo, carry);
+                    }
+                    if (Utility.InFountain() && ((bot.Health / bot.MaxHealth)) * 100 > 80 && tempcarry != null)
+                    {
+                        bot.IssueOrder(GameObjectOrder.MoveTo, tempcarry);
                     }
                 }
             }
@@ -129,10 +138,10 @@ namespace Support
             }
             if (!(tempcarry == null) && carry == null && !(Utility.InFountain()))
             {
-                if (bot.UnderTurret(false))
+                if (bot.UnderTurret(false) || bot.Distance(saferecall) > 100)
                 {
-                    saferecall.X = bot.Position.X + safe / 2;
-                    saferecall.Y = bot.Position.Y + safe / 2;
+                    saferecall.X = bot.Position.X + safe / 4;
+                    saferecall.Y = bot.Position.Y + safe / 4;
                     saferecall.Z = bot.Position.Z;
                     Util.Helpers.PrintMessage("hide on bush");
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);

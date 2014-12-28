@@ -19,7 +19,7 @@ namespace Support
     {
         public static Obj_AI_Hero bot = ObjectManager.Player;
         public static Obj_AI_Hero carry = null;
-        public static Obj_AI_Hero tempcarry = null;
+        private static Obj_AI_Hero tempcarry = null;
         private static Obj_AI_Turret nearestAllyTurret = null;
         private static Vector3 bluefountainpos;
         private static Vector3 purplefountainpos;
@@ -30,10 +30,8 @@ namespace Support
         private static int purple = -200;
         private static int chosen = 0;
         private static int safe = 0;
-        private static int _unsafe = 0;
         private static Vector3 frontline;
         private static Vector3 safepos;
-        private static Vector3 OutOfFountain;
         private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
@@ -59,21 +57,16 @@ namespace Support
         {
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; OutOfFountain.X = 1658; OutOfFountain.Y = 844; OutOfFountain.Z = 95.74808F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F;
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; _unsafe = purple; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F;
-            if (carry != null && tempcarry != null)
-            {
-                tempcarry = null;
-            }
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
                 {
                     MetaHandler.doChecks();
-                    if (tempcarry != null)
+                    if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
-                        tempcarry = null;
                     }
                 }
             }
@@ -111,7 +104,7 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain())))
+                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) && bot.Distance(carry, false) > 3000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
                 {
                     nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
                     if (nearestAllyTurret != null)
@@ -134,11 +127,8 @@ namespace Support
             }
             if (!(tempcarry == null) && carry == null && !(Utility.InFountain()))
             {
-                if (bot.UnderTurret(false) || bot.Distance(saferecall) > 100)
+                if (bot.UnderTurret(false))
                 {
-                    saferecall.X = bot.Position.X + safe / 4;
-                    saferecall.Y = bot.Position.Y + safe / 4;
-                    saferecall.Z = bot.Position.Z;
                     Util.Helpers.PrintMessage("hide on bush");
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
                 }

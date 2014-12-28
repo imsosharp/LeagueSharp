@@ -95,6 +95,7 @@ namespace Support
                         buyIndex += 1;
                     }
                 }
+                Autoplay.doAutoplay();
             }
         }
         public static bool hasItem(ItemId item)

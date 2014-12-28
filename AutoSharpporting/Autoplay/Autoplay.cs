@@ -63,62 +63,66 @@ namespace Support
         }
 
 
-        private static void doAutoplay()
+        public static void doAutoplay()
         {
             var timeElapsed = Environment.TickCount - loaded;
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }
-            if (carry == null && (timeElapsed) < 60000)
+            if (!bot.IsDead)
             {
-                bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
-                if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
+                if (carry == null && (timeElapsed) < 60000)
                 {
-                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly) == null))
+                    bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
+                    if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
                     {
-                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly);
+                        if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly) == null))
+                        {
+                            carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly);
+                        }
                     }
                 }
-            }
-            if (carry != null && 
-                Geometry.Distance(bot, frontline) < 500 &&
-                !carry.IsDead &&
-                !((bot.Health / bot.MaxHealth) * 100 < 30))
-            {
-                frontline.X = carry.Position.X + chosen;
-                frontline.Y = carry.Position.Y + chosen;
-                frontline.Z = carry.Position.Z;
-                bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
-            }
-            if (carry.IsDead || 
-                (carry == null && (timeElapsed) > 60 * 1000) || !((bot.Health / bot.MaxHealth) * 100 < 30))
-            {
-                tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < float.MaxValue && x.IsAlly);
-                frontline.X = tempcarry.Position.X + chosen;
-                frontline.Y = tempcarry.Position.Y + chosen;
-                frontline.Z = tempcarry.Position.Z;
-                if (Geometry.Distance(bot, frontline) < 500) bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
-            }
-            
-            if ((bot.Health / bot.MaxHealth) * 100 < 20)
-            {
-                nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
-                if (nearestAllyTurret != null)
+                if (carry != null &&
+                    Geometry.Distance(bot, frontline) < 500 &&
+                    !carry.IsDead &&
+                    !((bot.Health / bot.MaxHealth) * 100 < 30))
                 {
-                    saferecall.X = nearestAllyTurret.Position.X + safe;
-                    saferecall.Y = nearestAllyTurret.Position.Y + safe;
-                    saferecall.Z = nearestAllyTurret.Position.Z;
-                    tempcarry = carry;
-                    carry = null;
-
-                    bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
+                    Game.PrintChat(carry.ChampionName);
+                    frontline.X = carry.Position.X + chosen;
+                    frontline.Y = carry.Position.Y + chosen;
+                    frontline.Z = carry.Position.Z;
+                    bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
                 }
-                if (Utility.UnderTurret() && (Geometry.Distance(bot.Position, saferecall) < 250))
+                if (carry.IsDead ||
+                    (carry == null && (timeElapsed) > 60 * 1000) || !((bot.Health / bot.MaxHealth) * 100 < 30))
+                {
+                    tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < float.MaxValue && x.IsAlly);
+                    frontline.X = tempcarry.Position.X + chosen;
+                    frontline.Y = tempcarry.Position.Y + chosen;
+                    frontline.Z = tempcarry.Position.Z;
+                    if (Geometry.Distance(bot, frontline) < 500) bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
+                }
+
+                if ((bot.Health / bot.MaxHealth) * 100 < 20)
+                {
+                    nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
+                    if (nearestAllyTurret != null)
+                    {
+                        saferecall.X = nearestAllyTurret.Position.X + safe;
+                        saferecall.Y = nearestAllyTurret.Position.Y + safe;
+                        saferecall.Z = nearestAllyTurret.Position.Z;
+                        tempcarry = carry;
+                        carry = null;
+
+                        bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
+                    }
+                    if (Utility.UnderTurret() && (Geometry.Distance(bot.Position, saferecall) < 250))
                     {
                         bot.Spellbook.CastSpell(SpellSlot.Recall);
                     }
 
+                }
             }
 
 

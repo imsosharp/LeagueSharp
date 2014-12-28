@@ -36,7 +36,7 @@ namespace Support
         private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
-        
+
 
         public Autoplay()
         {
@@ -48,51 +48,35 @@ namespace Support
             MetaHandler.doChecks();
             doAutoplay();
         }
-        
+
         public void OnGameEnd(EventArgs args)
         {
 
         }
 
-        
-
         private static void doAutoplay()
         {
-            if (carry != null && tempcarry == null)
-            {
-                tempcarry = carry;
-            }
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; 
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; _unsafe = purple; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; 
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F;
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; _unsafe = purple; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F;
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
                 {
-                   MetaHandler.doChecks();
+                    MetaHandler.doChecks();
                     if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
-                        bot.IssueOrder(GameObjectOrder.MoveTo, carry);  
-
-                    }
-                    if (carry != null && Utility.InFountain())
-                    {
-                        Vector3 outOfFountain = new Vector3();
-                        outOfFountain.X = bot.Position.X + _unsafe;
-                        outOfFountain.Y = bot.Position.Y + _unsafe;
-                        outOfFountain.Z = bot.Position.Z;
-                        bot.IssueOrder(GameObjectOrder.MoveTo, outOfFountain);
                     }
                 }
             }
             if (carry == null && tempcarry == null)
             {
-                if (Utility.InFountain())
+                if (Utility.InFountain() && ((bot.Health / bot.MaxHealth) * 100) > 80)
                 {
 
-                    bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);                    
+                    bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
                 }
                 if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
                 {
@@ -128,40 +112,45 @@ namespace Support
                     {
                         tempcarry = carry;
                         carry = null;
-                        
+
                         bot.IssueOrder(GameObjectOrder.MoveTo, nearestAllyTurret.Position);
                         Util.Helpers.PrintMessage("moving to nearest turret");
-                        
+
                     }
-                    
+
                 }
                 if (bot.UnderTurret(false) && !(carry.IsDead) && (carry.Distance(bluefountainpos) > 3000 || carry.Distance(purplefountainpos) > 3000) && ((bot.Health / bot.MaxHealth) * 100) < 25)
                 {
                     tempcarry = carry;
                 }
 
-                
+
             }
             if (!(tempcarry == null) && carry == null && !(Utility.InFountain()))
             {
                 if (bot.UnderTurret(false))
                 {
-                    Util.Helpers.PrintMessage("moving to safe spot lel");
-                    saferecall.X = bot.Position.X + safe;
-                    saferecall.Y = bot.Position.Y + safe;
+                    saferecall.X = bot.Position.X + safe / 2;
+                    saferecall.Y = bot.Position.Y + safe / 2;
                     saferecall.Z = bot.Position.Z;
+                    Util.Helpers.PrintMessage("hide on bush");
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
                 }
-                if (bot.Position == saferecall || bot.Distance(saferecall) < 500)
+                if (bot.Position == saferecall || bot.Distance(saferecall) < 100)
                 {
                     Util.Helpers.PrintMessage("Trying to recall");
                     //Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send(); //disabled packet casting
                     bot.Spellbook.CastSpell(SpellSlot.Recall);
                 }
             }
+            if (bot.UnderTurret(false) && carry == null && tempcarry != null && !Utility.InFountain())
+            {
+                Util.Helpers.PrintMessage("hide on bush");
+                bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
+            }
         }
-            
 
-        }
 
     }
+
+}

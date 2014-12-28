@@ -24,13 +24,13 @@ namespace Support
         
         public static void doChecks()
         {
-            AutoLevel LvlUpSpellsMahNiggaPls = new AutoLevel(abilityOrder);
+            /* AutoLevel LvlUpSpellsMahNiggaPls = new AutoLevel(abilityOrder);
             if (Autoplay.tempcarry != null && Autoplay.carry == null && Utility.InFountain())
             {
                 Game.PrintChat("carry was null, but MetaHandler fixed that.");
                 Autoplay.carry = Autoplay.tempcarry;
                 Autoplay.bot.IssueOrder(GameObjectOrder.MoveTo, Autoplay.carry);  
-            }
+            } */
             
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {

@@ -33,6 +33,7 @@ namespace Support
         private static int _unsafe = 0;
         private static Vector3 frontline;
         private static Vector3 safepos;
+        private static Vector3 OutOfFountain;
         private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
@@ -58,7 +59,7 @@ namespace Support
         {
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F;
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; OutOfFountain.X = 1658; OutOfFountain.Y = 844; OutOfFountain.Z = 95.74808F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F;
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; _unsafe = purple; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F;
             if (carry == null && tempcarry != null)
             {

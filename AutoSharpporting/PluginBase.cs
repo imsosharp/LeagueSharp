@@ -47,8 +47,6 @@ namespace Support
     /// </summary>
     public abstract class PluginBase
     {
-        private readonly List<Spell> _spells = new List<Spell>();
-
         #region BeforeEnemyAttack
 
         public delegate void BeforeEnemyAttackEvenH(BeforeEnemyAttackEventArgs args);
@@ -96,9 +94,21 @@ namespace Support
             Orbwalking.AfterAttack += OnAfterAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += OnPossibleToInterrupt;
-            Game.OnGameSendPacket += OnSendPacket;
-            Game.OnGameProcessPacket += OnProcessPacket;
+            //Game.OnGameSendPacket += OnSendPacket;
+            //Game.OnGameProcessPacket += OnProcessPacket;
             OnLoad(new EventArgs());
+        }
+
+        private void DrawSpell(Spell spell)
+        {
+            if (spell == null)
+                return;
+
+            var menu = ConfigValue<Circle>(spell.Slot + "Range");
+            if (menu.Active && spell.Level > 0)
+            {
+                Utility.DrawCircle(Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
+            }
         }
 
         /// <summary>
@@ -106,40 +116,6 @@ namespace Support
         /// </summary>
         private void InitPrivateEvents()
         {
-            Utility.DelayAction.Add(
-                500, () =>
-                {
-                    try
-                    {
-                        _spells.Add(Q);
-                        _spells.Add(W);
-                        _spells.Add(E);
-                        _spells.Add(R);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                });
-
-            Game.OnGameUpdate += args =>
-            {
-                try
-                {
-                    ActiveMode = Orbwalker.ActiveMode;
-
-                    if (Config.Item("visit").GetValue<bool>())
-                    {
-                        Process.Start("http://www.joduska.me/forum/topic/170-aio-support-is-easy/");
-                        Config.Item("visit").SetValue(false);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            };
-
             Orbwalking.BeforeAttack += args =>
             {
                 try
@@ -184,16 +160,10 @@ namespace Support
                         Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
                     }
 
-                    foreach (var spell in _spells.Where(s => s != null))
-                    {
-                        var menuItem = ConfigValue<Circle>(spell.Slot + "Range");
-                        if (menuItem.Active && spell.Level > 0)
-                        {
-                            Utility.DrawCircle(
-                                Player.Position, spell.Range,
-                                spell.IsReady() ? menuItem.Color : Color.FromArgb(150, Color.Red));
-                        }
-                    }
+                    DrawSpell(Q);
+                    DrawSpell(W);
+                    DrawSpell(E);
+                    DrawSpell(R);
                 }
                 catch (Exception e)
                 {
@@ -257,7 +227,6 @@ namespace Support
             MiscConfig = Config.AddSubMenu(new Menu("Misc", "Misc"));
             InterruptConfig = Config.AddSubMenu(new Menu("Interrupt", "Interrupt"));
             DrawingConfig = Config.AddSubMenu(new Menu("Drawings", "Drawings"));
-            Config.AddItem(new MenuItem("visit", "Visit Forum").SetValue(false));
 
             // mana
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
@@ -339,14 +308,7 @@ namespace Support
         /// </summary>
         public bool ComboMode
         {
-            get { if (!Player.IsDead)
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			} }
+            get { return Player.IsDead; }
         }
 
         /// <summary>
@@ -389,17 +351,12 @@ namespace Support
             get { return Orbwalking.GetRealAutoAttackRange(Target); }
         }
 
-        public float SpellRange
-        {
-            get { return _spells.Where(s => s.Range != float.MaxValue).Select(s => s.Range).Max() + 500; }
-        }
-
         /// <summary>
         ///     Target
         /// </summary>
         public Obj_AI_Hero Target
         {
-            get { return TargetSelector.GetTarget(SpellRange, TargetSelector.DamageType.Magical); }
+            get { return TargetSelector.GetTarget(2500, TargetSelector.DamageType.Magical); }
         }
 
         /// <summary>
@@ -499,7 +456,7 @@ namespace Support
         ///     override to Implement OnProcessPacket logic
         /// </remarks>
         /// <param name="args"></param>
-        public virtual void OnProcessPacket(GamePacketEventArgs args) {}
+        public virtual void OnProcessPacket(GamePacketEventArgs args) { }
 
         /// <summary>
         ///     OnSendPacket
@@ -508,7 +465,7 @@ namespace Support
         ///     override to Implement OnSendPacket logic
         /// </remarks>
         /// <param name="args"></param>
-        public virtual void OnSendPacket(GamePacketEventArgs args) {}
+        public virtual void OnSendPacket(GamePacketEventArgs args) { }
 
         /// <summary>
         ///     OnPossibleToInterrupt
@@ -518,7 +475,7 @@ namespace Support
         /// </remarks>
         /// <param name="unit">Obj_AI_Base</param>
         /// <param name="spell">InterruptableSpell</param>
-        public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell) {}
+        public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell) { }
 
         /// <summary>
         ///     OnEnemyGapcloser
@@ -527,7 +484,7 @@ namespace Support
         ///     override to Implement AntiGapcloser logic
         /// </remarks>
         /// <param name="gapcloser">ActiveGapcloser</param>
-        public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser) {}
+        public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser) { }
 
         /// <summary>
         ///     OnUpdate
@@ -536,7 +493,7 @@ namespace Support
         ///     override to Implement Update logic
         /// </remarks>
         /// <param name="args">EventArgs</param>
-        public virtual void OnUpdate(EventArgs args) {}
+        public virtual void OnUpdate(EventArgs args) { }
 
         /// <summary>
         ///     OnBeforeEnemyAttack
@@ -545,7 +502,7 @@ namespace Support
         ///     override to Implement OnBeforeEnemyAttack logic
         /// </remarks>
         /// <param name="args">BeforeEnemyAttackEventArgs</param>
-        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args) {}
+        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args) { }
 
         /// <summary>
         ///     OnBeforeAttack
@@ -554,7 +511,7 @@ namespace Support
         ///     override to Implement OnBeforeAttack logic
         /// </remarks>
         /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
-        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args) {}
+        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args) { }
 
         /// <summary>
         ///     OnAfterAttack
@@ -564,7 +521,7 @@ namespace Support
         /// </remarks>
         /// <param name="unit">unit</param>
         /// <param name="target">target</param>
-        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target) {}
+        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target) { }
 
         /// <summary>
         ///     OnLoad
@@ -573,7 +530,7 @@ namespace Support
         ///     override to Implement class Initialization
         /// </remarks>
         /// <param name="args">EventArgs</param>
-        public virtual void OnLoad(EventArgs args) {}
+        public virtual void OnLoad(EventArgs args) { }
 
         /// <summary>
         ///     OnDraw
@@ -582,7 +539,7 @@ namespace Support
         ///     override to Implement Drawing
         /// </remarks>
         /// <param name="args">EventArgs</param>
-        public virtual void OnDraw(EventArgs args) {}
+        public virtual void OnDraw(EventArgs args) { }
 
         /// <summary>
         ///     ComboMenu
@@ -591,7 +548,7 @@ namespace Support
         ///     override to Implement ComboMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void ComboMenu(Menu config) {}
+        public virtual void ComboMenu(Menu config) { }
 
         /// <summary>
         ///     HarassMenu
@@ -600,7 +557,7 @@ namespace Support
         ///     override to Implement HarassMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void HarassMenu(Menu config) {}
+        public virtual void HarassMenu(Menu config) { }
 
         /// <summary>
         ///     ManaMenu
@@ -609,7 +566,7 @@ namespace Support
         ///     override to Implement ManaMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void ManaMenu(Menu config) {}
+        public virtual void ManaMenu(Menu config) { }
 
         /// <summary>
         ///     MiscMenu
@@ -618,7 +575,7 @@ namespace Support
         ///     override to Implement MiscMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void MiscMenu(Menu config) {}
+        public virtual void MiscMenu(Menu config) { }
 
         /// <summary>
         ///     MiscMenu
@@ -627,7 +584,7 @@ namespace Support
         ///     override to Implement Interrupt Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void InterruptMenu(Menu config) {}
+        public virtual void InterruptMenu(Menu config) { }
 
         /// <summary>
         ///     DrawingMenu
@@ -636,6 +593,6 @@ namespace Support
         ///     override to Implement DrawingMenu Config
         /// </remarks>
         /// <param name="config">Menu</param>
-        public virtual void DrawingMenu(Menu config) {}
+        public virtual void DrawingMenu(Menu config) { }
     }
 }

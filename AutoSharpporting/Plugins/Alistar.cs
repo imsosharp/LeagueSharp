@@ -51,20 +51,20 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "ComboQ"))
+                if (Q.CastCheck(Target, "Combo.Q"))
                 {
                     Q.Cast();
                 }
 
-                if (Q.IsReady() && W.CastCheck(Target, "ComboW"))
+                if (Q.IsReady() && W.CastCheck(Target, "Combo.W"))
                 {
                     W.CastOnUnit(Target, UsePackets);
                     var jumpTime = Math.Max(0, Player.Distance(Target) - 500) * 10 / 25 + 25;
-                    Utility.DelayAction.Add((int) jumpTime, () => Q.Cast());
+                    Utility.DelayAction.Add((int)jumpTime, () => Q.Cast());
                 }
 
-                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range);
-                if (E.CastCheck(ally, "ComboE", true, false))
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.E.Health").Value, E.Range);
+                if (E.CastCheck(ally, "Combo.E", true, false))
                 {
                     E.Cast();
                 }
@@ -72,13 +72,13 @@ namespace Support.Plugins
 
             if (HarassMode)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
+                if (Q.CastCheck(Target, "Harass.Q"))
                 {
                     Q.Cast();
                 }
 
-                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthR").Value, E.Range);
-                if (E.CastCheck(ally, "HarassE", true, false))
+                var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Harass.E.Health").Value, E.Range);
+                if (E.CastCheck(ally, "Harass.E", true, false))
                 {
                     E.Cast();
                 }
@@ -92,12 +92,7 @@ namespace Support.Plugins
                 return;
             }
 
-            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
-            {
-                Q.Cast();
-            }
-
-            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
+            if (W.CastCheck(gapcloser.Sender, "Gapcloser.W"))
             {
                 W.CastOnUnit(gapcloser.Sender, UsePackets);
             }
@@ -110,12 +105,12 @@ namespace Support.Plugins
                 return;
             }
 
-            if (Q.CastCheck(unit, "InterruptQ"))
+            if (Q.CastCheck(unit, "Interrupt.Q"))
             {
                 Q.Cast();
             }
 
-            if (W.CastCheck(unit, "InterruptW"))
+            if (W.CastCheck(unit, "Interrupt.W"))
             {
                 W.CastOnUnit(unit, UsePackets);
             }
@@ -123,26 +118,25 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
-            config.AddBool("ComboW", "Use WQ", true);
-            config.AddBool("ComboE", "Use E", true);
-            config.AddSlider("ComboHealthR", "Health to Heal", 20, 1, 100);
+            config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.W", "Use WQ", true);
+            config.AddBool("Combo.E", "Use E", true);
+            config.AddSlider("Combo.E.Health", "Health to Heal", 20, 1, 100);
         }
 
         public override void HarassMenu(Menu config)
         {
-            config.AddBool("HarassQ", "Use Q", true);
-            config.AddBool("HarassE", "Use E", true);
-            config.AddSlider("HarassHealthR", "Health to Heal", 20, 1, 100);
+            config.AddBool("Harass.Q", "Use Q", true);
+            config.AddBool("Harass.E", "Use E", true);
+            config.AddSlider("Harass.E.Health", "Health to Heal", 20, 1, 100);
         }
 
         public override void InterruptMenu(Menu config)
         {
-            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
+            config.AddBool("Gapcloser.W", "Use W to Interrupt Gapcloser", true);
 
-            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
-            config.AddBool("InterruptW", "Use W to Interrupt Spells", true);
+            config.AddBool("Interrupt.Q", "Use Q to Interrupt Spells", true);
+            config.AddBool("Interrupt.W", "Use W to Interrupt Spells", true);
         }
     }
 }

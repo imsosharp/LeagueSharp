@@ -106,14 +106,14 @@ namespace Support
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
                         }
-                        if (Geometry.Distance(Bot, _lanepos) < 250)
+                        if (Geometry.Distance(Bot, _lanepos) < 300)
                         {
                             if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly) != null)
+                                    .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 5000 && x.IsAlly) != null)
                             {
                                 Carry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly);
+                                        .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 5000 && x.IsAlly);
                             }
                         }
                     }

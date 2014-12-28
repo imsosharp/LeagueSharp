@@ -73,6 +73,8 @@ namespace Support
                     if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
+                        bot.IssueOrder(GameObjectOrder.MoveTo, carry);  
+
                     }
                 }
             }

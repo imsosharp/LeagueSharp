@@ -30,6 +30,7 @@ namespace Support
         private static int purple = -200;
         private static int chosen = 0;
         private static int safe = 0;
+        private static int _unsafe = 0;
         private static Vector3 frontline;
         private static Vector3 safepos;
         private static Vector3 saferecall;
@@ -63,8 +64,8 @@ namespace Support
             }
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; 
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; 
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; 
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; _unsafe = purple; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; 
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
@@ -75,6 +76,14 @@ namespace Support
                         carry = tempcarry;
                         bot.IssueOrder(GameObjectOrder.MoveTo, carry);  
 
+                    }
+                    if (carry != null && Utility.InFountain())
+                    {
+                        Vector3 outOfFountain = new Vector3();
+                        outOfFountain.X = bot.Position.X + _unsafe;
+                        outOfFountain.Y = bot.Position.Y + _unsafe;
+                        outOfFountain.Z = bot.Position.Z;
+                        bot.IssueOrder(GameObjectOrder.MoveTo, outOfFountain);
                     }
                 }
             }

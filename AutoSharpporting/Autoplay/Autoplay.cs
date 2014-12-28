@@ -35,22 +35,78 @@ namespace Support
         private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
+        private static Dictionary<string, FollowInfo> _AfkTracker;
+        private static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
+        private static int loaded = 0;
 
 
         public Autoplay()
         {
+            CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnUpdate;
             Game.OnGameEnd += OnGameEnd;
+        }
+        private static void OnGameLoad(EventArgs args)
+        {
+            loaded = Environment.TickCount;
         }
         private static void OnUpdate(EventArgs args)
         {
             MetaHandler.doChecks();
             doAutoplay();
+            foreach (Obj_AI_Hero ally in Allies)
+            {
+                AfkTracker[ally.ChampionName].Update(ally.Position);
+            }
         }
 
         public void OnGameEnd(EventArgs args)
         {
+            Game.Say("gg");
+        }
 
+        private static List<Obj_AI_Hero> Allies
+        {
+            get
+            {
+                return ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsAlly && !hero.IsMe).ToList();
+            }
+        }
+        // if afktracker is null init it for all allies
+        private static Dictionary<string, FollowInfo> AfkTracker
+        {
+            get
+            {
+                if (_AfkTracker == null)
+                {
+                    _AfkTracker = new Dictionary<string, FollowInfo>();
+                    foreach (Obj_AI_Hero ally in Allies)
+                    {
+                        _AfkTracker.Add(ally.ChampionName, new FollowInfo(ally.Position, Environment.TickCount));
+                    }
+                }
+                return _AfkTracker;
+            }
+        }
+
+        private static Obj_AI_Hero NearestFollowableAlly
+        {
+            get
+            {
+                Obj_AI_Hero closest = null;
+                float minDist = float.MaxValue;
+
+                foreach (Obj_AI_Hero ally in Allies.Where(ally => !ally.IsDead))
+                {
+                    if (bot.Distance(ally, false) < minDist && !AfkTracker[ally.ChampionName].IsAfk())
+                    {
+                        closest = ally;
+                        minDist = bot.Distance(ally, false);
+                    }
+                }
+
+                return closest;
+            }
         }
 
         private static void doAutoplay()
@@ -59,23 +115,82 @@ namespace Support
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }
-            if (carry != null)
-            {   frontline.X = carry.Position.X + chosen;
+            if (carry != null && 
+                Geometry.Distance(bot, frontline) < 300 &&
+                !carry.IsDead && !AfkTracker[carry.ChampionName].IsAfk() &&
+                !((bot.Health / bot.MaxHealth) * 100 < 30))
+            {
+                frontline.X = carry.Position.X + chosen;
                 frontline.Y = carry.Position.Y + chosen;
                 frontline.Z = carry.Position.Z;
-                Game.PrintChat(carry.ChampionName);
                 bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
             }
-            else if (tempcarry != null) { Game.PrintChat(tempcarry.ChampionName); }
-            if (carry == null && tempcarry != null)
+            if (carry.IsDead || 
+                (carry == null && Environment.TickCount - loaded > 60 * 1000) || 
+                AfkTracker[carry.ChampionName].IsAfk() &&
+                !((bot.Health / bot.MaxHealth) * 100 < 30))
+            {
+                tempcarry = NearestFollowableAlly;
+                frontline.X = tempcarry.Position.X + chosen;
+                frontline.Y = tempcarry.Position.Y + chosen;
+                frontline.Z = tempcarry.Position.Z;
+                bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
+            }
+            if (carry == null && Environment.TickCount < 60 * 1000)
+            {
+                if (Utility.InFountain())
+                {
+                    bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
+                }
+                if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
+                {
+                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly) == null))
+                    {
+                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly);
+                    }
+                }
+            }
+            if ((bot.Health / bot.MaxHealth) * 100 < 30)
+            {
+                nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
+                if (nearestAllyTurret != null)
+                {
+                    saferecall.X = nearestAllyTurret.Position.X + safe;
+                    saferecall.Y = nearestAllyTurret.Position.Y + safe;
+                    saferecall.Z = nearestAllyTurret.Position.Z;
+                    tempcarry = carry;
+                    carry = null;
+
+                    bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
+                    if (Geometry.Distance(bot.Position, saferecall) < 150)
+                    {
+                        bot.Spellbook.CastSpell(SpellSlot.Recall);
+                    }
+
+                }
+
+            }
+
+
+            /*if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
                 {
                     if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
+                        tempcarry = null;
+                        
                     }
                 }
+            }
+            if (carry != null && Utility.InFountain())
+            {
+                frontline.X = carry.Position.X + chosen;
+                frontline.Y = carry.Position.Y + chosen;
+                frontline.Z = carry.Position.Z;
+
+                bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
             }
             if (carry != null && Utility.InFountain() || Utility.InShopRange())
             {
@@ -158,7 +273,7 @@ namespace Support
             {
                 Util.Helpers.PrintMessage("hide on bush");
                 bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
-            }
+            }*/
         }
 
 

@@ -1,25 +1,20 @@
-﻿/*
- * Hi Adam, I was lazy, cheers for this ly bro :D
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using LeagueSharp;
-using LeagueSharp.Common;
 using SharpDX;
 
 namespace Support
 {
-    internal class FollowInfo
+    class FollowInfo
     {
-            // Considered AFK after 30 seconds
+        // Considered AFK after 30 seconds
         private const int AFK_TIMESPAN = 30 * 1000;
         // Holds previous known position of player
-        public Vector3 PreviousPosition;
+        public static Vector3 PreviousPosition;
         // Holds previous time position was recorded
-        public int TimeStamp;
+        public static int TimeStamp;
 
         public FollowInfo(Vector3 previousPosition, int timeStamp)
         {

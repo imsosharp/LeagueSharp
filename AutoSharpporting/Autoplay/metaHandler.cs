@@ -69,21 +69,9 @@ namespace Support
                 }
                 ObjectManager.Player.Spellbook.LevelSpell(abilitySlot);
             }
-            if (Utility.InFountain())
+            if (Utility.InFountain() && Autoplay.bot.Gold >= 1000)
             {
-                /* if (shopList[buyIndex] != 0)
-                {
-                    int thisItem = shopList[buyIndex];
-                    if (!hasItem(thisItem))
-                    {
-                        buyItem(thisItem);
-                    }
-                    if (hasItem(thisItem))
-                    {
-                        buyIndex += 1;
-                    }
-                } */
-                foreach (ItemId item in shopList)
+               foreach (ItemId item in shopList)
                 {
                     ItemId thisItem = shopList[buyIndex];
                     if (!hasItem(item))
@@ -101,10 +89,6 @@ namespace Support
         public static bool hasItem(ItemId item)
         {
             return Items.HasItem((int)item, Autoplay.bot);
-        }
-        public static void buyItem(int id)
-        {
-            Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(id, ObjectManager.Player.NetworkId)).Send();
         }
     }
 }

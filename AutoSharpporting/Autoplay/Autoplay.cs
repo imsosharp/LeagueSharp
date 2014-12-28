@@ -35,8 +35,6 @@ namespace Support
         private static Vector3 saferecall;
         private static Vector3 orbwalkingpos1;
         private static Vector3 orbwalkingpos2;
-        private static Dictionary<string, FollowInfo> _AfkTracker;
-        private static Obj_AI_Hero Player { get { return ObjectManager.Player; } }
         private static int loaded = 0;
 
 
@@ -49,12 +47,16 @@ namespace Support
         private static void OnGameLoad(EventArgs args)
         {
             loaded = Environment.TickCount;
+            bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
+            purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }        
             Game.PrintChat("Loaded: " + loaded);
         }
         private static void OnUpdate(EventArgs args)
         {
-            MetaHandler.doChecks();
             doAutoplay();
+            MetaHandler.doChecks();
         }
 
         public void OnGameEnd(EventArgs args)
@@ -66,10 +68,6 @@ namespace Support
         public static void doAutoplay()
         {
             var timeElapsed = Environment.TickCount - loaded;
-            bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
-            purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }
             if (!bot.IsDead)
             {
 
@@ -96,20 +94,24 @@ namespace Support
                     !carry.IsDead &&
                     !((bot.Health / bot.MaxHealth) * 100 < 20) && !(Utility.UnderTurret(carry, true)))
                 {
-                    Game.PrintChat(carry.ChampionName);
+                    Game.PrintChat("All good, following: " + carry.ChampionName);
                     frontline.X = carry.Position.X + chosen;
                     frontline.Y = carry.Position.Y + chosen;
                     frontline.Z = carry.Position.Z;
                     bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
                 }
-                if (timeElapsed > 60000 && !(Utility.UnderTurret(tempcarry, true)) && (carry.IsDead ||
+                if (timeElapsed > 60000 && (carry.IsDead ||
                     carry == null || !((bot.Health / bot.MaxHealth) * 100 < 20)))
                 {
+                    Game.PrintChat("Carry not found/dead, following: " + tempcarry.ChampionName);
                     tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < float.MaxValue && x.IsAlly);
                     frontline.X = tempcarry.Position.X + chosen;
                     frontline.Y = tempcarry.Position.Y + chosen;
                     frontline.Z = tempcarry.Position.Z;
-                    if (Geometry.Distance(bot, frontline) < 500) bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
+                    if (!(Utility.UnderTurret(tempcarry, true)))
+                    {
+                        if (Geometry.Distance(bot, frontline) < 500) bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
+                    }
                 }
 
                 if ((bot.Health / bot.MaxHealth) * 100 < 20)

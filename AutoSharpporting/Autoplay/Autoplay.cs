@@ -69,15 +69,7 @@ namespace Support
                     if (tempcarry != null)
                     {
                         carry = tempcarry;
-                    }
-                    if (Utility.InFountain() && ((bot.Health / bot.MaxHealth) * 100) > 80 && carry != null)
-                    {
-
-                        bot.IssueOrder(GameObjectOrder.MoveTo, carry);
-                    }
-                    if (Utility.InFountain() && ((bot.Health / bot.MaxHealth)) * 100 > 80 && tempcarry != null)
-                    {
-                        bot.IssueOrder(GameObjectOrder.MoveTo, tempcarry);
+                        tempcarry = null;
                     }
                 }
             }

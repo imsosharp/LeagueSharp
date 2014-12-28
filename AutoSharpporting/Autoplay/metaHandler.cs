@@ -67,7 +67,7 @@ namespace Support
                 {
                     abilitySlot = SpellSlot.Q;
                 }
-                ObjectManager.Player.Spellbook.LevelUpSpell(abilitySlot);
+                ObjectManager.Player.Spellbook.LevelSpell(abilitySlot);
             }
             if (Utility.InFountain())
             {

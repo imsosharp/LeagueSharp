@@ -82,7 +82,7 @@ namespace Support
                 }
             }
             if (carry != null && 
-                Geometry.Distance(bot, frontline) < 300 &&
+                Geometry.Distance(bot, frontline) < 500 &&
                 !carry.IsDead &&
                 !((bot.Health / bot.MaxHealth) * 100 < 30))
             {
@@ -98,7 +98,7 @@ namespace Support
                 frontline.X = tempcarry.Position.X + chosen;
                 frontline.Y = tempcarry.Position.Y + chosen;
                 frontline.Z = tempcarry.Position.Z;
-                bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
+                if (Geometry.Distance(bot, frontline) < 500) bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
             }
             
             if ((bot.Health / bot.MaxHealth) * 100 < 20)
@@ -114,7 +114,7 @@ namespace Support
 
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
                 }
-                if (Utility.UnderTurret() && (Geometry.Distance(bot.Position, saferecall) < 300))
+                if (Utility.UnderTurret() && (Geometry.Distance(bot.Position, saferecall) < 250))
                     {
                         bot.Spellbook.CastSpell(SpellSlot.Recall);
                     }

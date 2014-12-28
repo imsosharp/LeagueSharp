@@ -57,7 +57,7 @@ namespace Support
 
         private static void doAutoplay()
         {
-            if (carry != null)
+            if (carry != null && tempcarry == null)
             {
                 tempcarry = carry;
             }

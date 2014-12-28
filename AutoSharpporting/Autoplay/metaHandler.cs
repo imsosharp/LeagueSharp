@@ -5,6 +5,7 @@
 //which you can find here:
 //https://github.com/h3h3/LeagueSharp/tree/master/Support
 
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -57,6 +58,10 @@ namespace Support
             {
                foreach (ItemId item in ShopList)
                 {
+                    if (_buyIndex > ShopList.Count())
+                    {
+                        _buyIndex = 0;
+                    }
                     ItemId thisItem = ShopList[_buyIndex];
                     if (!HasItem(item))
                     {
@@ -67,7 +72,6 @@ namespace Support
                         _buyIndex += 1;
                     }
                 }
-                Autoplay.DoAutoplay();
             }
         }
         public static bool HasItem(ItemId item)

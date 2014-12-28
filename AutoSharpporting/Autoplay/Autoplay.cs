@@ -99,7 +99,8 @@ namespace Support
                         _safepos.Z = (Bot.Position.Z);
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos);
                     }
-                    if (Carry == null && (timeElapsed) < 60000)
+                    #region Carry is null
+                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 60000)
                     {
                         if (Utility.InFountain())
                         {
@@ -107,37 +108,41 @@ namespace Support
                         }
                         if ((Bot.Position.X - _lanepos.X < 100) && (Bot.Position.Y - _lanepos.Y < 100))
                         {
-                            if (
-                                !(ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot, false) < 4000 && x.IsAlly) == null))
+                            if (ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly) != null)
                             {
                                 Carry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot, false) < 4000 && x.IsAlly);
+                                        .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly);
                             }
                         }
                     }
+                    #endregion
+                    #region Carry is dead
                     if (Carry != null)
                     {
                         if (Carry.IsDead)
                         {
-                            Game.PrintChat("Carry not dead, following: " + _tempcarry.ChampionName);
-                            _tempcarry =
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly);
-                            _frontline.X = _tempcarry.Position.X + _chosen;
-                            _frontline.Y = _tempcarry.Position.Y + _chosen;
-                            _frontline.Z = _tempcarry.Position.Z;
-                            if (!(_tempcarry.UnderTurret(true)))
+                            Game.PrintChat("Carry dead, following: " + _tempcarry.ChampionName);
+                            _tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly);
+                            if (_tempcarry != null)
                             {
-                                if (Bot.Distance(_frontline) < 500)
+                                _frontline.X = _tempcarry.Position.X + _chosen;
+                                _frontline.Y = _tempcarry.Position.Y + _chosen;
+                                _frontline.Z = _tempcarry.Position.Z;
+                                if (!(_tempcarry.UnderTurret(true)))
                                 {
-                                    Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                    if (Bot.Distance(_tempcarry) < 500)
+                                    {
+                                        Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                    }
                                 }
                             }
                         }
                     }
-                    if (Carry != null && Bot.Distance(_frontline) < 500 && !Carry.IsDead &&
+                    #endregion Carry is dead
+                    #region Following
+                    if (Carry != null && Bot.Distance(Carry) > 500 && !Carry.IsDead &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 20) && !(Carry.UnderTurret(true)))
                     {
                         Game.PrintChat("All good, following: " + Carry.ChampionName);
@@ -146,8 +151,10 @@ namespace Support
                         _frontline.Z = Carry.Position.Z;
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                     }
+                    #endregion Following
+                    #region Carry not found
                     if (timeElapsed > 60000 &&
-                        (Carry == null || !((Bot.Health / Bot.MaxHealth) * 100 < 20)))
+                        Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 20))
                     {
                         Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
                         _tempcarry =
@@ -164,27 +171,32 @@ namespace Support
                             }
                         }
                     }
-
+                    #endregion
+                    #region Lowhealth mode
                     if ((Bot.Health / Bot.MaxHealth) * 100 < 20)
                     {
                         _nearestAllyTurret =
                             ObjectManager.Get<Obj_AI_Turret>()
-                                .FirstOrDefault(x => !x.IsMe && x.Distance(Bot, false) < 6000 && x.IsAlly);
+                                .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
                         if (_nearestAllyTurret != null)
                         {
                             _saferecall.X = _nearestAllyTurret.Position.X + _safe;
-                            _saferecall.Y = _nearestAllyTurret.Position.Y + _safe;
+                            _saferecall.Y = _nearestAllyTurret.Position.Y;
                             _saferecall.Z = _nearestAllyTurret.Position.Z;
-                            _tempcarry = Carry;
-                            Carry = null;
+                            if (Bot.Position.Distance(_saferecall) < 200)
+                            {
+                                Bot.Spellbook.CastSpell(SpellSlot.Recall);
+                            }
+                            else
+                            {
 
-                            Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall);
+                                Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall);
+                            }
+
                         }
-                        if (Utility.UnderTurret() && (Bot.Position.Distance(_saferecall) < 250))
-                        {
-                            Bot.Spellbook.CastSpell(SpellSlot.Recall);
-                        }
+                        
                     }
+                    #endregion
                 }
                 catch (Exception e)
                 {
@@ -231,9 +243,9 @@ namespace Support
                 }
                 if ((bot.Position.X - lanepos.X < 100) && (bot.Position.Y - lanepos.Y < 100))
                 {
-                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly) == null))
+                    if (!(ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly) == null))
                     {
-                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < 4000 && x.IsAlly);
+                        carry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly);
                     }
                 }
             }
@@ -258,7 +270,7 @@ namespace Support
                 }
                 if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) && bot.Distance(carry, false) > 3000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
                 {
-                    nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
+                    nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
                     if (nearestAllyTurret != null)
                     {
                         tempcarry = carry;

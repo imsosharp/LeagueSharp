@@ -101,7 +101,7 @@ namespace Support
                 bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
             }
             
-            if ((bot.Health / bot.MaxHealth) * 100 < 30)
+            if ((bot.Health / bot.MaxHealth) * 100 < 20)
             {
                 nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
                 if (nearestAllyTurret != null)
@@ -113,12 +113,11 @@ namespace Support
                     carry = null;
 
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
-                    if (Geometry.Distance(bot.Position, saferecall) < 150)
+                }
+                if (Utility.UnderTurret() && (Geometry.Distance(bot.Position, saferecall) < 300))
                     {
                         bot.Spellbook.CastSpell(SpellSlot.Recall);
                     }
-
-                }
 
             }
 

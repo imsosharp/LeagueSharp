@@ -59,16 +59,31 @@ namespace Support
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }
+            if (carry != null)
+            {   frontline.X = carry.Position.X + chosen;
+                frontline.Y = carry.Position.Y + chosen;
+                frontline.Z = carry.Position.Z;
+                Game.PrintChat(carry.ChampionName);
+                bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
+            }
+            else if (tempcarry != null) { Game.PrintChat(tempcarry.ChampionName); }
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
                 {
-                    MetaHandler.doChecks();
                     if (tempcarry != null && ((bot.Health / bot.MaxHealth) * 100) > 80)
                     {
                         carry = tempcarry;
                     }
                 }
+            }
+            if (carry != null && Utility.InFountain() || Utility.InShopRange())
+            {
+
+                frontline.X = carry.Position.X + chosen;
+                frontline.Y = carry.Position.Y + chosen;
+                frontline.Z = carry.Position.Z;
+                bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
             }
             if (carry == null && tempcarry == null)
             {

@@ -49,6 +49,7 @@ namespace Support
         private static void OnGameLoad(EventArgs args)
         {
             loaded = Environment.TickCount;
+            Game.PrintChat("Loaded: " + loaded);
         }
         private static void OnUpdate(EventArgs args)
         {

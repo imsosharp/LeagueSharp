@@ -19,7 +19,7 @@ namespace Support
     {
         public static Obj_AI_Hero bot = ObjectManager.Player;
         public static Obj_AI_Hero carry = null;
-        private static Obj_AI_Hero tempcarry = null;
+        public static Obj_AI_Hero tempcarry = null;
         private static Obj_AI_Turret nearestAllyTurret = null;
         private static Vector3 bluefountainpos;
         private static Vector3 purplefountainpos;
@@ -59,8 +59,8 @@ namespace Support
         {
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
-            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }
-            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F;}
+            if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; 
+            if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; 
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
@@ -74,7 +74,7 @@ namespace Support
             }
             if (carry == null && tempcarry == null)
             {
-                if (Utility.InFountain() && ((bot.Health / bot.MaxHealth) * 100) > 80)
+                if (Utility.InFountain())
                 {
 
                     bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);                    
@@ -131,7 +131,10 @@ namespace Support
             {
                 if (bot.UnderTurret(false))
                 {
-                    Util.Helpers.PrintMessage("hide on bush");
+                    Util.Helpers.PrintMessage("moving to safe spot lel");
+                    saferecall.X = bot.Position.X + (safe * 2);
+                    saferecall.Y = bot.Position.Y + safe;
+                    saferecall.Z = bot.Position.Z;
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
                 }
                 if (bot.Position == saferecall || bot.Distance(saferecall) < 100)
@@ -140,11 +143,6 @@ namespace Support
                     //Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send(); //disabled packet casting
                     bot.Spellbook.CastSpell(SpellSlot.Recall);
                 }
-            }
-            if (bot.UnderTurret(false) && carry == null && tempcarry != null && !Utility.InFountain())
-            {
-                Util.Helpers.PrintMessage("hide on bush");
-                bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
             }
         }
             

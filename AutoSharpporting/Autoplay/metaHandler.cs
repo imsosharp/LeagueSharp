@@ -24,7 +24,13 @@ namespace Support
         
         public static void doChecks()
         {
-            AutoLevel.Enabled(true);
+            AutoLevel LvlUpSpellsMahNiggaPls = new AutoLevel(abilityOrder);
+            if (Autoplay.tempcarry != null && Autoplay.carry == null && Utility.InFountain())
+            {
+                Game.PrintChat("carry was null, but MetaHandler fixed that.");
+                Autoplay.carry = Autoplay.tempcarry;
+            }
+            
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
                 //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();

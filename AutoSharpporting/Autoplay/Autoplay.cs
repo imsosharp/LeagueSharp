@@ -57,6 +57,10 @@ namespace Support
 
         private static void doAutoplay()
         {
+            if (carry != null)
+            {
+                tempcarry = carry;
+            }
             bluefountainpos.X = 424; bluefountainpos.Y = 396; bluefountainpos.Z = 182; //middle of blue fountain
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F; 

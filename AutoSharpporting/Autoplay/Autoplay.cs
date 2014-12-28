@@ -61,6 +61,10 @@ namespace Support
             purplefountainpos.X = 14354; purplefountainpos.Y = 14428; purplefountainpos.Z = 171; //middle of purple fountain
             if (bot.Team == GameObjectTeam.Order) { chosen = blue; safe = purple; _unsafe = blue; lanepos.X = 11376; lanepos.Y = 1062; lanepos.Z = 50.7677F; OutOfFountain.X = 1658; OutOfFountain.Y = 844; OutOfFountain.Z = 95.74808F; }//saferecall.X = 7836; saferecall.Y = 804; saferecall.Z = 49.4561234F;
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; _unsafe = purple; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }//saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F;
+            if (carry != null && tempcarry != null)
+            {
+                tempcarry = null;
+            }
             if (carry == null && tempcarry != null)
             {
                 if (Utility.InFountain())
@@ -107,7 +111,7 @@ namespace Support
                     safepos.Z = (bot.Position.Z);
                     bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
                 }
-                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) && bot.Distance(carry, false) > 3000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain()))
+                if ((carry.IsDead || ((carry.Distance(bluefountainpos) < 1000 || carry.Distance(purplefountainpos) < 1000) || ((bot.Health / bot.MaxHealth) * 100) < 25) && !(Utility.InFountain())))
                 {
                     nearestAllyTurret = ObjectManager.Get<Obj_AI_Turret>().First(x => !x.IsMe && x.Distance(bot, false) < 6000 && x.IsAlly);
                     if (nearestAllyTurret != null)

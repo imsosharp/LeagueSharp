@@ -72,6 +72,14 @@ namespace Support
             if (bot.Team == GameObjectTeam.Chaos) { chosen = purple; safe = blue; saferecall.X = 14128; saferecall.Y = 6908; saferecall.Z = 52.3063F; lanepos.X = 13496; lanepos.Y = 4218; lanepos.Z = 51.97616F; }
             if (!bot.IsDead)
             {
+
+                if (Utility.UnderTurret(bot, true))
+                {
+                    safepos.X = (bot.Position.X + safe);
+                    safepos.Y = (bot.Position.Y + safe);
+                    safepos.Z = (bot.Position.Z);
+                    bot.IssueOrder(GameObjectOrder.MoveTo, safepos);
+                }
                 if (carry == null && (timeElapsed) < 60000)
                 {
                     bot.IssueOrder(GameObjectOrder.MoveTo, lanepos);
@@ -86,7 +94,7 @@ namespace Support
                 if (carry != null &&
                     Geometry.Distance(bot, frontline) < 500 &&
                     !carry.IsDead &&
-                    !((bot.Health / bot.MaxHealth) * 100 < 30))
+                    !((bot.Health / bot.MaxHealth) * 100 < 20) && !(Utility.UnderTurret(carry, true)))
                 {
                     Game.PrintChat(carry.ChampionName);
                     frontline.X = carry.Position.X + chosen;
@@ -94,8 +102,8 @@ namespace Support
                     frontline.Z = carry.Position.Z;
                     bot.IssueOrder(GameObjectOrder.MoveTo, frontline);
                 }
-                if (carry.IsDead ||
-                    (carry == null && (timeElapsed) > 60 * 1000) || !((bot.Health / bot.MaxHealth) * 100 < 30))
+                if (timeElapsed > 60000 && !(Utility.UnderTurret(tempcarry, true)) && (carry.IsDead ||
+                    carry == null || !((bot.Health / bot.MaxHealth) * 100 < 20)))
                 {
                     tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.Distance(bot, false) < float.MaxValue && x.IsAlly);
                     frontline.X = tempcarry.Position.X + chosen;

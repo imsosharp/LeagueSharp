@@ -106,7 +106,7 @@ namespace Support
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
                         }
-                        if ((Bot.Position.X - _lanepos.X < 100) && (Bot.Position.Y - _lanepos.Y < 100))
+                        if (Geometry.Distance(Bot, _lanepos) < 250)
                         {
                             if (ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 4000 && x.IsAlly) != null)
@@ -132,7 +132,7 @@ namespace Support
                                 _frontline.Z = _tempcarry.Position.Z;
                                 if (!(_tempcarry.UnderTurret(true)))
                                 {
-                                    if (Bot.Distance(_tempcarry) < 500)
+                                    if (Geometry.Distance(_tempcarry, Bot) < 500)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                                     }
@@ -142,7 +142,7 @@ namespace Support
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && Bot.Distance(Carry) > 500 && !Carry.IsDead &&
+                    if (Carry != null && Geometry.Distance(Carry, Bot) > 500 && !Carry.IsDead &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 20) && !(Carry.UnderTurret(true)))
                     {
                         Game.PrintChat("All good, following: " + Carry.ChampionName);

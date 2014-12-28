@@ -147,12 +147,12 @@ namespace Support
                 if (bot.UnderTurret(false))
                 {
                     Util.Helpers.PrintMessage("moving to safe spot lel");
-                    saferecall.X = bot.Position.X + (safe * 2);
+                    saferecall.X = bot.Position.X + safe;
                     saferecall.Y = bot.Position.Y + safe;
                     saferecall.Z = bot.Position.Z;
                     bot.IssueOrder(GameObjectOrder.MoveTo, saferecall);
                 }
-                if (bot.Position == saferecall || bot.Distance(saferecall) < 100)
+                if (bot.Position == saferecall || bot.Distance(saferecall) < 500)
                 {
                     Util.Helpers.PrintMessage("Trying to recall");
                     //Packet.C2S.Cast.Encoded(new Packet.C2S.Cast.Struct(ObjectManager.Player.NetworkId, SpellSlot.Recall)).Send(); //disabled packet casting

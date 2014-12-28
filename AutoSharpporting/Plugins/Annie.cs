@@ -79,7 +79,7 @@ namespace Support.Plugins
         //sosharp love xSalice
         private int GetPassiveStacks()
         {
-            var buffs = Autoplay.bot.Buffs.Where(buff => (buff.Name.ToLower() == "pyromania" || buff.Name.ToLower() == "pyromania_particle"));
+            var buffs = Autoplay.Bot.Buffs.Where(buff => (buff.Name.ToLower() == "pyromania" || buff.Name.ToLower() == "pyromania_particle"));
             var buffInstances = buffs as BuffInstance[] ?? buffs.ToArray();
             if (!buffInstances.Any())
                 return 0;

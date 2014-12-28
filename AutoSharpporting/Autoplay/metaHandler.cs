@@ -5,63 +5,47 @@
 //which you can find here:
 //https://github.com/h3h3/LeagueSharp/tree/master/Support
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
 
 namespace Support
 {
     internal class MetaHandler
     {
-        static int qlvl, wlvl, elvl, rlvl, buyIndex = 0;
-        static int[] abilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
+        static int _qlvl, _wlvl, _elvl, _rlvl, _buyIndex = 0;
+        static readonly int[] AbilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
         //public static int[] shopList = { 3041, 3020, 3028, 3174, 3222, 3092, 2045, 3190, 0 }; //default
-        static ItemId[] shopList = new ItemId[] { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
+        static readonly ItemId[] ShopList = new ItemId[] { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
         
-        public static void doChecks()
-        {
-            /* AutoLevel LvlUpSpellsMahNiggaPls = new AutoLevel(abilityOrder);
-            if (Autoplay.tempcarry != null && Autoplay.carry == null && Utility.InFountain())
-            {
-                Game.PrintChat("carry was null, but MetaHandler fixed that.");
-                Autoplay.carry = Autoplay.tempcarry;
-                Autoplay.bot.IssueOrder(GameObjectOrder.MoveTo, Autoplay.carry);  
-            } */
-            
+        public static void DoChecks()
+        {            
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
-                //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(1001)).Send();
-                //Packet.C2S.BuyItem.Encoded(new Packet.C2S.BuyItem.Struct(3340)).Send();
-
-                Autoplay.bot.BuyItem(ItemId.Boots_of_Speed);
+                Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
             }
-            if ((qlvl + wlvl + elvl + rlvl) < Autoplay.bot.Level)
+            if ((_qlvl + _wlvl + _elvl + _rlvl) < Autoplay.Bot.Level)
             {
-                int i = Autoplay.bot.Level - 1;
+                int i = Autoplay.Bot.Level - 1;
                 SpellSlot abilitySlot;
-                if (abilityOrder[i] == 1)
+                if (AbilityOrder[i] == 1)
                 {
                     abilitySlot = SpellSlot.Q;
-                    qlvl++;
+                    _qlvl++;
                 }
-                else if (abilityOrder[i] == 2)
+                else if (AbilityOrder[i] == 2)
                 {
                     abilitySlot = SpellSlot.W;
-                    wlvl++;
+                    _wlvl++;
                 }
-                else if (abilityOrder[i] == 3)
+                else if (AbilityOrder[i] == 3)
                 {
                     abilitySlot = SpellSlot.E;
-                    elvl++;
+                    _elvl++;
                 }
-                else if (abilityOrder[i] == 4)
+                else if (AbilityOrder[i] == 4)
                 {
                     abilitySlot = SpellSlot.R;
-                    rlvl++;
+                    _rlvl++;
                 }
                 else
                 {
@@ -69,26 +53,26 @@ namespace Support
                 }
                 ObjectManager.Player.Spellbook.LevelSpell(abilitySlot);
             }
-            if (Utility.InFountain() && Autoplay.bot.Gold >= 1000)
+            if (Utility.InFountain() && Autoplay.Bot.Gold >= 1000)
             {
-               foreach (ItemId item in shopList)
+               foreach (ItemId item in ShopList)
                 {
-                    ItemId thisItem = shopList[buyIndex];
-                    if (!hasItem(item))
+                    ItemId thisItem = ShopList[_buyIndex];
+                    if (!HasItem(item))
                     {
-                        Autoplay.bot.BuyItem(item);
+                        Autoplay.Bot.BuyItem(item);
                     }
                     else
                     {
-                        buyIndex += 1;
+                        _buyIndex += 1;
                     }
                 }
-                Autoplay.doAutoplay();
+                Autoplay.DoAutoplay();
             }
         }
-        public static bool hasItem(ItemId item)
+        public static bool HasItem(ItemId item)
         {
-            return Items.HasItem((int)item, Autoplay.bot);
+            return Items.HasItem((int)item, Autoplay.Bot);
         }
     }
 }

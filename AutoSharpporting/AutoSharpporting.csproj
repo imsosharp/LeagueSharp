@@ -76,7 +76,6 @@
   <ItemGroup>
     <Compile Include="Autoplay\Autoplay.cs" />
     <Compile Include="Autoplay\MetaHandler.cs" />
-    <Compile Include="Autoplay\FollowInfo.cs" />
     <Compile Include="Util\AntiGapcloser.cs" />
     <Compile Include="Util\AutoBushRevealer.cs" />
     <Compile Include="Util\DamageBoostDatabase.cs" />

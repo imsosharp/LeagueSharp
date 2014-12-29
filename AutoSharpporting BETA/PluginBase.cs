@@ -308,7 +308,7 @@ namespace Support
         /// </summary>
         public bool ComboMode
         {
-            get { return Player.IsDead; }
+            get { return !(Player.IsDead); }
         }
 
         /// <summary>

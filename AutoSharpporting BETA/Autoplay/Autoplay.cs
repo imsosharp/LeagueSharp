@@ -89,24 +89,6 @@ namespace Support
             Game.Say("gg");
         }
 
-        public static bool AllyInFountain(Obj_AI_Hero hero)
-        {
-            float fountainRange = 750;
-            var map = Utility.Map.GetMap();
-            if (map != null && map._MapType == Utility.Map.MapType.SummonersRift)
-            {
-                fountainRange = 1050;
-            }
-            return
-            ObjectManager.Get<GameObject>()
-            .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.Team == hero.Team)
-            .Any(
-            spawnPoint =>
-            Vector2.Distance(hero.Position.To2D(), spawnPoint.Position.To2D()) <
-            fountainRange);
-        }
-
-
         private static bool IsBotSafe()
         {
             if (Utility.InFountain() && (Bot.Health / Bot.MaxHealth) * 100 < 80)
@@ -132,7 +114,7 @@ namespace Support
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos);
                     }
                     #region Carry is null
-                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 60000)
+                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 125000)
                     {
                         if (Utility.InFountain())
                         {
@@ -153,10 +135,10 @@ namespace Support
                     #region Carry is dead
                     if (Carry != null)
                     {
-                        if (Carry.IsDead || AllyInFountain(Carry) && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
+                        if (Carry.IsDead || Carry.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                         {
                             Game.PrintChat("Carry dead or afk, following: " + _tempcarry.ChampionName);
-                            _tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && !AllyInFountain(x));
+                            _tempcarry = ObjectManager.Get<Obj_AI_Hero>().FirstOrDefault(x => !x.IsMe && x.IsAlly && !Carry.InFountain());
                             if (_tempcarry != null)
                             {
                                 _frontline.X = _tempcarry.Position.X + _chosen;
@@ -167,6 +149,10 @@ namespace Support
                                     if (Geometry.Distance(_tempcarry, Bot) < 500)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                        if (Bot.IsVisible)
+                                        {
+                                            
+                                        }
                                     }
                                 }
                             }

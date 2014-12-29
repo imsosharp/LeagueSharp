@@ -140,7 +140,6 @@ namespace Support
                     {
                         if (Carry.IsDead || Carry.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                         {
-                            Game.PrintChat("Carry dead or afk, following: " + _tempcarry.ChampionName);
                             if (
                                 ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain()) != null)
@@ -151,6 +150,8 @@ namespace Support
                             }
                             if (_tempcarry != null)
                             {
+
+                                Game.PrintChat("Carry dead or afk, following: " + _tempcarry.ChampionName);
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 _frontline.Z = _tempcarry.Position.Z;
@@ -184,7 +185,6 @@ namespace Support
                     if (timeElapsed > 125000 &&
                         Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                     {
-                        Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain()) != null)
@@ -193,14 +193,18 @@ namespace Support
                                 ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
                         }
-                        _frontline.X = _tempcarry.Position.X + _chosen;
-                        _frontline.Y = _tempcarry.Position.Y + _chosen;
-                        _frontline.Z = _tempcarry.Position.Z;
-                        if (!(_tempcarry.UnderTurret(true)))
+                        if (_tempcarry != null)
                         {
-                            if (Bot.Distance(_frontline) < 500)
+                            Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
+                            _frontline.X = _tempcarry.Position.X + _chosen;
+                            _frontline.Y = _tempcarry.Position.Y + _chosen;
+                            _frontline.Z = _tempcarry.Position.Z;
+                            if (!(_tempcarry.UnderTurret(true)))
                             {
-                                Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                if (Bot.Distance(_frontline) < 500)
+                                {
+                                    Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                }
                             }
                         }
                     }

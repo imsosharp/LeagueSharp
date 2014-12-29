@@ -55,7 +55,7 @@ namespace Support
                 }
                 ObjectManager.Player.Spellbook.LevelSpell(abilitySlot);
             }
-            if (Utility.InFountain() && Autoplay.Bot.Gold >= 1000)
+            if (Utility.InFountain())
             {
                foreach (ItemId item in ShopList)
                 {

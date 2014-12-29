@@ -91,7 +91,7 @@ namespace Support
 
         private static bool IsBotSafe()
         {
-            if (Utility.InFountain() && (Bot.Health / Bot.MaxHealth) * 100 < 80)
+            if (Bot.InFountain() && (Bot.Health / Bot.MaxHealth) * 100 < 80)
             {
                 return false;
             }
@@ -116,7 +116,7 @@ namespace Support
                     #region Carry is null
                     if (Carry == null && timeElapsed > 15000 && timeElapsed < 125000)
                     {
-                        if (Utility.InFountain())
+                        if (Bot.InFountain())
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
                         }

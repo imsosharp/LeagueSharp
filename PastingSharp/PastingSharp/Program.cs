@@ -9,18 +9,17 @@ using forms = System.Windows.Forms;
 
 namespace PastingSharp
 {
-     class Program
+    public class Program
     {
-         static string contents = "";
-         static string[] linestoprint;
-         static Menu menu;
-         static int _lastPaste;
-         static void Main(string[] args)
+        public static string contents = "";
+        public static string[] linestoprint;
+        public static Menu menu;
+        public static void Main(string[] args)
         {
             CustomEvents.Game.OnGameLoad += Game_OnGameLoad;
         }
 
-         static void Game_OnGameLoad(EventArgs args)
+        public static void Game_OnGameLoad(EventArgs args)
         {
 
             menu = new Menu("PastingSharp", "pasting", true);
@@ -31,7 +30,7 @@ namespace PastingSharp
 
             Game.OnGameUpdate += Game_OnGameUpdate;
         }
-         static void Game_OnGameUpdate(EventArgs args)
+        public static void Game_OnGameUpdate(EventArgs args)
         {
 
             if (forms.Clipboard.ContainsText())
@@ -46,56 +45,23 @@ namespace PastingSharp
 
             if (menu.Item("paste").GetValue<KeyBind>().Active)
             {
-                
-                var sleep = (menu.Item("sleep").GetValue<int>()) * 1000;
-                if (sleep == 0)
+                if (linestoprint == null)
                 {
-                    if (linestoprint == null && contents != null)
-                    {
-                        Game.Say(contents);
-                        _lastPaste = Environment.TickCount;
-                    }
-                    else if (linestoprint != null)
-                    {
-                        foreach (string s in linestoprint)
-                        {
-                            Game.Say(s);
-                        }
-                        var linestoprintsize = contents.Count();
-                        Array.Clear(linestoprint, 0, linestoprintsize);
-                        _lastPaste = Environment.TickCount;
-                    }
-                    if (linestoprint == null && contents == null)
-                    {
-                        Game.PrintChat("Your clipboard is empty, are you sure you copied something?");
-                    }
+                    Game.Say(contents);
                 }
+                else
+                {
+                    foreach (string s in linestoprint)
+                    {
+                        Game.Say(s);
+                    }
+                    var linestoprintsize = contents.Count();
+                    Array.Clear(linestoprint, 0, linestoprintsize);
+                }
+                var sleep = (menu.Item("sleep").GetValue<int>()) * 1000;
                 if (sleep != 0)
                 {
-                    if (Environment.TickCount - _lastPaste > sleep || _lastPaste == 0)
-                    {
-                        if (linestoprint == null && contents != null)
-                        {
-                            Game.Say(contents);
-                            _lastPaste = Environment.TickCount;
-                        }
-                        else if (linestoprint != null)
-                        {
-                            foreach (string s in linestoprint)
-                            {
-                                Game.Say(s);
-                            }
-                            var linestoprintsize = contents.Count();
-                            Array.Clear(linestoprint, 0, linestoprintsize);
-                            _lastPaste = Environment.TickCount;
-                        }
-                        if (linestoprint == null && contents == null)
-                        {
-                            Game.PrintChat("Your clipboard is empty, are you sure you copied something?");
-                        }
-
-
-                    }
+                    System.Threading.Thread.Sleep(sleep);
                 }
             }
             

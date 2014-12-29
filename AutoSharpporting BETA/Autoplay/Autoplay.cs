@@ -142,11 +142,11 @@ namespace Support
                         {
                             if (
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain()) != null)
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName) != null)
                             {
                                 _tempcarry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName);
                             }
                             if (_tempcarry != null)
                             {
@@ -187,11 +187,11 @@ namespace Support
                     {
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain()) != null)
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName) != null)
                         {
                             _tempcarry =
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName);
                         }
                         if (_tempcarry != null)
                         {

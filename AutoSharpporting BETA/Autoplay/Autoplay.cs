@@ -123,11 +123,11 @@ namespace Support
                         if (Geometry.Distance(Bot, _lanepos) < 300)
                         {
                             if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 5000 && x.IsAlly) != null)
+                                    .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly) != null)
                             {
                                 Carry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 5000 && x.IsAlly);
+                                        .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
                             }
                         }
                     }
@@ -171,13 +171,13 @@ namespace Support
                     }
                     #endregion Following
                     #region Carry not found
-                    if (timeElapsed > 60000 &&
+                    if (timeElapsed > 125000 &&
                         Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                     {
                         Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
                         _tempcarry =
                             ObjectManager.Get<Obj_AI_Hero>()
-                                .FirstOrDefault(x => !x.IsMe && x.IsAlly);
+                                .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
                         _frontline.X = _tempcarry.Position.X + _chosen;
                         _frontline.Y = _tempcarry.Position.Y + _chosen;
                         _frontline.Z = _tempcarry.Position.Z;

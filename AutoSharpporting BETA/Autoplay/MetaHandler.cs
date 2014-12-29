@@ -23,6 +23,7 @@ namespace Support
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
             {
                 Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
+                Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
             }
             if ((_qlvl + _wlvl + _elvl + _rlvl) < Autoplay.Bot.Level)
             {

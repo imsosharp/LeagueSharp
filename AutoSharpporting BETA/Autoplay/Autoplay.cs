@@ -95,7 +95,10 @@ namespace Support
             {
                 return false;
             }
+            else
+            {
                 return true;
+            }
 
         }
 
@@ -138,7 +141,14 @@ namespace Support
                         if (Carry.IsDead || Carry.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                         {
                             Game.PrintChat("Carry dead or afk, following: " + _tempcarry.ChampionName);
-                            _tempcarry = ObjectManager.Get<Obj_AI_Hero>().FirstOrDefault(x => !x.IsMe && x.IsAlly && !Carry.InFountain());
+                            if (
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain()) != null)
+                            {
+                                _tempcarry =
+                                    ObjectManager.Get<Obj_AI_Hero>()
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
+                            }
                             if (_tempcarry != null)
                             {
                                 _frontline.X = _tempcarry.Position.X + _chosen;
@@ -175,9 +185,14 @@ namespace Support
                         Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                     {
                         Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
-                        _tempcarry =
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
+                        if (
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain()) != null)
+                        {
+                            _tempcarry =
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain());
+                        }
                         _frontline.X = _tempcarry.Position.X + _chosen;
                         _frontline.Y = _tempcarry.Position.Y + _chosen;
                         _frontline.Z = _tempcarry.Position.Z;

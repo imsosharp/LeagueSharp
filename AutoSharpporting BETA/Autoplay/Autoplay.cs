@@ -97,11 +97,22 @@ namespace Support
             }
             return
             ObjectManager.Get<GameObject>()
-            .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.IsAlly)
+            .Where(spawnPoint => spawnPoint is Obj_SpawnPoint && spawnPoint.Team == hero.Team)
             .Any(
             spawnPoint =>
             Vector2.Distance(hero.Position.To2D(), spawnPoint.Position.To2D()) <
             fountainRange);
+        }
+
+
+        private static bool IsBotSafe()
+        {
+            if (Utility.InFountain() && (Bot.Health / Bot.MaxHealth) * 100 < 80)
+            {
+                return false;
+            }
+                return true;
+
         }
 
         public static void DoAutoplay()
@@ -140,9 +151,9 @@ namespace Support
                     #region Carry is dead
                     if (Carry != null)
                     {
-                        if (Carry.IsDead || AllyInFountain(Carry))
+                        if (Carry.IsDead || AllyInFountain(Carry) && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                         {
-                            Game.PrintChat("Carry dead, following: " + _tempcarry.ChampionName);
+                            Game.PrintChat("Carry dead or afk, following: " + _tempcarry.ChampionName);
                             _tempcarry = ObjectManager.Get<Obj_AI_Hero>().First(x => !x.IsMe && x.IsAlly && !AllyInFountain(x));
                             if (_tempcarry != null)
                             {
@@ -162,7 +173,7 @@ namespace Support
                     #endregion Carry is dead
                     #region Following
                     if (Carry != null && Geometry.Distance(Carry, Bot) > 500 && !Carry.IsDead &&
-                        !((Bot.Health / Bot.MaxHealth) * 100 < 20) && !(Carry.UnderTurret(true)))
+                        !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)) && IsBotSafe())
                     {
                         Game.PrintChat("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
@@ -173,7 +184,7 @@ namespace Support
                     #endregion Following
                     #region Carry not found
                     if (timeElapsed > 60000 &&
-                        Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 20))
+                        Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
                     {
                         Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
                         _tempcarry =
@@ -192,7 +203,7 @@ namespace Support
                     }
                     #endregion
                     #region Lowhealth mode
-                    if ((Bot.Health / Bot.MaxHealth) * 100 < 20)
+                    if ((Bot.Health / Bot.MaxHealth) * 100 < 30)
                     {
                         _nearestAllyTurret =
                             ObjectManager.Get<Obj_AI_Turret>()
@@ -213,7 +224,7 @@ namespace Support
                             }
 
                         }
-                        
+
                     }
                     #endregion
                 }

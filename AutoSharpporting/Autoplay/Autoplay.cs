@@ -167,7 +167,7 @@ namespace Support
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && Geometry.Distance(Carry, Bot) > 300 && !Carry.IsDead &&
+                    if (Carry != null && Geometry.Distance(Carry, Bot) > 300 && !Carry.IsDead && !Carry.InFountain() &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)) && IsBotSafe())
                     {
                         Game.PrintChat("All good, following: " + Carry.ChampionName);

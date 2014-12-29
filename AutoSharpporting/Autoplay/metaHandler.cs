@@ -15,9 +15,7 @@ namespace Support
     {
         static int _qlvl, _wlvl, _elvl, _rlvl, _buyIndex = 0;
         static readonly int[] AbilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        //public static int[] shopList = { 3041, 3020, 3028, 3174, 3222, 3092, 2045, 3190, 0 }; //default
         static readonly ItemId[] ShopList = new ItemId[] { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
-        
         public static void DoChecks()
         {            
             if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
@@ -55,7 +53,7 @@ namespace Support
                 }
                 ObjectManager.Player.Spellbook.LevelSpell(abilitySlot);
             }
-            if (Utility.InFountain() && Autoplay.Bot.Gold >= 1000)
+            if (Utility.InFountain())
             {
                foreach (ItemId item in ShopList)
                 {

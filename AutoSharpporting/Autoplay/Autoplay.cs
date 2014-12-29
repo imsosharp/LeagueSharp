@@ -157,13 +157,9 @@ namespace Support
                                 _frontline.Z = _tempcarry.Position.Z;
                                 if (!(_tempcarry.UnderTurret(true)))
                                 {
-                                    if (Geometry.Distance(_tempcarry, Bot) < 500)
+                                    if (Geometry.Distance(Carry, Bot) > 300)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
-                                        if (Bot.IsVisible)
-                                        {
-                                            
-                                        }
                                     }
                                 }
                             }
@@ -171,7 +167,7 @@ namespace Support
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && Geometry.Distance(Carry, Bot) > 500 && !Carry.IsDead &&
+                    if (Carry != null && Geometry.Distance(Carry, Bot) > 300 && !Carry.IsDead &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)) && IsBotSafe())
                     {
                         Game.PrintChat("All good, following: " + Carry.ChampionName);
@@ -201,7 +197,7 @@ namespace Support
                             _frontline.Z = _tempcarry.Position.Z;
                             if (!(_tempcarry.UnderTurret(true)))
                             {
-                                if (Bot.Distance(_frontline) < 500)
+                                if (Bot.Distance(_frontline) > 300)
                                 {
                                     Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                                 }
@@ -214,7 +210,7 @@ namespace Support
                     {
                         _nearestAllyTurret =
                             ObjectManager.Get<Obj_AI_Turret>()
-                                .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
+                                .FirstOrDefault(x => !x.IsMe && x.IsAlly);
                         if (_nearestAllyTurret != null)
                         {
                             _saferecall.X = _nearestAllyTurret.Position.X + _safe;

@@ -23,7 +23,7 @@ namespace PastingSharp
         {
 
             menu = new Menu("PastingSharp", "pasting", true);
-            menu.AddItem(new MenuItem("sleep", "Pause between pastes (seconds)").SetValue(new Slider(1, 0, 15)));
+            menu.AddItem(new MenuItem("sleep", "Pause between pastes (seconds)").SetValue(new Slider(0, 0, 15)));
             menu.AddItem(new MenuItem("paste", "Paste").SetValue(new KeyBind("P".ToCharArray()[0], KeyBindType.Press)));
             menu.AddToMainMenu();
             Game.PrintChat("PastingSharp loaded. Press P to paste.");

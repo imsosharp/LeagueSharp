@@ -157,7 +157,7 @@ namespace Support
                                 _frontline.Z = _tempcarry.Position.Z;
                                 if (!(_tempcarry.UnderTurret(true)))
                                 {
-                                    if (Geometry.Distance(Carry, Bot) > 300)
+                                    if (Geometry.Distance(_tempcarry, Bot) > 300)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                                     }

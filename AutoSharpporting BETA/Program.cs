@@ -51,8 +51,13 @@ namespace Support
                         return;
                     }
                         type = Type.GetType("Support.Plugins.Default");
+                    if (type != null)
+                    {
                         Protector.Init();
                         Activator.CreateInstance(type);
+                        return;
+                    }
+                    Game.PrintChat("Something went wrong, tell sosharp.");
                 }
                 catch (Exception e)
                 {

@@ -50,8 +50,14 @@ namespace Support
                         Activator.CreateInstance(type);
                         return;
                     }
-
-                    Helpers.PrintMessage(ObjectManager.Player.ChampionName + " not supported");
+                        type = Type.GetType("Support.Plugins.Default");
+                    if (type != null)
+                    {
+                        Protector.Init();
+                        Activator.CreateInstance(type);
+                        return;
+                    }
+                    Game.PrintChat("Something went wrong, tell sosharp.");
                 }
                 catch (Exception e)
                 {

@@ -15,12 +15,12 @@ namespace Support
     {
         static int _qlvl, _wlvl, _elvl, _rlvl = 0;
         static readonly int[] AbilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        static readonly ItemId[] ShopList = { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
+        static readonly ItemId[] ShopList = { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rabadons_Deathcap, ItemId.Rod_of_Ages };
         public static void DoChecks()
         {            
             if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
             {
-                Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
+                Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
                 Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
             }
             if ((_qlvl + _wlvl + _elvl + _rlvl) < Autoplay.Bot.Level)

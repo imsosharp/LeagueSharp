@@ -256,6 +256,7 @@ namespace Support
                 if (_orbwalkingpos != null)
                 {
                     Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos);
+                    _stepTime = Environment.TickCount;
                 }
             }
 

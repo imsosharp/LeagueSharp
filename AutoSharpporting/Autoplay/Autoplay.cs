@@ -61,6 +61,8 @@ namespace Support
                 _lanepos.Y = 4218;
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
+            AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
+            AutoLevel.Enabled(true);
         }
 
         private static void OnUpdate(EventArgs args)
@@ -109,11 +111,11 @@ namespace Support
 
                             WalkAround(_lanepos.To3D());
                             if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly) != null)
+                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x)) != null)
                             {
                                 Carry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly);
+                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
                             }
                         }
                     }
@@ -169,11 +171,20 @@ namespace Support
                     {
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead) != null)
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && !MetaHandler.HasSmite(x)) != null)
+                        {
+                            _tempcarry =
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && !MetaHandler.HasSmite(x));
+                        }
+                        else if (
+                            ObjectManager.Get<Obj_AI_Hero>()
+                                .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead) != null)
                         {
                             _tempcarry =
                                 ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead);
+
                         }
                         if (_tempcarry != null)
                         {

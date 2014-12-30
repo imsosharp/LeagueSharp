@@ -24,13 +24,13 @@ namespace Support
         public static Obj_AI_Hero Carry;
         private static Obj_AI_Hero _tempcarry;
         private static Obj_AI_Turret _nearestAllyTurret;
-        private static Vector3 _lanepos;
+        private static Vector2 _lanepos;
         private static int _chosen;
         private static int _safe;
-        private static Vector3 _frontline;
-        private static Vector3 _safepos;
-        private static Vector3 _saferecall;
-        private static Vector3 _orbwalkingpos;
+        private static Vector2 _frontline;
+        private static Vector2 _safepos;
+        private static Vector2 _saferecall;
+        private static Vector2 _orbwalkingpos;
         private static int _loaded;
         private static readonly Random Rand = new Random(42 * DateTime.Now.Millisecond);
         private static int _randSeconds, _randRange, _stepTime;
@@ -50,23 +50,15 @@ namespace Support
             {
                 _chosen = Blue;
                 _safe = Purple;
-                _saferecall.X = 7836;
-                _saferecall.Y = 804;
-                _saferecall.Z = 49.4561234F;
                 _lanepos.X = 11376;
                 _lanepos.Y = 1062;
-                _lanepos.Z = 50.7677F;
             }
             if (Bot.Team == GameObjectTeam.Chaos)
             {
                 _chosen = Purple;
                 _safe = Blue;
-                _saferecall.X = 14128;
-                _saferecall.Y = 6908;
-                _saferecall.Z = 52.3063F;
                 _lanepos.X = 13496;
                 _lanepos.Y = 4218;
-                _lanepos.Z = 51.97616F;
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
         }
@@ -88,7 +80,7 @@ namespace Support
             {
                 return (Bot.Health > Bot.MaxHealth * 0.9f);
             }
-            return (Bot.Health > Bot.MaxHealth * 0.3f);
+            return (Bot.Health > Bot.MaxHealth * 0.3f) && !Bot.IsRecalling();
 
         }
 
@@ -103,20 +95,19 @@ namespace Support
                     {
                         _safepos.X = (Bot.Position.X + _safe);
                         _safepos.Y = (Bot.Position.Y + _safe);
-                        _safepos.Z = (Bot.Position.Z);
-                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos);
+                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
                     }
                     #region Carry is null
                     if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000)
                     {
                         if (Bot.InFountain() || Bot.Distance(_lanepos) > 400)
                         {
-                            Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos.To3D());
                         }
                         if (Bot.Distance(_lanepos) < 400)
                         {
 
-                            WalkAround(_lanepos);
+                            WalkAround(_lanepos.To3D());
                             if (ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly) != null)
                             {
@@ -146,12 +137,11 @@ namespace Support
                                 Console.WriteLine("Carry dead or afk, following: " + _tempcarry.ChampionName);
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
-                                _frontline.Z = _tempcarry.Position.Z;
                                 if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                                 {
                                     if (_tempcarry.Distance(Bot) > 450)
                                     {
-                                        Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                        Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                         WalkAround(_tempcarry);
                                     }
                                 }
@@ -165,10 +155,9 @@ namespace Support
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
-                        _frontline.Z = Carry.Position.Z;
                         if (!Carry.UnderTurret() && Carry.Distance(Bot) > 450)
                         {
-                            Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                         }
 
                         WalkAround(Carry);
@@ -191,12 +180,11 @@ namespace Support
                             Console.WriteLine("Carry not found, following: " + _tempcarry.ChampionName);
                             _frontline.X = _tempcarry.Position.X + _chosen;
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
-                            _frontline.Z = _tempcarry.Position.Z;
                             if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                             {
                                 if (Bot.Distance(_frontline) > 450)
                                 {
-                                    Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                    Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                 }
                                 WalkAround(_tempcarry);
                             }
@@ -213,15 +201,14 @@ namespace Support
                         {
                             _saferecall.X = _nearestAllyTurret.Position.X + _safe;
                             _saferecall.Y = _nearestAllyTurret.Position.Y;
-                            _saferecall.Z = _nearestAllyTurret.Position.Z;
-                            if (Bot.Position.Distance(_saferecall) < 200)
+                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
                             {
                                 Bot.Spellbook.CastSpell(SpellSlot.Recall);
                             }
                             else
                             {
 
-                                Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall);
+                                Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
                             }
 
                         }
@@ -247,18 +234,16 @@ namespace Support
                     int orbwalkingAdditionInteger = _randRange * (-1);
                     _orbwalkingpos.X = Bot.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = Bot.Position.Y + orbwalkingAdditionInteger;
-                    _orbwalkingpos.Z = Bot.Position.Z;
                 }
                 else
                 {
                     int orbwalkingAdditionInteger = _randRange;
                     _orbwalkingpos.X = Bot.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = Bot.Position.Y + orbwalkingAdditionInteger;
-                    _orbwalkingpos.Z = Bot.Position.Z;
                 }
                 if (_orbwalkingpos != null)
                 {
-                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos);
+                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
                     _stepTime = Environment.TickCount;
                 }
             }
@@ -276,18 +261,16 @@ namespace Support
                     int orbwalkingAdditionInteger = _randRange * (-1);
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
-                    _orbwalkingpos.Z = follow.Position.Z;
                 }
                 else
                 {
                     int orbwalkingAdditionInteger = _randRange;
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
-                    _orbwalkingpos.Z = follow.Position.Z;
                 }
                 if (_orbwalkingpos != null)
                 {
-                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos);
+                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
                     _stepTime = Environment.TickCount;
                 }
             }

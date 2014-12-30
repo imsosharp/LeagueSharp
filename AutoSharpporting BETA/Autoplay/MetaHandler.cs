@@ -71,5 +71,11 @@ namespace Support
         {
             return Items.HasItem((int)item, Autoplay.Bot);
         }
+
+        public static bool HasSmite(Obj_AI_Hero hero)
+        {
+            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown;
+        }
+       
     }
 }

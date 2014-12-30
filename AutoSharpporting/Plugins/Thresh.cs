@@ -52,7 +52,7 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 400);
             R = new Spell(SpellSlot.R, 400);
 
-            Q.SetSkillshot(0.5f, 70f, 1900, true, SkillshotType.SkillshotCircle);
+            Q.SetSkillshot(0.5f, 70f, 1900, true, SkillshotType.SkillshotLine);
         }
 
         private bool FollowQ

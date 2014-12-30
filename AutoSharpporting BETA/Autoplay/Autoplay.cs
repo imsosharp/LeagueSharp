@@ -80,11 +80,11 @@ namespace Support
             Game.Say("gg");
         }
 
-        private bool IsBotSafe()
+        private static bool IsBotSafe()
         {
-            if (Bot.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 > 90))
+            if (Bot.InFountain())
             {
-                return false;
+                return (Bot.Health / Bot.MaxHealth) * 100 > 90;
             }
                 return true;
 

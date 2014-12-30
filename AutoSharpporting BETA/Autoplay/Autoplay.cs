@@ -152,7 +152,7 @@ namespace Support
                                     if (Geometry.Distance(_tempcarry, Bot) > 450)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
-                                        WalkAround();
+                                        WalkAround(_tempcarry);
                                     }
                                 }
                             }
@@ -168,7 +168,7 @@ namespace Support
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
-                        WalkAround();
+                        WalkAround(Carry);
                     }
                     #endregion Following
                     #region Carry not found
@@ -195,7 +195,7 @@ namespace Support
                                 {
                                     Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                                 }
-                                WalkAround();
+                                WalkAround(_tempcarry);
                             }
                         }
                     }
@@ -261,5 +261,34 @@ namespace Support
             }
 
         } //end of WalkAround()
+
+        private static void WalkAround(Obj_AI_Hero follow)
+        {
+            _randRange = rand.Next(-267, 276);
+            _randSeconds = rand.Next(1000, 7000);
+            if (Environment.TickCount - _stepTime >= _randSeconds)
+            {
+                if (Bot.Team == GameObjectTeam.Order)
+                {
+                    int orbwalkingAdditionInteger = _randRange * (-1);
+                    _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Z = follow.Position.Z;
+                }
+                else
+                {
+                    int orbwalkingAdditionInteger = _randRange;
+                    _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Z = follow.Position.Z;
+                }
+                if (_orbwalkingpos != null)
+                {
+                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos);
+                    _stepTime = Environment.TickCount;
+                }
+            }
+
+        } //end of WalkAround(Obj_AI_Hero)
     }
 }

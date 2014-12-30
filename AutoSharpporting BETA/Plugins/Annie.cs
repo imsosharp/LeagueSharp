@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Copyright 2014 - 2014 Support
-// Annie.cs is part of Support.
+// Braum.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or

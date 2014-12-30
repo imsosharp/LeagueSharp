@@ -233,7 +233,7 @@ namespace Support
                     ObjectManager.Get<Obj_AI_Hero>()
                         .Where(h => h.IsAlly && !h.IsDead)
                         .OrderByDescending(h => h.FlatPhysicalDamageMod)
-                        .Where(h => ObjectManager.Player.Distance(h) < mikael.Item.Range))
+                        .Where(mikael.Item.IsInRange))
                 {
                     foreach (var buff in CcTypes)
                     {
@@ -333,8 +333,8 @@ namespace Support
                     return;
                 }
 
-                var caster = (Obj_AI_Turret)sender;
-                var target = (Obj_AI_Hero)args.Target;
+                var caster = (Obj_AI_Turret) sender;
+                var target = (Obj_AI_Hero) args.Target;
 
                 if (
                     Menu.SubMenu("Detector")
@@ -378,8 +378,8 @@ namespace Support
                     return;
                 }
 
-                var caster = (Obj_AI_Hero)sender;
-                var target = (Obj_AI_Hero)args.Target;
+                var caster = (Obj_AI_Hero) sender;
+                var target = (Obj_AI_Hero) args.Target;
 
                 if (
                     Menu.SubMenu("Detector")
@@ -413,7 +413,7 @@ namespace Support
                     return;
                 }
 
-                var missile = (Obj_SpellMissile)sender;
+                var missile = (Obj_SpellMissile) sender;
 
                 if (!missile.SpellCaster.IsValid<Obj_AI_Hero>() || !missile.SpellCaster.IsEnemy)
                 {
@@ -425,8 +425,8 @@ namespace Support
                     return;
                 }
 
-                var caster = (Obj_AI_Hero)missile.SpellCaster;
-                var target = (Obj_AI_Hero)missile.Target;
+                var caster = (Obj_AI_Hero) missile.SpellCaster;
+                var target = (Obj_AI_Hero) missile.Target;
 
                 if (
                     Menu.SubMenu("Detector")
@@ -560,7 +560,7 @@ namespace Support
 
                         if (skillshot.SpellData.SpellName == "UFSlash")
                         {
-                            skillshot.SpellData.MissileSpeed = 1600 + (int)skillshot.Unit.MoveSpeed;
+                            skillshot.SpellData.MissileSpeed = 1600 + (int) skillshot.Unit.MoveSpeed;
                         }
 
                         if (skillshot.SpellData.Invert)
@@ -590,20 +590,20 @@ namespace Support
                             var angle = 60;
                             var edge1 =
                                 (skillshot.End - skillshot.Unit.ServerPosition.To2D()).Rotated(
-                                    -angle / 2 * (float)Math.PI / 180);
-                            var edge2 = edge1.Rotated(angle * (float)Math.PI / 180);
+                                    -angle / 2 * (float) Math.PI / 180);
+                            var edge2 = edge1.Rotated(angle * (float) Math.PI / 180);
 
                             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>())
                             {
                                 var v = minion.ServerPosition.To2D() - skillshot.Unit.ServerPosition.To2D();
                                 if (minion.Name == "Seed" && edge1.CrossProduct(v) > 0 && v.CrossProduct(edge2) > 0 &&
-                                    minion.Distance(skillshot.Unit) < 800 && (minion.Team != ObjectManager.Player.Team))
+                                    minion.Distance(skillshot.Unit, false) < 800 && (minion.Team != ObjectManager.Player.Team))
                                 {
                                     var start = minion.ServerPosition.To2D();
                                     var end = skillshot.Unit.ServerPosition.To2D()
                                         .Extend(
                                             minion.ServerPosition.To2D(),
-                                            skillshot.Unit.Distance(minion) > 200 ? 1300 : 1000);
+                                            skillshot.Unit.Distance(minion, false) > 200 ? 1300 : 1000);
 
                                     var skillshotToAdd = new Skillshot(
                                         skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, start, end,
@@ -639,9 +639,9 @@ namespace Support
                             var bounce2Pos = bounce1Pos + skillshot.Direction * d3;
 
                             bounce1SpellData.Delay =
-                                (int)(skillshot.SpellData.Delay + d1 * 1000f / skillshot.SpellData.MissileSpeed + 500);
+                                (int) (skillshot.SpellData.Delay + d1 * 1000f / skillshot.SpellData.MissileSpeed + 500);
                             bounce2SpellData.Delay =
-                                (int)(bounce1SpellData.Delay + d2 * 1000f / bounce1SpellData.MissileSpeed + 500);
+                                (int) (bounce1SpellData.Delay + d2 * 1000f / bounce1SpellData.MissileSpeed + 500);
 
                             var bounce1 = new Skillshot(
                                 skillshot.DetectionType, bounce1SpellData, skillshot.StartTick, skillshot.End,

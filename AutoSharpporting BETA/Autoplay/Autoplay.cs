@@ -84,7 +84,7 @@ namespace Support
         {
             if (Bot.InFountain())
             {
-                return (Bot.Health / Bot.MaxHealth) * 100 > 90;
+                return Bot.Health < Bot.MaxHealth * 0.9f;
             }
                 return true;
 

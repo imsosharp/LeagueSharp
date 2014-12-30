@@ -71,6 +71,7 @@ namespace Support
 
         private static void OnUpdate(EventArgs args)
         {
+            IsBotSafe();
             DoAutoplay();
             MetaHandler.DoChecks();
         }
@@ -84,6 +85,7 @@ namespace Support
         {
             if (Bot.InFountain())
             {
+                Game.PrintChat("im in de foundain and zoharp ist nub :DDDDDDDDDD");
                 return Bot.Health < Bot.MaxHealth * 0.9f;
             }
                 return true;

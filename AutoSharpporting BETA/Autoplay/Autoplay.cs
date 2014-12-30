@@ -32,6 +32,7 @@ namespace Support
         private static int _loaded;
         private static  Random rand = new Random(42 * DateTime.Now.Millisecond);
         private static int _randSeconds, _randRange, _stepTime = 0;
+        private static bool IsBotSafe = true;
 
         public Autoplay()
         {
@@ -71,7 +72,13 @@ namespace Support
 
         private static void OnUpdate(EventArgs args)
         {
-            IsBotSafe();
+            
+            if (Bot.InFountain())
+            {
+                IsBotSafe = (Bot.Health > Bot.MaxHealth * 0.9f);
+                Game.PrintChat("is safe???: " + IsBotSafe);
+                Console.WriteLine("is safe???: " + IsBotSafe);
+            }
             DoAutoplay();
             MetaHandler.DoChecks();
         }
@@ -81,16 +88,6 @@ namespace Support
             Game.Say("gg");
         }
 
-        private static bool IsBotSafe()
-        {
-            if (Bot.InFountain())
-            {
-                Game.PrintChat("im in de foundain and zoharp ist nub :DDDDDDDDDD");
-                return Bot.Health > Bot.MaxHealth * 0.9f;
-            }
-                return true;
-
-        }
 
         public static void DoAutoplay()
         {
@@ -129,7 +126,7 @@ namespace Support
                     #region Carry is dead
                     if (Carry != null)
                     {
-                        if (Carry.IsDead || Carry.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 30))
+                        if (Carry.IsDead || Carry.InFountain())
                         {
                             if (
                                 ObjectManager.Get<Obj_AI_Hero>()
@@ -146,7 +143,7 @@ namespace Support
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 _frontline.Z = _tempcarry.Position.Z;
-                                if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
+                                if (!(_tempcarry.UnderTurret(true)) && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe)
                                 {
                                     if (Geometry.Distance(_tempcarry, Bot) > 450)
                                     {
@@ -166,7 +163,7 @@ namespace Support
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
-                        if (!Carry.UnderTurret() && Geometry.Distance(Carry, Bot) > 450 && IsBotSafe())
+                        if (!Carry.UnderTurret() && Geometry.Distance(Carry, Bot) > 450 && IsBotSafe)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                         }
@@ -192,7 +189,7 @@ namespace Support
                             _frontline.X = _tempcarry.Position.X + _chosen;
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
                             _frontline.Z = _tempcarry.Position.Z;
-                            if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
+                            if (!(_tempcarry.UnderTurret(true)) && IsBotSafe)
                             {
                                 if (Bot.Distance(_frontline) > 450)
                                 {

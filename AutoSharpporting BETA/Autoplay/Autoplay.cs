@@ -107,7 +107,7 @@ namespace Support
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos);
                     }
                     #region Carry is null
-                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 125000)
+                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000)
                     {
                         if (Bot.InFountain())
                         {
@@ -118,11 +118,11 @@ namespace Support
 
                             WalkAround();
                             if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly) != null)
+                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly) != null)
                             {
                                 Carry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly);
+                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly);
                             }
                         }
                     }
@@ -175,16 +175,16 @@ namespace Support
                     }
                     #endregion Following
                     #region Carry not found
-                    if (timeElapsed > 125000 &&
+                    if (timeElapsed > 135000 &&
                         Carry == null && IsBotSafe())
                     {
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName) != null)
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead) != null)
                         {
                             _tempcarry =
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName);
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead);
                         }
                         if (_tempcarry != null)
                         {

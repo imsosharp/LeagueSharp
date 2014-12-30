@@ -157,14 +157,14 @@ namespace Support
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && Geometry.Distance(Carry, Bot) > 450 && !Carry.IsDead && !Carry.InFountain() &&
+                    if (Carry != null && !Carry.IsDead && !Carry.InFountain() &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)))
                     {
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
-                        if (!Carry.UnderTurret() && IsBotSafe())
+                        if (!Carry.UnderTurret() && Geometry.Distance(Carry, Bot) > 450 && IsBotSafe())
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                         }
@@ -237,7 +237,7 @@ namespace Support
         private static void WalkAround()
         {
             _randRange = rand.Next(-267, 276);
-            _randSeconds = rand.Next(1000, 7000);
+            _randSeconds = rand.Next(1000, 4000);
             if (Environment.TickCount - _stepTime >= _randSeconds)
             {
                 if (Bot.Team == GameObjectTeam.Order)

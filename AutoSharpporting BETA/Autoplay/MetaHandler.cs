@@ -16,26 +16,46 @@ namespace Support
 {
     internal class MetaHandler
     {
-        static readonly ItemId[] ShopList = { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rabadons_Deathcap, ItemId.Rod_of_Ages };
+        static readonly ItemId[] SRShopList = { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rabadons_Deathcap, ItemId.Rod_of_Ages };
+        static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Blasting_Wand, ItemId.Catalyst_the_Protector, ItemId.Sorcerers_Shoes };
         public static void DoChecks()
-        {            
-            if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
+        {
+            var map = Utility.Map.GetMap();
+            if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
             {
-                Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
-                Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
-            }
-
-            if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
-            {
-               foreach (ItemId item in ShopList)
+                if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
                 {
-                    if (!HasItem(item))
+                    Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                    Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
+                }
+
+                if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
+                {
+                    foreach (ItemId item in SRShopList)
                     {
-                        Autoplay.Bot.BuyItem(item);
-                        Console.WriteLine("Trying to buy Item: " + (int)item);
+                        if (!HasItem(item))
+                        {
+                            Autoplay.Bot.BuyItem(item);
+                            Console.WriteLine("Trying to buy Item: " + (int) item);
+                        }
                     }
                 }
             }
+            else
+            {
+                if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
+                {
+                    foreach (ItemId item in TTShopList)
+                    {
+                        if (!HasItem(item))
+                        {
+                            Autoplay.Bot.BuyItem(item);
+                            Console.WriteLine("Trying to buy Item: " + (int)item);
+                        }
+                    }
+                }
+            }
+
         }
         public static bool HasItem(ItemId item)
         {

@@ -32,6 +32,7 @@ namespace Support
         private static Vector2 _saferecall;
         private static Vector2 _orbwalkingpos;
         private static int _loaded;
+        private static bool _byPassLoadedCheck = false;
         private static readonly Random Rand = new Random(42 * DateTime.Now.Millisecond);
         private static int _randSeconds, _randRange, _stepTime;
 
@@ -46,19 +47,37 @@ namespace Support
         {
             _loaded = Environment.TickCount;
             _stepTime = Environment.TickCount;
-            if (Bot.Team == GameObjectTeam.Order)
+            var map = Utility.Map.GetMap();
+            if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
             {
-                _chosen = Blue;
-                _safe = Purple;
-                _lanepos.X = 11376;
-                _lanepos.Y = 1062;
+                if (Bot.Team == GameObjectTeam.Order)
+                {
+                    _chosen = Blue;
+                    _safe = Purple;
+                    _lanepos.X = 11376;
+                    _lanepos.Y = 1062;
+                }
+                if (Bot.Team == GameObjectTeam.Chaos)
+                {
+                    _chosen = Purple;
+                    _safe = Blue;
+                    _lanepos.X = 13496;
+                    _lanepos.Y = 4218;
+                }
             }
-            if (Bot.Team == GameObjectTeam.Chaos)
+            else
             {
-                _chosen = Purple;
-                _safe = Blue;
-                _lanepos.X = 13496;
-                _lanepos.Y = 4218;
+                _byPassLoadedCheck = true;
+                if (Bot.Team == GameObjectTeam.Order)
+                {
+                    _chosen = Blue;
+                    _safe = Purple;
+                }
+                if (Bot.Team == GameObjectTeam.Chaos)
+                {
+                    _chosen = Purple;
+                    _safe = Blue;
+                }
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
@@ -100,7 +119,7 @@ namespace Support
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
                     }
                     #region Carry is null
-                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000)
+                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000 && !_byPassLoadedCheck)
                     {
                         if (Bot.InFountain() || Bot.Distance(_lanepos) > 400)
                         {
@@ -117,6 +136,16 @@ namespace Support
                                     ObjectManager.Get<Obj_AI_Hero>()
                                         .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
                             }
+                        }
+                    }
+                    if (_byPassLoadedCheck && Carry == null)
+                    {
+                        if (ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x)) != null)
+                        {
+                            Carry =
+                                ObjectManager.Get<Obj_AI_Hero>()
+                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
                         }
                     }
                     #endregion

@@ -6,6 +6,7 @@
 //https://github.com/h3h3/LeagueSharp/tree/master/Support
 
 using System;
+using System.Drawing.Text;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -21,21 +22,16 @@ namespace Support
         public static Obj_AI_Hero Carry;
         private static Obj_AI_Hero _tempcarry;
         private static Obj_AI_Turret _nearestAllyTurret;
-        private static Vector3 _bluefountainpos;
-        private static Vector3 _purplefountainpos;
         private static Vector3 _lanepos;
         private static int _chosen;
         private static int _safe;
         private static Vector3 _frontline;
         private static Vector3 _safepos;
         private static Vector3 _saferecall;
-        private static Vector3 _orbwalkingpos1;
-        private static Vector3 _orbwalkingpos2;
+        private static Vector3 _orbwalkingpos;
         private static int _loaded;
-        private static int _lastTimeSeenWalking;
-        private static Vector3 _lastPosition;
-        private static readonly Random rand = new Random(42 * DateTime.Now.Millisecond);
-        private static int _randint = rand.Next(0, 150);
+        private static  Random rand = new Random(42 * DateTime.Now.Millisecond);
+        private static int _randSeconds, _randRange, _stepTime = 0;
 
         public Autoplay()
         {
@@ -47,12 +43,7 @@ namespace Support
         private static void OnGameLoad(EventArgs args)
         {
             _loaded = Environment.TickCount;
-            _bluefountainpos.X = 424;
-            _bluefountainpos.Y = 396;
-            _bluefountainpos.Z = 182; //middle of blue fountain
-            _purplefountainpos.X = 14354;
-            _purplefountainpos.Y = 14428;
-            _purplefountainpos.Z = 171; //middle of purple fountain
+            _stepTime = Environment.TickCount;
             if (Bot.Team == GameObjectTeam.Order)
             {
                 _chosen = Blue;
@@ -123,7 +114,7 @@ namespace Support
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
                         }
-                        if (Geometry.Distance(Bot, _lanepos) < 300)
+                        if (Geometry.Distance(Bot, _lanepos) < 450)
                         {
                             if (ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly) != null)
@@ -132,6 +123,7 @@ namespace Support
                                     ObjectManager.Get<Obj_AI_Hero>()
                                         .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
                             }
+                            WalkAround();
                         }
                     }
                     #endregion
@@ -157,9 +149,10 @@ namespace Support
                                 _frontline.Z = _tempcarry.Position.Z;
                                 if (!(_tempcarry.UnderTurret(true)))
                                 {
-                                    if (Geometry.Distance(_tempcarry, Bot) > 300)
+                                    if (Geometry.Distance(_tempcarry, Bot) > 450)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                                        WalkAround();
                                     }
                                 }
                             }
@@ -167,7 +160,7 @@ namespace Support
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && Geometry.Distance(Carry, Bot) > 300 && !Carry.IsDead && !Carry.InFountain() &&
+                    if (Carry != null && Geometry.Distance(Carry, Bot) > 450 && !Carry.IsDead && !Carry.InFountain() &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)) && IsBotSafe())
                     {
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
@@ -175,6 +168,7 @@ namespace Support
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                        WalkAround();
                     }
                     #endregion Following
                     #region Carry not found
@@ -197,10 +191,11 @@ namespace Support
                             _frontline.Z = _tempcarry.Position.Z;
                             if (!(_tempcarry.UnderTurret(true)))
                             {
-                                if (Bot.Distance(_frontline) > 300)
+                                if (Bot.Distance(_frontline) > 450)
                                 {
                                     Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                                 }
+                                WalkAround();
                             }
                         }
                     }
@@ -236,6 +231,34 @@ namespace Support
                     Console.WriteLine(e);
                 }
             }
-        }
+        } //end of DoAutoplay()
+
+        private static void WalkAround()
+        {
+            _randRange = rand.Next(-267, 276);
+            _randSeconds = rand.Next(1000, 7000);
+            if (Environment.TickCount - _stepTime >= _randSeconds)
+            {
+                if (Bot.Team == GameObjectTeam.Order)
+                {
+                    int orbwalkingAdditionInteger = _randRange * (-1);
+                    _orbwalkingpos.X = Bot.Position.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = Bot.Position.Y + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Z = Bot.Position.Z;
+                }
+                else
+                {
+                    int orbwalkingAdditionInteger = _randRange;
+                    _orbwalkingpos.X = Bot.Position.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = Bot.Position.Y + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Z = Bot.Position.Z;
+                }
+                if (_orbwalkingpos != null)
+                {
+                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos);
+                }
+            }
+
+        } //end of WalkAround()
     }
 }

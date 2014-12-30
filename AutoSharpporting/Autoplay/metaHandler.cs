@@ -1,9 +1,11 @@
-﻿//Autoplay Plugin of h3h3's AIO Support
-//
-//All credits go to him. I only wrote whatever is in this file.
-//The core is based on version 2.0.7.2
-//which you can find here:
-//https://github.com/h3h3/LeagueSharp/tree/master/Support
+﻿/* Autoplay Plugin of h3h3's AIO Support
+*
+* All credits go to him. I only wrote this and
+* Autoplay.cs.
+* The core is always updated to latest version.
+* which you can find here:
+* https://github.com/h3h3/LeagueSharp/tree/master/Support
+*/
 
 using System.Linq;
 using LeagueSharp;

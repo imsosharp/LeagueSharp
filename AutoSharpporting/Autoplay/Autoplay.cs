@@ -1,9 +1,11 @@
-﻿//Autoplay Plugin of h3h3's AIO Support
-//
-//All credits go to him. I only wrote whatever is in this file.
-//The core is based on version 2.0.7.2
-//which you can find here:
-//https://github.com/h3h3/LeagueSharp/tree/master/Support
+﻿/* Autoplay Plugin of h3h3's AIO Support
+*
+* All credits go to him. I only wrote this and
+* MetaHandler.cs.
+* The core is always updated to latest version.
+* which you can find here:
+* https://github.com/h3h3/LeagueSharp/tree/master/Support
+*/
 
 using System;
 using System.Drawing.Text;
@@ -30,8 +32,8 @@ namespace Support
         private static Vector3 _saferecall;
         private static Vector3 _orbwalkingpos;
         private static int _loaded;
-        private static Random rand = new Random(42 * DateTime.Now.Millisecond);
-        private static int _randSeconds, _randRange, _stepTime = 0;
+        private static readonly Random Rand = new Random(42 * DateTime.Now.Millisecond);
+        private static int _randSeconds, _randRange, _stepTime;
 
         public Autoplay()
         {
@@ -105,22 +107,22 @@ namespace Support
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos);
                     }
                     #region Carry is null
-                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 125000)
+                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000)
                     {
                         if (Bot.InFountain())
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
                         }
-                        if (Geometry.Distance(Bot, _lanepos) < 450)
+                        if (Bot.Distance(_lanepos) < 450)
                         {
 
                             WalkAround();
                             if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly) != null)
+                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly) != null)
                             {
                                 Carry =
                                     ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
+                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly);
                             }
                         }
                     }
@@ -147,7 +149,7 @@ namespace Support
                                 _frontline.Z = _tempcarry.Position.Z;
                                 if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                                 {
-                                    if (Geometry.Distance(_tempcarry, Bot) > 450)
+                                    if (_tempcarry.Distance(Bot) > 450)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                                         WalkAround(_tempcarry);
@@ -164,7 +166,7 @@ namespace Support
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
-                        if (!Carry.UnderTurret() && Geometry.Distance(Carry, Bot) > 450)
+                        if (!Carry.UnderTurret() && Carry.Distance(Bot) > 450)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                         }
@@ -173,16 +175,16 @@ namespace Support
                     }
                     #endregion Following
                     #region Carry not found
-                    if (timeElapsed > 125000 &&
+                    if (timeElapsed > 135000 &&
                         Carry == null && IsBotSafe())
                     {
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName) != null)
+                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead) != null)
                         {
                             _tempcarry =
                                 ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName);
+                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead);
                         }
                         if (_tempcarry != null)
                         {
@@ -236,8 +238,8 @@ namespace Support
 
         private static void WalkAround()
         {
-            _randRange = rand.Next(-267, 276);
-            _randSeconds = rand.Next(1000, 4000);
+            _randRange = Rand.Next(-267, 276);
+            _randSeconds = Rand.Next(1000, 4000);
             if (Environment.TickCount - _stepTime >= _randSeconds)
             {
                 if (Bot.Team == GameObjectTeam.Order)
@@ -265,8 +267,8 @@ namespace Support
 
         private static void WalkAround(Obj_AI_Hero follow)
         {
-            _randRange = rand.Next(-267, 276);
-            _randSeconds = rand.Next(1000, 7000);
+            _randRange = Rand.Next(-267, 276);
+            _randSeconds = Rand.Next(1000, 4000);
             if (Environment.TickCount - _stepTime >= _randSeconds)
             {
                 if (Bot.Team == GameObjectTeam.Order)

@@ -80,7 +80,7 @@ namespace Support
             {
                 return (Bot.Health > Bot.MaxHealth * 0.9f);
             }
-            return (Bot.Health > Bot.MaxHealth * 0.3f);
+            return (Bot.Health > Bot.MaxHealth * 0.3f) && !Bot.IsRecalling();
 
         }
 

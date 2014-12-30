@@ -109,14 +109,14 @@ namespace Support
                     #region Carry is null
                     if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000)
                     {
-                        if (Bot.InFountain())
+                        if (Bot.InFountain() || Bot.Distance(_lanepos) > 400)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos);
                         }
-                        if (Bot.Distance(_lanepos) < 450)
+                        if (Bot.Distance(_lanepos) < 400)
                         {
 
-                            WalkAround();
+                            WalkAround(_lanepos);
                             if (ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 3000 && x.IsAlly) != null)
                             {
@@ -236,7 +236,7 @@ namespace Support
             }
         } //end of DoAutoplay()
 
-        private static void WalkAround()
+        private static void WalkAround(Vector3 pos)
         {
             _randRange = Rand.Next(-267, 276);
             _randSeconds = Rand.Next(1000, 4000);

@@ -86,10 +86,7 @@ namespace Support
             {
                 return false;
             }
-            else
-            {
                 return true;
-            }
 
         }
 
@@ -130,7 +127,7 @@ namespace Support
                     #region Carry is dead
                     if (Carry != null)
                     {
-                        if (Carry.IsDead || Carry.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
+                        if (Carry.IsDead || Carry.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 30))
                         {
                             if (
                                 ObjectManager.Get<Obj_AI_Hero>()
@@ -147,7 +144,7 @@ namespace Support
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 _frontline.Z = _tempcarry.Position.Z;
-                                if (!(_tempcarry.UnderTurret(true)))
+                                if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                                 {
                                     if (Geometry.Distance(_tempcarry, Bot) > 450)
                                     {
@@ -161,19 +158,23 @@ namespace Support
                     #endregion Carry is dead
                     #region Following
                     if (Carry != null && Geometry.Distance(Carry, Bot) > 450 && !Carry.IsDead && !Carry.InFountain() &&
-                        !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)) && IsBotSafe())
+                        !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)))
                     {
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
-                        Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                        if (!Carry.UnderTurret() && IsBotSafe())
+                        {
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
+                        }
+
                         WalkAround(Carry);
                     }
                     #endregion Following
                     #region Carry not found
                     if (timeElapsed > 125000 &&
-                        Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe())
+                        Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30))
                     {
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
@@ -189,7 +190,7 @@ namespace Support
                             _frontline.X = _tempcarry.Position.X + _chosen;
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
                             _frontline.Z = _tempcarry.Position.Z;
-                            if (!(_tempcarry.UnderTurret(true)))
+                            if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                             {
                                 if (Bot.Distance(_frontline) > 450)
                                 {

@@ -1,4 +1,4 @@
-﻿//Autoplay Plugin of h3h3's AIO Support
+//Autoplay Plugin of h3h3's AIO Supporta
 //
 //All credits go to him. I only wrote whatever is in this file.
 //The core is based on version 2.0.7.2
@@ -14,11 +14,11 @@ namespace Support
     internal class MetaHandler
     {
         static int _qlvl, _wlvl, _elvl, _rlvl, _buyIndex = 0;
-        static readonly int[] AbilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        static readonly ItemId[] ShopList = new ItemId[] { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
+        static readonly int[] AbilityOrder = { 2, 1, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
+        static readonly ItemId[] ShopList = new ItemId[] { ItemId.Sorcerers_Shoes, ItemId.Mejais_Soulstealer, ItemId.Mikaels_Crucible, ItemId.Locket_of_the_Iron_Solari, ItemId.Rabadons_Deathcap, ItemId.Morellonomicon };
         public static void DoChecks()
         {            
-            if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
+            if ((Utility.InFountain() && ObjectManager.Player.Gold == 475) || (Utility.InFountain() && ObjectManager.Player.Gold == 515) ) //now it should work with the wealth mastery
             {
                 Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
                 Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);

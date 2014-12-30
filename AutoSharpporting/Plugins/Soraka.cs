@@ -108,7 +108,7 @@ namespace Support.Plugins
 
                 if (Player.IsRecalling() ||
                     ally.IsRecalling() ||
-                    Utility.InFountain())
+                    ObjectManager.Player.InFountain())
                     return;
 
                 if (ally != null)

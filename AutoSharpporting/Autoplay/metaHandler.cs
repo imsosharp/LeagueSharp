@@ -60,6 +60,7 @@ namespace Support
                     if (!HasItem(item))
                     {
                         Autoplay.Bot.BuyItem(item);
+                        Game.PrintChat("Trying to buy Item: " + (int)item);
                     }
                 }
             }

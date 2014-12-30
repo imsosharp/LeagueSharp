@@ -123,7 +123,7 @@ namespace Support.Util
         {
             if (packet)
             {
-                var p = new Packet.C2S.Move.Struct { MoveType = (byte) order, SourceNetworkId = hero.NetworkId };
+                var p = new Packet.C2S.Move.Struct { MoveType = (byte)order, SourceNetworkId = hero.NetworkId };
 
                 switch (order)
                 {
@@ -146,7 +146,7 @@ namespace Support.Util
             {
                 var p = new Packet.C2S.Move.Struct
                 {
-                    MoveType = (byte) order,
+                    MoveType = (byte)order,
                     SourceNetworkId = hero.NetworkId,
                     X = point.X,
                     Y = point.Y
@@ -170,7 +170,7 @@ namespace Support.Util
 
         public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
         {
-            return item != null && item.IsReady() && target.IsValidTarget(item.Range);
+            return item.IsReady() && target.IsValidTarget(item.Range);
         }
 
         public static bool CastCheck(this Spell spell,

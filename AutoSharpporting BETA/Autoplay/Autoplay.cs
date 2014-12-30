@@ -61,6 +61,8 @@ namespace Support
                 _lanepos.Y = 4218;
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
+            AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
+            AutoLevel.Enabled(true);
         }
 
         private static void OnUpdate(EventArgs args)

@@ -82,7 +82,7 @@ namespace Support
 
         private static bool IsBotSafe()
         {
-            if (Bot.InFountain() && (Bot.Health / Bot.MaxHealth) * 100 < 80)
+            if (Bot.InFountain() && !((Bot.Health / Bot.MaxHealth) * 100 < 90))
             {
                 return false;
             }

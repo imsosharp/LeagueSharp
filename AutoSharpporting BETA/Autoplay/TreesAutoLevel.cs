@@ -1,4 +1,7 @@
-﻿#region
+﻿/* Borrowed from Trees:
+ * https://github.com/trees-software/LeagueSharp/blob/master/AutoLevelSpells/Program.cs 
+ */
+#region
 
 using System;
 using LeagueSharp;

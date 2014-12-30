@@ -66,20 +66,20 @@ namespace Support.Plugins
                 {
                     R.Cast(Target, true);
                 }
-                Cast_E();
+                CastE();
             }
         }
 
-        private void Cast_E()
+        private void CastE()
         {
-            if (GetPassiveStacks() < 4)
+            if (GetPassiveStacks() < 4 && !ObjectManager.Player.IsRecalling())
                 E.Cast();
         }
 
         //sosharp love xSalice
         private int GetPassiveStacks()
         {
-            var buffs = Autoplay.Bot.Buffs.Where(buff => (buff.Name.ToLower() == "pyromania" || buff.Name.ToLower() == "pyromania_particle"));
+            var buffs = ObjectManager.Player.Buffs.Where(buff => (buff.Name.ToLower() == "pyromania" || buff.Name.ToLower() == "pyromania_particle"));
             var buffInstances = buffs as BuffInstance[] ?? buffs.ToArray();
             if (!buffInstances.Any())
                 return 0;

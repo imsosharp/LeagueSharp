@@ -7,6 +7,7 @@
 * https://github.com/h3h3/LeagueSharp/tree/master/Support
 */
 
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -31,7 +32,7 @@ namespace Support
                     if (!HasItem(item))
                     {
                         Autoplay.Bot.BuyItem(item);
-                        Game.PrintChat("Trying to buy Item: " + (int)item);
+                        Console.WriteLine("Trying to buy Item: " + (int)item);
                     }
                 }
             }

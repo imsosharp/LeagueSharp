@@ -75,7 +75,7 @@ namespace Support
                 _lanepos.Y = 4218;
                 _lanepos.Z = 51.97616F;
             }
-            Game.PrintChat("Loaded: " + _loaded);
+            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
         }
 
         private static void OnUpdate(EventArgs args)
@@ -151,7 +151,7 @@ namespace Support
                             if (_tempcarry != null)
                             {
 
-                                Game.PrintChat("Carry dead or afk, following: " + _tempcarry.ChampionName);
+                                Console.WriteLine("Carry dead or afk, following: " + _tempcarry.ChampionName);
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 _frontline.Z = _tempcarry.Position.Z;
@@ -170,7 +170,7 @@ namespace Support
                     if (Carry != null && Geometry.Distance(Carry, Bot) > 300 && !Carry.IsDead && !Carry.InFountain() &&
                         !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)) && IsBotSafe())
                     {
-                        Game.PrintChat("All good, following: " + Carry.ChampionName);
+                        Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
@@ -191,7 +191,7 @@ namespace Support
                         }
                         if (_tempcarry != null)
                         {
-                            Game.PrintChat("Carry not found, following: " + _tempcarry.ChampionName);
+                            Console.WriteLine("Carry not found, following: " + _tempcarry.ChampionName);
                             _frontline.X = _tempcarry.Position.X + _chosen;
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
                             _frontline.Z = _tempcarry.Position.Z;

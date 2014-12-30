@@ -13,12 +13,12 @@ namespace Support
 {
     internal class MetaHandler
     {
-        static int _qlvl, _wlvl, _elvl, _rlvl, _buyIndex = 0;
+        static int _qlvl, _wlvl, _elvl, _rlvl = 0;
         static readonly int[] AbilityOrder = { 1, 2, 3, 2, 2, 4, 2, 1, 2, 1, 4, 1, 1, 3, 3, 4, 3, 3, }; //spell level order
-        static readonly ItemId[] ShopList = new ItemId[] { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
+        static readonly ItemId[] ShopList = { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari };
         public static void DoChecks()
         {            
-            if (Utility.InFountain() && ObjectManager.Player.Gold == 475)
+            if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
             {
                 Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
                 Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
@@ -53,22 +53,13 @@ namespace Support
                 }
                 ObjectManager.Player.Spellbook.LevelSpell(abilitySlot);
             }
-            if (Utility.InFountain())
+            if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
             {
                foreach (ItemId item in ShopList)
                 {
-                    if (_buyIndex > ShopList.Count())
-                    {
-                        _buyIndex = 0;
-                    }
-                    ItemId thisItem = ShopList[_buyIndex];
                     if (!HasItem(item))
                     {
                         Autoplay.Bot.BuyItem(item);
-                    }
-                    else
-                    {
-                        _buyIndex += 1;
                     }
                 }
             }

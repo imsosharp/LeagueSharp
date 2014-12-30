@@ -30,9 +30,8 @@ namespace Support
         private static Vector3 _saferecall;
         private static Vector3 _orbwalkingpos;
         private static int _loaded;
-        private static  Random rand = new Random(42 * DateTime.Now.Millisecond);
+        private static Random rand = new Random(42 * DateTime.Now.Millisecond);
         private static int _randSeconds, _randRange, _stepTime = 0;
-        private static bool IsBotSafe = true;
 
         public Autoplay()
         {
@@ -72,22 +71,24 @@ namespace Support
 
         private static void OnUpdate(EventArgs args)
         {
-            
-            if (Bot.InFountain())
-            {
-                IsBotSafe = (Bot.Health > Bot.MaxHealth * 0.9f);
-                Game.PrintChat("is safe???: " + IsBotSafe);
-                Console.WriteLine("is safe???: " + IsBotSafe);
-            }
             DoAutoplay();
             MetaHandler.DoChecks();
         }
 
-        public void OnGameEnd(EventArgs args)
+        public static void OnGameEnd(EventArgs args)
         {
             Game.Say("gg");
         }
 
+        private static bool IsBotSafe()
+        {
+            if (Bot.InFountain())
+            {
+                return (Bot.Health > Bot.MaxHealth * 0.9f);
+            }
+            return (Bot.Health > Bot.MaxHealth * 0.3f);
+
+        }
 
         public static void DoAutoplay()
         {
@@ -112,6 +113,8 @@ namespace Support
                         }
                         if (Geometry.Distance(Bot, _lanepos) < 450)
                         {
+
+                            WalkAround();
                             if (ObjectManager.Get<Obj_AI_Hero>()
                                     .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly) != null)
                             {
@@ -119,14 +122,13 @@ namespace Support
                                     ObjectManager.Get<Obj_AI_Hero>()
                                         .FirstOrDefault(x => !x.IsMe && Geometry.Distance(x, Bot) < 6000 && x.IsAlly);
                             }
-                            WalkAround();
                         }
                     }
                     #endregion
                     #region Carry is dead
                     if (Carry != null)
                     {
-                        if (Carry.IsDead || Carry.InFountain())
+                        if (IsBotSafe() && Carry.IsDead || Carry.InFountain())
                         {
                             if (
                                 ObjectManager.Get<Obj_AI_Hero>()
@@ -143,7 +145,7 @@ namespace Support
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 _frontline.Z = _tempcarry.Position.Z;
-                                if (!(_tempcarry.UnderTurret(true)) && !((Bot.Health / Bot.MaxHealth) * 100 < 30) && IsBotSafe)
+                                if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                                 {
                                     if (Geometry.Distance(_tempcarry, Bot) > 450)
                                     {
@@ -156,14 +158,13 @@ namespace Support
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && !Carry.IsDead && !Carry.InFountain() &&
-                        !((Bot.Health / Bot.MaxHealth) * 100 < 30) && !(Carry.UnderTurret(true)))
+                    if (Carry != null && !Carry.IsDead && !Carry.InFountain() && IsBotSafe() && !(Carry.UnderTurret(true)))
                     {
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
                         _frontline.Z = Carry.Position.Z;
-                        if (!Carry.UnderTurret() && Geometry.Distance(Carry, Bot) > 450 && IsBotSafe)
+                        if (!Carry.UnderTurret() && Geometry.Distance(Carry, Bot) > 450)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline);
                         }
@@ -173,7 +174,7 @@ namespace Support
                     #endregion Following
                     #region Carry not found
                     if (timeElapsed > 125000 &&
-                        Carry == null && !((Bot.Health / Bot.MaxHealth) * 100 < 30))
+                        Carry == null && IsBotSafe())
                     {
                         if (
                                 ObjectManager.Get<Obj_AI_Hero>()
@@ -189,7 +190,7 @@ namespace Support
                             _frontline.X = _tempcarry.Position.X + _chosen;
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
                             _frontline.Z = _tempcarry.Position.Z;
-                            if (!(_tempcarry.UnderTurret(true)) && IsBotSafe)
+                            if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
                             {
                                 if (Bot.Distance(_frontline) > 450)
                                 {
@@ -201,7 +202,7 @@ namespace Support
                     }
                     #endregion
                     #region Lowhealth mode
-                    if ((Bot.Health / Bot.MaxHealth) * 100 < 30)
+                    if (!IsBotSafe() && !Bot.InFountain())
                     {
                         _nearestAllyTurret =
                             ObjectManager.Get<Obj_AI_Turret>()

@@ -22,8 +22,8 @@ namespace Support
         private const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
         public static Obj_AI_Hero Carry;
+        public static Obj_AI_Turret NearestAllyTurret;
         private static Obj_AI_Hero _tempcarry;
-        private static Obj_AI_Turret _nearestAllyTurret;
         private static Vector2 _lanepos;
         private static int _chosen;
         private static int _safe;
@@ -241,13 +241,13 @@ namespace Support
                     #region Lowhealth mode
                     if (!IsBotSafe() && !Bot.InFountain())
                     {
-                        _nearestAllyTurret =
+                        NearestAllyTurret =
                             ObjectManager.Get<Obj_AI_Turret>()
                                 .FirstOrDefault(x => !x.IsMe && x.IsAlly);
-                        if (_nearestAllyTurret != null)
+                        if (NearestAllyTurret != null)
                         {
-                            _saferecall.X = _nearestAllyTurret.Position.X + _safe;
-                            _saferecall.Y = _nearestAllyTurret.Position.Y;
+                            _saferecall.X = NearestAllyTurret.Position.X + _safe;
+                            _saferecall.Y = NearestAllyTurret.Position.Y;
                             if (Bot.Position.Distance(_saferecall.To3D()) < 200)
                             {
                                 Bot.Spellbook.CastSpell(SpellSlot.Recall);

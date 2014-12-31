@@ -23,6 +23,10 @@ namespace Support
             var map = Utility.Map.GetMap();
             if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
             {
+                if (Autoplay.Bot.InFountain() && Autoplay.NearestAllyTurret != null)
+                {
+                    Autoplay.NearestAllyTurret = null;
+                }
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
                 {
                     Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);

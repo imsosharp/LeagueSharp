@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
 // Copyright 2014 - 2014 Support
-// Braum.cs is part of Support.
+// Annie.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -70,6 +70,49 @@ namespace Support.Plugins
             }
         }
 
+        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        {
+            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            {
+                return;
+            }
+            if (GetPassiveStacks() >= 4)
+            {
+                if (Q.CastCheck(unit, "Interrupt.Q"))
+                {
+                    Q.Cast(unit, UsePackets);
+                    return;
+                }
+                if (W.CastCheck(unit, "Interrupt.W"))
+                {
+                    W.CastOnUnit(unit, UsePackets);
+                    return;
+                }
+            }
+            if (GetPassiveStacks() == 3)
+            {
+                if (E.IsReady())
+                {
+                    E.Cast();
+                    if (Q.CastCheck(unit, "Interrupt.Q"))
+                    {
+                        Q.Cast(unit, UsePackets);
+                        return;
+                    }
+                    if (W.CastCheck(unit, "Interrupt.W"))
+                    {
+                        W.CastOnUnit(unit, UsePackets);
+                        return;
+                    }
+                }
+                if (Q.CastCheck(unit, "Interrupt.Q") && W.CastCheck(unit, "Interrupt.W"))
+                    {
+                        Q.Cast(unit, UsePackets);
+                        W.CastOnUnit(unit, UsePackets);
+                    }
+            }
+        }
+
         private void CastE()
         {
             if (GetPassiveStacks() < 4 && !ObjectManager.Player.IsRecalling())
@@ -93,6 +136,12 @@ namespace Support.Plugins
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
+        }
+
+        public override void InterruptMenu(Menu config)
+        {
+            config.AddBool("Interrupt.Q", "Use Q to Interrupt Spells", true);
+            config.AddBool("Interrupt.W", "Use W to Interrupt Spells", true);
         }
     }
 }

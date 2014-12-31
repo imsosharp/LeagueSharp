@@ -26,6 +26,7 @@ namespace Support
                 if (Autoplay.Bot.InFountain() && Autoplay.NearestAllyTurret != null)
                 {
                     Autoplay.NearestAllyTurret = null;
+                    Autoplay.AllTurrets = null;
                 }
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
                 {

@@ -8,6 +8,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Linq;
 using LeagueSharp;
@@ -22,6 +23,7 @@ namespace Support
         private const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
         public static Obj_AI_Hero Carry;
+        public static List<Obj_AI_Turret> AllTurrets;
         public static Obj_AI_Turret NearestAllyTurret;
         private static Obj_AI_Hero _tempcarry;
         private static Vector2 _lanepos;
@@ -241,10 +243,12 @@ namespace Support
                     #region Lowhealth mode
                     if (!IsBotSafe() && !Bot.InFountain())
                     {
-                        NearestAllyTurret =
-                            ObjectManager.Get<Obj_AI_Turret>()
-                                .FirstOrDefault(x => !x.IsMe && x.IsAlly);
-                        if (NearestAllyTurret != null)
+                        AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
+                        AllTurrets.OrderBy(turret => turret.Distance(Bot));
+
+
+                        NearestAllyTurret = AllTurrets.FirstOrDefault(turret => turret.IsAlly);
+;                        if (NearestAllyTurret != null)
                         {
                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
                             _saferecall.Y = NearestAllyTurret.Position.Y;

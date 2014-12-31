@@ -51,7 +51,15 @@ namespace Support
                 {
                     foreach (ItemId item in TTShopList)
                     {
-                        if (!HasItem(item))
+                        if (item == ItemId.Sorcerers_Shoes)
+                        {
+                            if (!HasItem(item))
+                            {
+                                Autoplay.Bot.BuyItem(item);
+                                Console.WriteLine("Trying to buy Item: " + (int) item);
+                            }
+                        }
+                        else
                         {
                             Autoplay.Bot.BuyItem(item);
                             Console.WriteLine("Trying to buy Item: " + (int)item);

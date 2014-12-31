@@ -35,6 +35,8 @@ namespace Support
         private static bool _byPassLoadedCheck = false;
         private static readonly Random Rand = new Random(42 * DateTime.Now.Millisecond);
         private static int _randSeconds, _randRange, _stepTime;
+        private static float _lowHealthRatio = 0.3f;
+        private static bool _byPassFountainCheck = false;
 
         public Autoplay()
         {
@@ -79,6 +81,11 @@ namespace Support
                     _safe = Blue;
                 }
             }
+            if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
+            {
+                _lowHealthRatio = 0.0f;
+                _byPassFountainCheck = true;
+            }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
@@ -99,9 +106,9 @@ namespace Support
         {
             if (Bot.InFountain())
             {
-                return (Bot.Health > Bot.MaxHealth * 0.9f);
+                return (Bot.Health > Bot.MaxHealth * 0.9f) || _byPassFountainCheck;
             }
-            return (Bot.Health > Bot.MaxHealth * 0.3f) && !Bot.IsRecalling();
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
 
         }
 

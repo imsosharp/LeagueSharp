@@ -16,7 +16,7 @@ namespace Support
 {
     internal class MetaHandler
     {
-        static readonly ItemId[] SRShopList = { ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Chalice_of_Harmony, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rabadons_Deathcap, ItemId.Rod_of_Ages };
+        static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rod_of_Ages };
         static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Blasting_Wand, ItemId.Catalyst_the_Protector, ItemId.Sorcerers_Shoes };
         public static void DoChecks()
         {
@@ -43,6 +43,10 @@ namespace Support
             }
             else
             {
+                if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 815 || Autoplay.Bot.Gold == 855))
+                {
+                    Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
+                }
                 if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
                 {
                     foreach (ItemId item in TTShopList)

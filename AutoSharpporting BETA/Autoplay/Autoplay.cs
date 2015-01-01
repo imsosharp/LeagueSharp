@@ -23,7 +23,7 @@ namespace Support
         private const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
         public static Obj_AI_Hero Carry;
-        public static List<Obj_AI_Turret> AllTurrets;
+        public static Obj_AI_Hero NearestAllyHero;
         public static Obj_AI_Turret NearestAllyTurret;
         private static Obj_AI_Hero _tempcarry;
         private static Vector2 _lanepos;
@@ -97,6 +97,7 @@ namespace Support
         {
             DoAutoplay();
             MetaHandler.DoChecks();
+            MetaHandler.UpdateObjects();
         }
 
         public static void OnGameEnd(EventArgs args)
@@ -138,23 +139,17 @@ namespace Support
                         {
 
                             WalkAround(_lanepos.To3D());
-                            if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x)) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero)) != null)
                             {
-                                Carry =
-                                    ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
+                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero));
                             }
                         }
                     }
                     if (_byPassLoadedCheck && Carry == null)
                     {
-                        if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x)) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero)) != null)
                         {
-                            Carry =
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
+                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero));
                         }
                     }
                     #endregion
@@ -243,11 +238,7 @@ namespace Support
                     #region Lowhealth mode
                     if (!IsBotSafe() && !Bot.InFountain())
                     {
-                        AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
-                        AllTurrets.OrderBy(turret => turret.Distance(Bot));
-
-
-                        NearestAllyTurret = AllTurrets.FirstOrDefault(turret => turret.IsAlly);
+                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
 ;                        if (NearestAllyTurret != null)
                         {
                             _saferecall.X = NearestAllyTurret.Position.X + _safe;

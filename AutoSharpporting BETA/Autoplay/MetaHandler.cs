@@ -8,6 +8,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -16,6 +17,13 @@ namespace Support
 {
     internal class MetaHandler
     {
+
+        public static List<Obj_AI_Turret> AllTurrets;
+        public static List<Obj_AI_Turret> AllyTurrets;
+        public static List<Obj_AI_Turret> EnemyTurrets;
+        public static List<Obj_AI_Hero> AllHeroes;
+        public static List<Obj_AI_Hero> AllyHeroes;
+        public static List<Obj_AI_Hero> EnemyHeroes; 
         static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rod_of_Ages };
         static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Blasting_Wand, ItemId.Catalyst_the_Protector, ItemId.Sorcerers_Shoes };
         public static void DoChecks()
@@ -26,7 +34,6 @@ namespace Support
                 if (Autoplay.Bot.InFountain() && Autoplay.NearestAllyTurret != null)
                 {
                     Autoplay.NearestAllyTurret = null;
-                    Autoplay.AllTurrets = null;
                 }
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
                 {
@@ -82,6 +89,27 @@ namespace Support
         public static bool HasSmite(Obj_AI_Hero hero)
         {
             return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown;
+        }
+
+        public static void UpdateObjects()
+        {
+
+            //Heroes
+            AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
+            AllHeroes = AllHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
+            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly).ToList();
+            AllyHeroes = AllyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
+            EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
+            EnemyHeroes = EnemyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
+
+            //Turrets
+            AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
+            AllTurrets = AllTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
+            AllyTurrets = AllTurrets.FindAll(turret => turret.IsAlly).ToList();
+            AllyTurrets = AllyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
+            EnemyTurrets = AllTurrets.FindAll(turret => !turret.IsAlly).ToList();
+            EnemyTurrets = EnemyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
+
         }
        
     }

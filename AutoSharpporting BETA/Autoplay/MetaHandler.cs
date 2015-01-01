@@ -29,6 +29,8 @@ namespace Support
         static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Rylais_Crystal_Scepter, ItemId.Will_of_the_Ancients, ItemId.Zekes_Herald, ItemId.Locket_of_the_Iron_Solari, ItemId.Hextech_Sweeper };
         static readonly ItemId[] ARAMShopListAD = { ItemId.Blade_of_the_Ruined_King, ItemId.Berserkers_Greaves, ItemId.Infinity_Edge, ItemId.Phantom_Dancer, ItemId.Statikk_Shiv };
         static readonly ItemId[] OtherMapsShopList = { ItemId.Rod_of_Ages_Crystal_Scar };
+        static ItemId[] CustomBuild = { };
+
         public static void DoChecks()
         {
             var map = Utility.Map.GetMap();
@@ -44,60 +46,77 @@ namespace Support
                     Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                 }
 
-                if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
+                if (!FileHandler.ExistsCustomBuild())
                 {
-                    foreach (ItemId item in SRShopList)
+                    if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
                     {
-                        if (!HasItem(item))
+                        foreach (ItemId item in SRShopList)
+                        {
+                            if (!HasItem(item))
+                            {
+                                Autoplay.Bot.BuyItem(item);
+                                Console.WriteLine("Trying to buy Item: " + (int) item);
+                            }
+                        }
+                    }
+                }
+            }
+            if (!FileHandler.ExistsCustomBuild())
+            {
+                if (map != null && map.Type == Utility.Map.MapType.TwistedTreeline)
+                {
+                    if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 815 || Autoplay.Bot.Gold == 855))
+                    {
+                        Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
+                    }
+                    if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
+                    {
+                        foreach (ItemId item in TTShopList)
+                        {
+                            if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
+                            {
+                                Autoplay.Bot.BuyItem(item);
+                                Console.WriteLine("Trying to buy Item: " + (int) item);
+                            }
+                        }
+                    }
+                }
+                else if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
+                {
+                    foreach (ItemId item in ARAMShopListAP) //#TODO check if AP or AD and load the corresponding one
+                    {
+                        if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
                         {
                             Autoplay.Bot.BuyItem(item);
                             Console.WriteLine("Trying to buy Item: " + (int) item);
                         }
                     }
                 }
-            }
-            else if (map != null && map.Type == Utility.Map.MapType.TwistedTreeline)
-            {
-                if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 815 || Autoplay.Bot.Gold == 855))
+                else
                 {
-                    Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
-                }
-                if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
-                {
-                    foreach (ItemId item in TTShopList)
+                    foreach (ItemId item in OtherMapsShopList)
                     {
-                        if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
+                        if (!HasItem(ItemId.Sorcerers_Shoes))
                         {
-                            Autoplay.Bot.BuyItem(item);
-                            Console.WriteLine("Trying to buy Item: " + (int)item);
+                            Autoplay.Bot.BuyItem(ItemId.Sorcerers_Shoes);
                         }
+                        Autoplay.Bot.BuyItem(item);
+                        Console.WriteLine("Trying to buy Item: " + (int) item);
                     }
                 }
             }
-            else if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
+            if (FileHandler.ExistsCustomBuild())
             {
-                foreach (ItemId item in ARAMShopListAP) //#TODO check if AP or AD and load the corresponding one
+                CustomBuild = FileHandler.IDAtoITEMA();
+                foreach (var item in CustomBuild)
                 {
-                   if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
-                        {
-                            Autoplay.Bot.BuyItem(item);
-                            Console.WriteLine("Trying to buy Item: " + (int)item);
-                        }
-                }
-            }
-            else
-            {
-                foreach (ItemId item in OtherMapsShopList)
-                {
-                    if (!HasItem(ItemId.Sorcerers_Shoes))
+                    if (!HasItem(item) && Autoplay.Bot.InFountain())
                     {
-                        Autoplay.Bot.BuyItem(ItemId.Sorcerers_Shoes);
+                        Autoplay.Bot.BuyItem(item);
+                        Console.WriteLine("Trying to buy Item: " + (int) item);
                     }
-                    Autoplay.Bot.BuyItem(item);
-                        Console.WriteLine("Trying to buy Item: " + (int)item);
                 }
             }
-
         }
         public static bool HasItem(ItemId item)
         {

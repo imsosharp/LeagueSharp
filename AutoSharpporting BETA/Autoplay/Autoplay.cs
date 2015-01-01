@@ -99,6 +99,7 @@ namespace Support
             DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
+            FileHandler.DoChecks();
         }
 
         public static void OnGameEnd(EventArgs args)

@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autoplay\Autoplay.cs" />
+    <Compile Include="Autoplay\FileHandler.cs" />
     <Compile Include="Autoplay\MetaHandler.cs" />
     <Compile Include="Autoplay\TreesAutoLevel.cs" />
     <Compile Include="Plugins\Default.cs" />

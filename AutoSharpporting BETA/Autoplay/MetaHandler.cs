@@ -28,7 +28,7 @@ namespace Support
         static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Wooglets_Witchcap };
         static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes };
         static readonly ItemId[] ARAMShopListAD = { ItemId.Blade_of_the_Ruined_King, ItemId.Berserkers_Greaves, ItemId.Infinity_Edge, ItemId.Phantom_Dancer, ItemId.Statikk_Shiv };
-        static readonly ItemId[] OtherMapsShopList = { ItemId.Rod_of_Ages };
+        static readonly ItemId[] OtherMapsShopList = { ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes };
         public static void DoChecks()
         {
             var map = Utility.Map.GetMap();
@@ -66,15 +66,7 @@ namespace Support
                 {
                     foreach (ItemId item in TTShopList)
                     {
-                        if (item == ItemId.Sorcerers_Shoes)
-                        {
-                            if (!HasItem(item))
-                            {
-                                Autoplay.Bot.BuyItem(item);
-                                Console.WriteLine("Trying to buy Item: " + (int) item);
-                            }
-                        }
-                        else
+                        if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
                         {
                             Autoplay.Bot.BuyItem(item);
                             Console.WriteLine("Trying to buy Item: " + (int)item);
@@ -84,17 +76,20 @@ namespace Support
             }
             else if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
             {
-                foreach (ItemId item in TTShopList)
+                foreach (ItemId item in ARAMShopListAP) //#TODO check if AP or AD and load the corresponding one
                 {
-                    if (item == ItemId.Sorcerers_Shoes)
-                    {
-                        if (!HasItem(item))
+                   if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
                         {
                             Autoplay.Bot.BuyItem(item);
                             Console.WriteLine("Trying to buy Item: " + (int)item);
                         }
-                    }
-                    else
+                }
+            }
+            else
+            {
+                foreach (ItemId item in OtherMapsShopList)
+                {
+                    if (!HasItem(item) && Autoplay.Bot.InFountain())
                     {
                         Autoplay.Bot.BuyItem(item);
                         Console.WriteLine("Trying to buy Item: " + (int)item);

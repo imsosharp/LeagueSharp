@@ -26,9 +26,9 @@ namespace Support
         public static List<Obj_AI_Hero> EnemyHeroes; 
         static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rod_of_Ages };
         static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Wooglets_Witchcap };
-        static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes };
+        static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Rylais_Crystal_Scepter, ItemId.Will_of_the_Ancients, ItemId.Zekes_Herald, ItemId.Locket_of_the_Iron_Solari, ItemId.Hextech_Sweeper };
         static readonly ItemId[] ARAMShopListAD = { ItemId.Blade_of_the_Ruined_King, ItemId.Berserkers_Greaves, ItemId.Infinity_Edge, ItemId.Phantom_Dancer, ItemId.Statikk_Shiv };
-        static readonly ItemId[] OtherMapsShopList = { ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes };
+        static readonly ItemId[] OtherMapsShopList = { ItemId.Rod_of_Ages_Crystal_Scar };
         public static void DoChecks()
         {
             var map = Utility.Map.GetMap();
@@ -89,11 +89,12 @@ namespace Support
             {
                 foreach (ItemId item in OtherMapsShopList)
                 {
-                    if (!HasItem(item) && Autoplay.Bot.InFountain())
+                    if (!HasItem(ItemId.Sorcerers_Shoes))
                     {
-                        Autoplay.Bot.BuyItem(item);
-                        Console.WriteLine("Trying to buy Item: " + (int)item);
+                        Autoplay.Bot.BuyItem(ItemId.Sorcerers_Shoes);
                     }
+                    Autoplay.Bot.BuyItem(item);
+                        Console.WriteLine("Trying to buy Item: " + (int)item);
                 }
             }
 
@@ -127,6 +128,19 @@ namespace Support
             EnemyTurrets = AllTurrets.FindAll(turret => !turret.IsAlly).ToList();
             EnemyTurrets = EnemyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
 
+        }
+
+        public static bool IsInBase(Obj_AI_Hero hero)
+        {
+            var map = Utility.Map.GetMap();
+            if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
+            {
+                var baseRange = 16000000; //4000^2
+                return hero.IsVisible &&
+                       ObjectManager.Get<Obj_SpawnPoint>()
+                           .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < baseRange);
+            }
+            return false;
         }
        
     }

@@ -40,6 +40,7 @@ namespace Support
         private static int _randSeconds, _randRange, _stepTime;
         private static float _lowHealthRatio = 0.3f;
         private static bool _byPassFountainCheck = false;
+        private static AutoLevel asAutoLevel;
 
         public Autoplay()
         {
@@ -94,7 +95,7 @@ namespace Support
                 Jungler = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero));
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
-            AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
+            asAutoLevel = new AutoLevel(TreesAutoLevel.GetSequence());
         }
 
         private static void OnUpdate(EventArgs args)

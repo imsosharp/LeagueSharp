@@ -96,12 +96,10 @@ namespace Support
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
             SpellHumanizer.Enabled = true;
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
-            AutoLevel.Enabled(true);
         }
 
         private static void OnUpdate(EventArgs args)
         {
-            AutoLevel.Enabled(true);
             DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
@@ -146,7 +144,7 @@ namespace Support
                         {
 
                             WalkAround(_lanepos.To3D());
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler && !MetaHandler.HasSmite(hero)) != null)
                             {
                                 Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler && !MetaHandler.HasSmite(hero));
                             }
@@ -165,15 +163,29 @@ namespace Support
                     {
                         if (IsBotSafe() && Carry.IsDead || Carry.InFountain())
                         {
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) != null)
+                            if (_tempcarry == null || _tempcarry.IsDead || _tempcarry.InFountain())
                             {
-                                _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
-                            }
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) == null &&
-                                MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
-                            {
-                                //well fuck, let's follow the jungler -sighs-
-                                _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) !=
+                                    null)
+                                {
+                                    _tempcarry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
+                                }
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) ==
+                                    null &&
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
+                                {
+                                    //well fuck, let's follow the jungler -sighs-
+                                    _tempcarry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
+                                }
                             }
                             if (_tempcarry != null)
                             {
@@ -211,15 +223,27 @@ namespace Support
                     if (timeElapsed > 135000 &&
                         Carry == null && IsBotSafe())
                     {
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) != null)
+                        if (_tempcarry == null || _tempcarry.IsDead || _tempcarry.InFountain())
                         {
-                            _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
-                        }
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) == null &&
-                            MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
-                        {
-                            //well fuck, let's follow the jungler -sighs-
-                            _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
+                            if (
+                                MetaHandler.AllyHeroes.FirstOrDefault(
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler && MetaHandler.HasSmite(hero)) != null)
+                            {
+                                _tempcarry =
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler && MetaHandler.HasSmite(hero));
+                            }
+                            if (
+                                MetaHandler.AllyHeroes.FirstOrDefault(
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler && MetaHandler.HasSmite(hero)) == null &&
+                                MetaHandler.AllyHeroes.FirstOrDefault(
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
+                            {
+                                //well fuck, let's follow the jungler -sighs-
+                                _tempcarry =
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
+                            }
                         }
                         if (_tempcarry != null)
                         {
@@ -240,8 +264,11 @@ namespace Support
                     #region Lowhealth mode
                     if (!IsBotSafe() && !Bot.InFountain())
                     {
-                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
-;                        if (NearestAllyTurret != null)
+                        if (NearestAllyTurret == null)
+                        {
+                            NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+                        }
+                        if (NearestAllyTurret != null)
                         {
                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
                             _saferecall.Y = NearestAllyTurret.Position.Y;

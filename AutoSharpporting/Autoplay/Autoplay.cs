@@ -8,6 +8,7 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Linq;
 using LeagueSharp;
@@ -22,8 +23,10 @@ namespace Support
         private const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
         public static Obj_AI_Hero Carry;
+        public static Obj_AI_Hero NearestAllyHero;
+        public static Obj_AI_Turret NearestAllyTurret;
+        public static Obj_AI_Hero Jungler;
         private static Obj_AI_Hero _tempcarry;
-        private static Obj_AI_Turret _nearestAllyTurret;
         private static Vector2 _lanepos;
         private static int _chosen;
         private static int _safe;
@@ -86,15 +89,20 @@ namespace Support
                 _lowHealthRatio = 0.0f;
                 _byPassFountainCheck = true;
             }
-            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
+            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero)) != null)
+            {
+                Jungler = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero));
+            }
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
+            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
         }
 
         private static void OnUpdate(EventArgs args)
         {
             DoAutoplay();
             MetaHandler.DoChecks();
+            MetaHandler.UpdateObjects();
         }
 
         public static void OnGameEnd(EventArgs args)
@@ -136,23 +144,17 @@ namespace Support
                         {
 
                             WalkAround(_lanepos.To3D());
-                            if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x)) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler) != null)
                             {
-                                Carry =
-                                    ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
+                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler);
                             }
                         }
                     }
                     if (_byPassLoadedCheck && Carry == null)
                     {
-                        if (ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x)) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero != Jungler) != null)
                         {
-                            Carry =
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.Distance(Bot) < 6000 && x.IsAlly && !MetaHandler.HasSmite(x));
+                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero != Jungler);
                         }
                     }
                     #endregion
@@ -161,13 +163,15 @@ namespace Support
                     {
                         if (IsBotSafe() && Carry.IsDead || Carry.InFountain())
                         {
-                            if (
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) != null)
                             {
-                                _tempcarry =
-                                    ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && x.ChampionName != Carry.ChampionName);
+                                _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
+                            }
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) == null &&
+                                MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
+                            {
+                                //well fuck, let's follow the jungler -sighs-
+                                _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
                             }
                             if (_tempcarry != null)
                             {
@@ -205,22 +209,15 @@ namespace Support
                     if (timeElapsed > 135000 &&
                         Carry == null && IsBotSafe())
                     {
-                        if (
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                        .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && !MetaHandler.HasSmite(x)) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) != null)
                         {
-                            _tempcarry =
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead && !MetaHandler.HasSmite(x));
+                            _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
                         }
-                        else if (
-                            ObjectManager.Get<Obj_AI_Hero>()
-                                .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) == null &&
+                            MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                         {
-                            _tempcarry =
-                                ObjectManager.Get<Obj_AI_Hero>()
-                                    .FirstOrDefault(x => !x.IsMe && x.IsAlly && !x.InFountain() && !x.IsDead);
-
+                            //well fuck, let's follow the jungler -sighs-
+                            _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
                         }
                         if (_tempcarry != null)
                         {
@@ -241,13 +238,11 @@ namespace Support
                     #region Lowhealth mode
                     if (!IsBotSafe() && !Bot.InFountain())
                     {
-                        _nearestAllyTurret =
-                            ObjectManager.Get<Obj_AI_Turret>()
-                                .FirstOrDefault(x => !x.IsMe && x.IsAlly);
-                        if (_nearestAllyTurret != null)
+                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+;                        if (NearestAllyTurret != null)
                         {
-                            _saferecall.X = _nearestAllyTurret.Position.X + _safe;
-                            _saferecall.Y = _nearestAllyTurret.Position.Y;
+                            _saferecall.X = NearestAllyTurret.Position.X + _safe;
+                            _saferecall.Y = NearestAllyTurret.Position.Y;
                             if (Bot.Position.Distance(_saferecall.To3D()) < 200)
                             {
                                 Bot.Spellbook.CastSpell(SpellSlot.Recall);

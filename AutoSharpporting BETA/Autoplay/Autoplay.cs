@@ -25,6 +25,7 @@ namespace Support
         public static Obj_AI_Hero Carry;
         public static Obj_AI_Hero NearestAllyHero;
         public static Obj_AI_Turret NearestAllyTurret;
+        public static Obj_AI_Hero Jungler;
         private static Obj_AI_Hero _tempcarry;
         private static Vector2 _lanepos;
         private static int _chosen;
@@ -88,9 +89,13 @@ namespace Support
                 _lowHealthRatio = 0.0f;
                 _byPassFountainCheck = true;
             }
-            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
+            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero)) != null)
+            {
+                Jungler = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero));
+            }
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
+            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
         }
 
         private static void OnUpdate(EventArgs args)
@@ -139,17 +144,17 @@ namespace Support
                         {
 
                             WalkAround(_lanepos.To3D());
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero)) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler) != null)
                             {
-                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero));
+                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler);
                             }
                         }
                     }
                     if (_byPassLoadedCheck && Carry == null)
                     {
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero)) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero != Jungler) != null)
                         {
-                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero));
+                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero != Jungler);
                         }
                     }
                     #endregion
@@ -158,11 +163,11 @@ namespace Support
                     {
                         if (IsBotSafe() && Carry.IsDead || Carry.InFountain())
                         {
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) != null)
                             {
-                                _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
+                                _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
                             }
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) == null &&
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) == null &&
                                 MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                             {
                                 //well fuck, let's follow the jungler -sighs-
@@ -204,11 +209,11 @@ namespace Support
                     if (timeElapsed > 135000 &&
                         Carry == null && IsBotSafe())
                     {
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) != null)
                         {
-                            _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
+                            _tempcarry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
                         }
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) == null &&
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) == null &&
                             MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                         {
                             //well fuck, let's follow the jungler -sighs-

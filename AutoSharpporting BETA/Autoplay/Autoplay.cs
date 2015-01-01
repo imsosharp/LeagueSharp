@@ -94,7 +94,6 @@ namespace Support
                 Jungler = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero));
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
-            SpellHumanizer.Enabled = true;
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
         }
 

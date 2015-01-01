@@ -96,6 +96,7 @@ namespace Support
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
+            SpellHumanizer.Enabled = true;
         }
 
         private static void OnUpdate(EventArgs args)
@@ -146,7 +147,7 @@ namespace Support
                             WalkAround(_lanepos.To3D());
                             if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler) != null)
                             {
-                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler);
+                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler && !MetaHandler.HasSmite(hero));
                             }
                         }
                     }

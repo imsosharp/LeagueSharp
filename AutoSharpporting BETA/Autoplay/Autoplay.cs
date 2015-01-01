@@ -40,7 +40,6 @@ namespace Support
         private static int _randSeconds, _randRange, _stepTime;
         private static float _lowHealthRatio = 0.3f;
         private static bool _byPassFountainCheck = false;
-        private static AutoLevel asAutoLevel;
 
         public Autoplay()
         {
@@ -90,12 +89,8 @@ namespace Support
                 _lowHealthRatio = 0.0f;
                 _byPassFountainCheck = true;
             }
-            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero)) != null)
-            {
-                Jungler = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && MetaHandler.HasSmite(hero));
-            }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
-            asAutoLevel = new AutoLevel(TreesAutoLevel.GetSequence());
+            AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
         }
 
@@ -145,17 +140,17 @@ namespace Support
                         {
 
                             WalkAround(_lanepos.To3D());
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler && !MetaHandler.HasSmite(hero)) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero)) != null)
                             {
-                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && hero != Jungler && !MetaHandler.HasSmite(hero));
+                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero));
                             }
                         }
                     }
                     if (_byPassLoadedCheck && Carry == null)
                     {
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero != Jungler) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero)) != null)
                         {
-                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero != Jungler);
+                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero));
                         }
                     }
                     #endregion
@@ -168,16 +163,16 @@ namespace Support
                             {
                                 if (
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) !=
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) !=
                                     null)
                                 {
                                     _tempcarry =
                                         MetaHandler.AllyHeroes.FirstOrDefault(
-                                            hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler);
+                                            hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
                                 }
                                 if (
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler) ==
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) ==
                                     null &&
                                     MetaHandler.AllyHeroes.FirstOrDefault(
                                         hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
@@ -228,15 +223,15 @@ namespace Support
                         {
                             if (
                                 MetaHandler.AllyHeroes.FirstOrDefault(
-                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler && MetaHandler.HasSmite(hero)) != null)
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) != null)
                             {
                                 _tempcarry =
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler && MetaHandler.HasSmite(hero));
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
                             }
                             if (
                                 MetaHandler.AllyHeroes.FirstOrDefault(
-                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && hero != Jungler && MetaHandler.HasSmite(hero)) == null &&
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) == null &&
                                 MetaHandler.AllyHeroes.FirstOrDefault(
                                     hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                             {

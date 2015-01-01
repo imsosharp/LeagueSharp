@@ -96,6 +96,7 @@ namespace Support
             }
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
             asAutoLevel = new AutoLevel(TreesAutoLevel.GetSequence());
+            AutoLevel.Enabled(true);
         }
 
         private static void OnUpdate(EventArgs args)

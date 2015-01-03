@@ -114,6 +114,11 @@ namespace Support
 
         private static bool IsBotSafe()
         {
+            var map = Utility.Map.GetMap();
+            if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
+            {
+                return true;
+            }
             if (Bot.InFountain())
             {
                 return (Bot.Health > Bot.MaxHealth * 0.9f) || _byPassFountainCheck;

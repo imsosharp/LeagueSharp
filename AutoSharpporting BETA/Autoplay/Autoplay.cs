@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Linq;
+using Support.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -89,7 +90,7 @@ namespace Support
                 _lowHealthRatio = 0.0f;
                 _byPassFountainCheck = true;
             }
-            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
+            Helpers.PrintMessage("LOADED PROGRAM: ENJOY SELVES.");
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
             FileHandler.DoChecks();

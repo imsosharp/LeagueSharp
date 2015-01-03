@@ -107,8 +107,8 @@ namespace Support
         public static bool HasSmite(Obj_AI_Hero hero)
         {
             return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown && 
-                hero.Spellbook.GetSpell(SpellSlot.Summoner1).Name.ToLower().Contains("smite") ||
-                hero.Spellbook.GetSpell(SpellSlot.Summoner2).Name.ToLower().Contains("smite");
+                (hero.Spellbook.GetSpell(SpellSlot.Summoner1).Name.ToLower().Contains("smite") ||
+                hero.Spellbook.GetSpell(SpellSlot.Summoner2).Name.ToLower().Contains("smite"));
         }
 
         public static void UpdateObjects()

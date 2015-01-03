@@ -25,7 +25,6 @@ namespace Support
         public static List<Obj_AI_Hero> AllyHeroes;
         public static List<Obj_AI_Hero> EnemyHeroes;
         public static string[] Supports = { "Alistar", "Annie", "Blitzcrank", "Braum", "Fiddlesticks", "Janna", "Karma", "Kayle", "Leona", "Lulu", "Morgana", "Nunu", "Nami", "Soraka", "Sona", "Taric", "Thresh", "Zilean", "Zyra" };
-
         public static string[] AP =
         {
             "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Azir", "Blitzcrank",

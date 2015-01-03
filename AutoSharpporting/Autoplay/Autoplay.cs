@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing.Text;
 using System.Linq;
+using Support.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -36,9 +37,11 @@ namespace Support
         private static Vector2 _orbwalkingpos;
         private static int _loaded;
         private static bool _byPassLoadedCheck = false;
-        private static readonly Random Rand = new Random(42 * DateTime.Now.Millisecond);
+        private static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second);
         private static int _randSeconds, _randRange, _stepTime;
         private static float _lowHealthRatio = 0.3f;
+        private static float _lowManaRatio = 0.1f;
+        private static float _lowHealthIfLowManaRatio = 0.5f;
         private static bool _byPassFountainCheck = false;
 
         public Autoplay()
@@ -57,17 +60,17 @@ namespace Support
             {
                 if (Bot.Team == GameObjectTeam.Order)
                 {
-                    _chosen = Blue;
-                    _safe = Purple;
-                    _lanepos.X = 11376;
-                    _lanepos.Y = 1062;
+                    _chosen = Blue + Rand.Next(-76, 76);
+                    _safe = Purple + Rand.Next(-67, 67);
+                    _lanepos.X = 11376 + Rand.Next(-50, 50);
+                    _lanepos.Y = 1062 + Rand.Next(-50, 50);
                 }
                 if (Bot.Team == GameObjectTeam.Chaos)
                 {
-                    _chosen = Purple;
-                    _safe = Blue;
-                    _lanepos.X = 13496;
-                    _lanepos.Y = 4218;
+                    _chosen = Purple + Rand.Next(-67, 67);
+                    _safe = Blue + Rand.Next(-76, 76);
+                    _lanepos.X = 13496 + Rand.Next(-50, 50);
+                    _lanepos.Y = 4218 + Rand.Next(-50, 50);
                 }
             }
             else
@@ -89,10 +92,11 @@ namespace Support
                 _lowHealthRatio = 0.0f;
                 _byPassFountainCheck = true;
             }
-            Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
+            Helpers.PrintMessage("LOADED PROGRAM: ENJOY SELVES.");
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
             FileHandler.DoChecks();
+            MetaHandler.LoadObjects();
         }
 
         private static void OnUpdate(EventArgs args)
@@ -113,6 +117,10 @@ namespace Support
             if (Bot.InFountain())
             {
                 return (Bot.Health > Bot.MaxHealth * 0.9f) || _byPassFountainCheck;
+            }
+            if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
+            {
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio;
             }
             return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
 
@@ -138,13 +146,12 @@ namespace Support
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos.To3D());
                         }
-                        if (Bot.Distance(_lanepos) < 400)
+                        if (Bot.Distance(_lanepos) < 1000)
                         {
-
                             WalkAround(_lanepos.To3D());
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero)) != null)
+                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 8000 && !MetaHandler.HasSmite(hero)) != null)
                             {
-                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 6000 && !MetaHandler.HasSmite(hero));
+                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 8000 && !MetaHandler.HasSmite(hero));
                             }
                         }
                     }

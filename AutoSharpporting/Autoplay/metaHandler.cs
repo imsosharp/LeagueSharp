@@ -127,28 +127,33 @@ namespace Support
 
         public static bool HasSmite(Obj_AI_Hero hero)
         {
-            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown && 
-                (hero.Spellbook.GetSpell(SpellSlot.Summoner1).Name.ToLower().Contains("smite") ||
-                hero.Spellbook.GetSpell(SpellSlot.Summoner2).Name.ToLower().Contains("smite"));
+            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown;
+        }
+
+        public static void LoadObjects()
+        {
+            //Heroes
+            AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
+            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero) && !HasSmite(hero)).ToList();
+            EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
+
+            //Turrets
+            AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
+            AllyTurrets = AllTurrets.FindAll(turret => turret.IsAlly).ToList();
+            EnemyTurrets = AllTurrets.FindAll(turret => !turret.IsAlly).ToList();
         }
 
         public static void UpdateObjects()
         {
 
             //Heroes
-            AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
             AllHeroes = AllHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
-            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero)).ToList();
             AllyHeroes = AllyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
-            EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
             EnemyHeroes = EnemyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
 
             //Turrets
-            AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
             AllTurrets = AllTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
-            AllyTurrets = AllTurrets.FindAll(turret => turret.IsAlly).ToList();
             AllyTurrets = AllyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
-            EnemyTurrets = AllTurrets.FindAll(turret => !turret.IsAlly).ToList();
             EnemyTurrets = EnemyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
 
         }

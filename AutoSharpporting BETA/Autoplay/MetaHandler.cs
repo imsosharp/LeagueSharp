@@ -136,11 +136,6 @@ namespace Support
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
             AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero) && !HasSmite(hero)).ToList();
             EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
-
-            //Turrets
-            AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
-            AllyTurrets = AllTurrets.FindAll(turret => turret.IsAlly).ToList();
-            EnemyTurrets = AllTurrets.FindAll(turret => !turret.IsAlly).ToList();
         }
 
         public static void UpdateObjects()
@@ -151,7 +146,11 @@ namespace Support
             AllyHeroes = AllyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
             EnemyHeroes = EnemyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
 
+         
             //Turrets
+            AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
+            AllyTurrets = AllTurrets.FindAll(turret => turret.IsAlly).ToList();
+            EnemyTurrets = AllTurrets.FindAll(turret => !turret.IsAlly).ToList();
             AllTurrets = AllTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
             AllyTurrets = AllyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();
             EnemyTurrets = EnemyTurrets.OrderBy(turret => turret.Distance(Autoplay.Bot)).ToList();

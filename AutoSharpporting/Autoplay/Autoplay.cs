@@ -92,7 +92,6 @@ namespace Support
                 _lowHealthRatio = 0.0f;
                 _byPassFountainCheck = true;
             }
-            Helpers.PrintMessage("LOADED PROGRAM: ENJOY SELVES.");
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
             FileHandler.DoChecks();

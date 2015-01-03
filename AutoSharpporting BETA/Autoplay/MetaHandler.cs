@@ -35,86 +35,44 @@ namespace Support
         public static void DoChecks()
         {
             var map = Utility.Map.GetMap();
-            if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
+
+            if (map != null && (map.Type == Utility.Map.MapType.SummonersRift || map.Type == Utility.Map.MapType.TwistedTreeline))
             {
                 if (Autoplay.Bot.InFountain() && Autoplay.NearestAllyTurret != null)
                 {
                     Autoplay.NearestAllyTurret = null;
                 }
-                if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
-                {
-                    Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
-                    Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
-                }
-
-                if (!FileHandler.ExistsCustomBuild())
-                {
-                    if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
-                    {
-                        foreach (ItemId item in SRShopList)
-                        {
-                            if (!HasItem(item))
-                            {
-                                Autoplay.Bot.BuyItem(item);
-                                Console.WriteLine("Trying to buy Item: " + (int) item);
-                            }
-                        }
-                    }
-                }
             }
-            if (!FileHandler.ExistsCustomBuild())
+            if (Autoplay.Bot.InFountain())
             {
-                if (map != null && map.Type == Utility.Map.MapType.TwistedTreeline)
+                if (FileHandler.ExistsCustomBuild())
                 {
-                    if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 815 || Autoplay.Bot.Gold == 855))
+                    if (map.Type == Utility.Map.MapType.HowlingAbyss && !Autoplay.Bot.IsDead)
                     {
-                        Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
+                        return;
                     }
-                    if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
+                    CustomBuild = FileHandler.GetCustomBuild();
+                    foreach (var item in CustomBuild)
                     {
-                        foreach (ItemId item in TTShopList)
+                        if (!HasItem(item))
                         {
-                            if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
-                            {
-                                Autoplay.Bot.BuyItem(item);
-                                Console.WriteLine("Trying to buy Item: " + (int) item);
-                            }
-                        }
-                    }
-                }
-                else if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
-                {
-                    foreach (ItemId item in ARAMShopListAP) //#TODO check if AP or AD and load the corresponding one
-                    {
-                        if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
-                        {
-                            Autoplay.Bot.BuyItem(item);
-                            Console.WriteLine("Trying to buy Item: " + (int) item);
+                            BuyItem(item);
                         }
                     }
                 }
                 else
                 {
-                    foreach (ItemId item in OtherMapsShopList)
+                    if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
-                        if (!HasItem(ItemId.Sorcerers_Shoes))
-                        {
-                            Autoplay.Bot.BuyItem(ItemId.Sorcerers_Shoes);
-                        }
-                        Autoplay.Bot.BuyItem(item);
-                        Console.WriteLine("Trying to buy Item: " + (int) item);
+                        Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
-                }
-            }
-            if (FileHandler.ExistsCustomBuild())
-            {
-                CustomBuild = FileHandler.AllocCBuild();
-                foreach (var item in CustomBuild)
-                {
-                    if (!HasItem(item) && Autoplay.Bot.InFountain())
+                    foreach (var item in GetDefaultItemArray())
                     {
-                        Autoplay.Bot.BuyItem(item);
-                        Console.WriteLine("Trying to buy Item: " + (int) item);
+                        if (!HasItem(item))
+                        {
+                            BuyItem(item);
+                        }
                     }
                 }
             }
@@ -122,6 +80,30 @@ namespace Support
         public static bool HasItem(ItemId item)
         {
             return Items.HasItem((int)item, Autoplay.Bot);
+        }
+
+        public static void BuyItem(ItemId item)
+        {
+            Autoplay.Bot.BuyItem(item);
+        }
+
+        public static ItemId[] GetDefaultItemArray()
+        {
+
+            var map = Utility.Map.GetMap();
+            if (map.Type == Utility.Map.MapType.SummonersRift)
+            {
+                return SRShopList;
+            }
+            if (map.Type == Utility.Map.MapType.TwistedTreeline)
+            {
+                return TTShopList;
+            }
+            if (map.Type == Utility.Map.MapType.HowlingAbyss)
+            {
+                return ARAMShopListAP;
+            }
+            return OtherMapsShopList;
         }
 
         public static bool HasSmite(Obj_AI_Hero hero)

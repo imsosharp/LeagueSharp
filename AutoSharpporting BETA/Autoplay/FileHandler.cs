@@ -46,7 +46,7 @@ namespace Support
             return (File.Exists(theFile));
         }
 
-        public static ItemId[] AllocCBuild()
+        public static ItemId[] GetCustomBuild()
         {
             ItemId[] localCopy = { };
             for(var i = 0; i < Items.Count(); i++)

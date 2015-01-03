@@ -23,7 +23,8 @@ namespace Support
         public static List<Obj_AI_Turret> EnemyTurrets;
         public static List<Obj_AI_Hero> AllHeroes;
         public static List<Obj_AI_Hero> AllyHeroes;
-        public static List<Obj_AI_Hero> EnemyHeroes; 
+        public static List<Obj_AI_Hero> EnemyHeroes;
+        public static string[] Supports = { "Alistar", "Annie", "Blitzcrank", "Braum", "Fiddlesticks", "Janna", "Karma", "Kayle", "Leona", "Lulu", "Morgana", "Nunu", "Nami", "Soraka", "Sona", "Taric", "Thresh", "Zilean", "Zyra" }; 
         static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rod_of_Ages };
         static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Wooglets_Witchcap };
         static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Rylais_Crystal_Scepter, ItemId.Will_of_the_Ancients, ItemId.Zekes_Herald, ItemId.Locket_of_the_Iron_Solari, ItemId.Hextech_Sweeper };
@@ -107,7 +108,7 @@ namespace Support
             }
             if (FileHandler.ExistsCustomBuild())
             {
-                CustomBuild = FileHandler.IDAtoITEMA();
+                CustomBuild = FileHandler.AllocCBuild();
                 foreach (var item in CustomBuild)
                 {
                     if (!HasItem(item) && Autoplay.Bot.InFountain())
@@ -136,7 +137,7 @@ namespace Support
             //Heroes
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
             AllHeroes = AllHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
-            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly).ToList();
+            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero)).ToList();
             AllyHeroes = AllyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
             EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
             EnemyHeroes = EnemyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
@@ -163,6 +164,18 @@ namespace Support
             }
             return false;
         }
+
+        public static bool IsSupport(Obj_AI_Hero hero)
+        {
+            foreach (var support in Supports)
+            {
+                if (hero.BaseSkinName == support)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
        
     }
-}

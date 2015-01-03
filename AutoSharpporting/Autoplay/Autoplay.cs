@@ -109,7 +109,7 @@ namespace Support
 
         public static void OnGameEnd(EventArgs args)
         {
-            Game.Say("gg");
+            //Game.Say("gg"); nope
         }
 
         private static bool IsBotSafe()

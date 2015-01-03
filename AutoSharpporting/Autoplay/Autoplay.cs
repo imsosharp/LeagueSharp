@@ -92,6 +92,7 @@ namespace Support
             Game.PrintChat("AutoSharpporting Loaded: " + _loaded);
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
+            FileHandler.DoChecks();
         }
 
         private static void OnUpdate(EventArgs args)
@@ -99,6 +100,7 @@ namespace Support
             DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
+            //FileHandler.DoChecks(); no need for it at onupdate, lulz
         }
 
         public static void OnGameEnd(EventArgs args)

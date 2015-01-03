@@ -23,85 +23,101 @@ namespace Support
         public static List<Obj_AI_Turret> EnemyTurrets;
         public static List<Obj_AI_Hero> AllHeroes;
         public static List<Obj_AI_Hero> AllyHeroes;
-        public static List<Obj_AI_Hero> EnemyHeroes; 
-        static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes };
+        public static List<Obj_AI_Hero> EnemyHeroes;
+        public static string[] Supports = { "Alistar", "Annie", "Blitzcrank", "Braum", "Fiddlesticks", "Janna", "Karma", "Kayle", "Leona", "Lulu", "Morgana", "Nunu", "Nami", "Soraka", "Sona", "Taric", "Thresh", "Zilean", "Zyra" };
+        public static string[] AP =
+        {
+            "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Azir", "Blitzcrank",
+            "Brand", "Braum", "Cassiopeia", "Chogath", "Diana", "Elise", "Evelynn", "Ezreal", "FiddleSticks", "Fizz",
+            "Galio", "Gragas", "Hecarim", "Heimerdinger", "Irelia", "Janna", "Jax", "Karma", "Karthus", "Kassadin",
+            "Katarina", "Kayle", "Kennen", "KogMaw", "LeBlanc", "Lissandra", "Lulu", "Lux", "Malphite", "Malzahar",
+            "Maokai", "Morderkaiser", "Morgana", "Nami", "Nautilus", "Nidalee", "Nunu", "Orianna", "RekSai", "Rumble",
+            "Ryze", "Shaco", "Singed", "Sona", "Swain", "Syndra", "Teemo", "Thresh", "TwistedFate", "veigar", "VelKoz",
+            "Viktor", "Vladimir", "Xerath", "XinZhao", "Yorick", "Ziggs", "Zilean", "Zyra"
+        };
+        static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Mejais_Soulstealer, ItemId.Sorcerers_Shoes, ItemId.Athenes_Unholy_Grail, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Ruby_Sightstone, ItemId.Locket_of_the_Iron_Solari, ItemId.Morellonomicon, ItemId.Rod_of_Ages };
         static readonly ItemId[] TTShopList = { ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Wooglets_Witchcap };
         static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rod_of_Ages, ItemId.Sorcerers_Shoes, ItemId.Rylais_Crystal_Scepter, ItemId.Will_of_the_Ancients, ItemId.Zekes_Herald, ItemId.Locket_of_the_Iron_Solari, ItemId.Hextech_Sweeper };
         static readonly ItemId[] ARAMShopListAD = { ItemId.Blade_of_the_Ruined_King, ItemId.Berserkers_Greaves, ItemId.Infinity_Edge, ItemId.Phantom_Dancer, ItemId.Statikk_Shiv };
         static readonly ItemId[] OtherMapsShopList = { ItemId.Rod_of_Ages_Crystal_Scar };
+        static ItemId[] CustomBuild = { };
+
         public static void DoChecks()
         {
             var map = Utility.Map.GetMap();
-            if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
+
+            if (map != null && (map.Type == Utility.Map.MapType.SummonersRift || map.Type == Utility.Map.MapType.TwistedTreeline))
             {
                 if (Autoplay.Bot.InFountain() && Autoplay.NearestAllyTurret != null)
                 {
                     Autoplay.NearestAllyTurret = null;
                 }
-                if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
+            }
+            if (Autoplay.Bot.InFountain())
+            {
+                if (FileHandler.ExistsCustomBuild())
                 {
-                    Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
-                    Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
-                }
-
-                if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
-                {
-                    foreach (ItemId item in SRShopList)
+                    if (map.Type == Utility.Map.MapType.HowlingAbyss && !Autoplay.Bot.IsDead)
+                    {
+                        return;
+                    }
+                    CustomBuild = FileHandler.GetCustomBuild();
+                    foreach (var item in CustomBuild)
                     {
                         if (!HasItem(item))
                         {
-                            Autoplay.Bot.BuyItem(item);
-                            Console.WriteLine("Trying to buy Item: " + (int) item);
+                            BuyItem(item);
                         }
                     }
                 }
-            }
-            else if (map != null && map.Type == Utility.Map.MapType.TwistedTreeline)
-            {
-                if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 815 || Autoplay.Bot.Gold == 855))
+                else
                 {
-                    Autoplay.Bot.BuyItem(ItemId.Boots_of_Speed);
-                }
-                if (Autoplay.Bot.InFountain() && Autoplay.Bot.Gold >= 1000)
-                {
-                    foreach (ItemId item in TTShopList)
+                    if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
-                        if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
-                        {
-                            Autoplay.Bot.BuyItem(item);
-                            Console.WriteLine("Trying to buy Item: " + (int)item);
-                        }
+                        Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
-                }
-            }
-            else if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
-            {
-                foreach (ItemId item in ARAMShopListAP) //#TODO check if AP or AD and load the corresponding one
-                {
-                   if (!HasItem(item) && Autoplay.Bot.IsDead && Autoplay.Bot.InFountain())
-                        {
-                            Autoplay.Bot.BuyItem(item);
-                            Console.WriteLine("Trying to buy Item: " + (int)item);
-                        }
-                }
-            }
-            else
-            {
-                foreach (ItemId item in OtherMapsShopList)
-                {
-                    if (!HasItem(ItemId.Sorcerers_Shoes))
+                    foreach (var item in GetDefaultItemArray())
                     {
-                        Autoplay.Bot.BuyItem(ItemId.Sorcerers_Shoes);
+                        if (!HasItem(item))
+                        {
+                            BuyItem(item);
+                        }
                     }
-                    Autoplay.Bot.BuyItem(item);
-                        Console.WriteLine("Trying to buy Item: " + (int)item);
                 }
             }
-
         }
         public static bool HasItem(ItemId item)
         {
             return Items.HasItem((int)item, Autoplay.Bot);
+        }
+
+        public static void BuyItem(ItemId item)
+        {
+            Autoplay.Bot.BuyItem(item);
+        }
+
+        public static ItemId[] GetDefaultItemArray()
+        {
+
+            var map = Utility.Map.GetMap();
+            if (map.Type == Utility.Map.MapType.SummonersRift)
+            {
+                return SRShopList;
+            }
+            if (map.Type == Utility.Map.MapType.TwistedTreeline)
+            {
+                return TTShopList;
+            }
+            if (map.Type == Utility.Map.MapType.HowlingAbyss)
+            {
+                foreach (var apchamp in AP)
+                {
+                    if (Autoplay.Bot.BaseSkinName.ToLower() == apchamp.ToLower()) return ARAMShopListAP;
+                }
+                return ARAMShopListAD;
+            }
+            return OtherMapsShopList;
         }
 
         public static bool HasSmite(Obj_AI_Hero hero)
@@ -117,7 +133,7 @@ namespace Support
             //Heroes
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
             AllHeroes = AllHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
-            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly).ToList();
+            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero)).ToList();
             AllyHeroes = AllyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
             EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
             EnemyHeroes = EnemyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
@@ -144,6 +160,18 @@ namespace Support
             }
             return false;
         }
+
+        public static bool IsSupport(Obj_AI_Hero hero)
+        {
+            foreach (var support in Supports)
+            {
+                if (hero.BaseSkinName.ToLower() == support.ToLower())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
        
     }
-}

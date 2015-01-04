@@ -125,6 +125,7 @@ namespace Support
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
 <<<<<<< HEAD
+<<<<<<< HEAD
                 return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !_commandOverride;
             }
             return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !_commandOverride;
@@ -133,6 +134,11 @@ namespace Support
             }
             return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
 >>>>>>> parent of 09334b8... PermissionToGoUnderTurret >> BETA
+=======
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && _commandOverride;
+            }
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && _commandOverride;
+>>>>>>> parent of 3784ed2... fug
 
         }
 

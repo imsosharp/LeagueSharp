@@ -30,10 +30,11 @@ namespace Support.Plugins
     {
         public Default()
         {
-            Q = new Spell(SpellSlot.Q, AttackRange);
-            W = new Spell(SpellSlot.W, AttackRange);
-            E = new Spell(SpellSlot.E, AttackRange);
-            R = new Spell(SpellSlot.R, AttackRange);
+            Q = new Spell(SpellSlot.Q, 600);
+            W = new Spell(SpellSlot.W, 450);
+            E = new Spell(SpellSlot.E, 200);
+            R = new Spell(SpellSlot.R, 500);
+            Q.SetSkillshot(0.25f, 60, 1600, true, SkillshotType.SkillshotLine);
         }
 
 

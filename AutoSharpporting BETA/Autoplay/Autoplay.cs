@@ -128,9 +128,9 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && _commandOverride;
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !_commandOverride;
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && _commandOverride;
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !_commandOverride;
 
         }
 

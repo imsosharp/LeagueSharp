@@ -324,6 +324,12 @@ namespace Support
                         Console.WriteLine("command override: being attacked by turret");
                         _commandOverride = true;
                         _commandOverrideTime = Environment.TickCount;
+                        Vector2 newSafePos = new Vector2();
+                        float newSafeX = _safe * Rand.Next(2, 3);
+                        double newSafeY = _safe * Rand.NextDouble();
+                        newSafePos.X = Bot.Position.X + newSafeX;
+                        newSafePos.Y = Bot.Position.X + (float)newSafeY;
+                        Bot.IssueOrder(GameObjectOrder.MoveTo, newSafePos.To3D());
                     }
                 }
             }

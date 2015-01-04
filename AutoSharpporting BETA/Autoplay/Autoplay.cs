@@ -43,12 +43,15 @@ namespace Support
         private static float _lowManaRatio = 0.1f;
         private static float _lowHealthIfLowManaRatio = 0.5f;
         private static bool _byPassFountainCheck = false;
+        private static bool _commandOverride = false;
+        private static int _commandOverrideTime = 0;
 
         public Autoplay()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnUpdate;
             Game.OnGameEnd += OnGameEnd;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 
         private static void OnGameLoad(EventArgs args)
@@ -101,6 +104,7 @@ namespace Support
         private static void OnUpdate(EventArgs args)
         {
             DoAutoplay();
+            CheckTurret();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
             //FileHandler.DoChecks(); no need for it at onupdate, lulz
@@ -124,9 +128,9 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio;
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && _commandOverride;
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && _commandOverride;
 
         }
 
@@ -137,7 +141,7 @@ namespace Support
             {
                 try
                 {
-                    if (Bot.UnderTurret(true))
+                    if (Bot.UnderTurret(true) && _commandOverride)
                     {
                         _safepos.X = (Bot.Position.X + _safe);
                         _safepos.Y = (Bot.Position.Y + _safe);
@@ -202,25 +206,22 @@ namespace Support
                                 Console.WriteLine("Carry dead or afk, following: " + _tempcarry.ChampionName);
                                 _frontline.X = _tempcarry.Position.X + _chosen;
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
-                                if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
-                                {
                                     if (_tempcarry.Distance(Bot) > 450)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                         WalkAround(_tempcarry);
                                     }
-                                }
                             }
                         }
                     }
                     #endregion Carry is dead
                     #region Following
-                    if (Carry != null && !Carry.IsDead && !Carry.InFountain() && IsBotSafe() && !(Carry.UnderTurret(true)))
+                    if (Carry != null && !Carry.IsDead && !Carry.InFountain() && IsBotSafe())
                     {
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
-                        if (!Carry.UnderTurret() && Carry.Distance(Bot) > 450)
+                        if (Carry.Distance(Bot) > 450)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                         }
@@ -259,7 +260,7 @@ namespace Support
                             Console.WriteLine("Carry not found, following: " + _tempcarry.ChampionName);
                             _frontline.X = _tempcarry.Position.X + _chosen;
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
-                            if (!(_tempcarry.UnderTurret(true)) && IsBotSafe())
+                            if (IsBotSafe())
                             {
                                 if (Bot.Distance(_frontline) > 450)
                                 {
@@ -301,7 +302,36 @@ namespace Support
                     Console.WriteLine(e);
                 }
             }
-        } //end of DoAutoplay()
+        }
+
+        public static void CheckTurret()
+        {
+            if (_commandOverride && Environment.TickCount - _commandOverrideTime > 2000)
+            {
+                _commandOverride = false;
+            }
+        }
+
+        public static void OnProcessSpellCast(Obj_AI_Base caster, GameObjectProcessSpellCastEventArgs spell)
+        {
+            try
+            {
+                if (caster.IsValid && !caster.IsAlly && (caster.Type == GameObjectType.obj_AI_Turret || caster.Type == GameObjectType.obj_Turret ||
+                    caster.Name.ToLower().Contains("turret")))
+                {
+                    if (spell.Target == Bot)
+                    {
+                        Console.WriteLine("command override: being attacked by turret");
+                        _commandOverride = true;
+                        _commandOverrideTime = Environment.TickCount;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
 
         private static void WalkAround(Vector3 pos)
         {

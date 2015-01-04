@@ -146,7 +146,6 @@ namespace Support
             AllyHeroes = AllyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
             EnemyHeroes = EnemyHeroes.OrderBy(hero => hero.Distance(Autoplay.Bot)).ToList();
 
-         
             //Turrets
             AllTurrets = ObjectManager.Get<Obj_AI_Turret>().ToList();
             AllyTurrets = AllTurrets.FindAll(turret => turret.IsAlly).ToList();

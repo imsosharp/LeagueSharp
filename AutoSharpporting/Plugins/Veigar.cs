@@ -70,7 +70,7 @@ namespace Support.Plugins
 
             if (E.CastCheck(unit, "Interrupt.E"))
             {
-                castE((Obj_AI_Hero)unit);
+                E.Cast(unit, true);
                 return;
             }
         }

@@ -32,7 +32,7 @@ namespace Support.Plugins
             {
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    castE((Obj_AI_Hero)Target);
+                    E.Cast(Target, true);
                 }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
@@ -94,43 +94,6 @@ namespace Support.Plugins
             config.AddBool("Interrupt.E", "Use E to Interrupt Spells", true);
         }
 
-        public override void castE(Obj_AI_Base target)
-        {
-            PredictionOutput pred = Prediction.GetPrediction(target,E.Delay);
-            Vector2 castVec = pred.UnitPosition.To2D() -
-                              Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * E.Width;
-
-            if (pred.Hitchance >= HitChance.High && E.IsReady())
-            {
-                E.Cast(castVec);
-            }
-        }
-
-        /// Cast E Credit DedToto
-        //E CAST(UNIT)
-        public override void castE(Obj_AI_Hero target)
-        {
-            PredictionOutput pred = Prediction.GetPrediction(target, E.Delay);
-            Vector2 castVec = pred.UnitPosition.To2D() -
-                              Vector2.Normalize(pred.UnitPosition.To2D() - Player.Position.To2D()) * E.Width;
-
-            if (pred.Hitchance >= HitChance.High && E.IsReady())
-            {
-                E.Cast(castVec, UsePackets);
-            }
-        }
-
-        //E CAST(COORDINATES)
-        public override void castE(Vector3 pos)
-        {
-            Vector2 castVec = pos.To2D() -
-                              Vector2.Normalize(pos.To2D() - Player.Position.To2D()) * E.Width;
-
-            if (E.IsReady())
-            {
-                E.Cast(castVec, UsePackets);
-            }
-        }
     }
 }
 

@@ -28,20 +28,25 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
+
+            var targetR = TargetSelector.GetTarget(10000, TargetSelector.DamageType.Magical);
             if (ComboMode)
             {
-                if (!IsQActive)
+               /* if (Orbwalking.InAutoAttackRange(Target) && Q.Instance.ToggleState == 1)
                 {
                     Q.Cast();
-                }
+                }*/
                 if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
 
-                if (R.CastCheck(Target, "ComboR"))
+                if (R.CastCheck(targetR, "ComboR") && R.IsKillable(targetR))
                 {
-                    R.Cast(Target, true);
+                    R.Cast(targetR, UsePackets);
+                }
+                if(Orbwalking.InAutoAttackRange(Target)){
+                    Player.IssueOrder(GameObjectOrder.AttackUnit,Target);
                 }
             }
 
@@ -49,7 +54,7 @@ namespace Support.Plugins
             {
                 if (W.CastCheck(Target, "HarassW"))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
             }
         }
@@ -79,7 +84,7 @@ namespace Support.Plugins
 
         public override void ComboMenu(Menu config)
         {
-            config.AddBool("ComboQ", "Use Q", true);
+           // config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
         }

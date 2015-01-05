@@ -1,28 +1,4 @@
-﻿#region LICENSE
-
-// Copyright 2014 Support
-// Morgana.cs is part of Support.
-// 
-// Support is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-// 
-// Support is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with Support. If not, see <http://www.gnu.org/licenses/>.
-// 
-// Filename: Support/Support/Morgana.cs
-// Created:  01/10/2014
-// Date:     26/12/2014/16:23
-// Author:   h3h3
-
-#endregion
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
@@ -40,37 +16,37 @@ namespace Support.Plugins
         public Tristana()
         {
             Q = new Spell(SpellSlot.Q, 703);
+            W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 703);
             R = new Spell(SpellSlot.R, 703);
+
+            W.SetSkillshot(500,270,1500,false,SkillshotType.SkillshotCone);
         }
 
         public override void OnUpdate(EventArgs args)
         {
-                if (ComboMode)
-                {
-                if (Q.CastCheck(Target, "ComboQ"))
+            if (ComboMode)
+            {
+                if (Q.CastCheck(Target, "ComboQ") && Orbwalking.InAutoAttackRange(Target))
                 {
                     Q.Cast();
                 }
                 if (W.CastCheck(Target, "ComboW") && W.IsKillable(Target))
                 {
-                    W.Cast(Target, true);
+                    W.Cast(Target, UsePackets);
                 }
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
+
                 if (R.CastCheck(Target, "ComboR") && R.IsKillable(Target))
                 {
-                    R.Cast(Target, true);
+                    R.Cast(Target, UsePackets);
                 }
-            }
-
-            if (HarassMode)
-            {
-                if (E.CastCheck(Target, "HarassE"))
+                if (Orbwalking.InAutoAttackRange(Target))
                 {
-                    E.Cast(Target, true);
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
             }
         }
@@ -90,6 +66,7 @@ namespace Support.Plugins
 
         }
 
+
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
@@ -98,16 +75,9 @@ namespace Support.Plugins
             config.AddBool("ComboR", "Use R", true);
         }
 
-        public override void HarassMenu(Menu config)
-        {
-            config.AddBool("HarassE", "Use E", true);
-        }
-
         public override void InterruptMenu(Menu config)
         {
             config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
-
-
     }
 }

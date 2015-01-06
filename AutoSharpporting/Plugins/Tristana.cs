@@ -27,6 +27,7 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
+                KS();
                 if (Q.CastCheck(Target, "ComboQ") && Orbwalking.InAutoAttackRange(Target))
                 {
                     Q.Cast();
@@ -39,17 +40,39 @@ namespace Support.Plugins
                 {
                     E.Cast(Target, UsePackets);
                 }
-
-                if (R.CastCheck(Target, "ComboR") && R.IsKillable(Target))
-                {
-                    R.Cast(Target, UsePackets);
-                }
-                if (Orbwalking.InAutoAttackRange(Target))
+                if (Orbwalking.InAutoAttackRange(Target) && (Player.HealthPercentage() > 50 || Player.GetAutoAttackDamage(Target) > Target.Health))
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
             }
+        
+
         }
+
+        public void KS()
+        {
+
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+            {
+                if (target != null)
+                {
+                    //R
+                    if (Player.Distance(target.ServerPosition) <= R.Range &&
+                        (Player.GetSpellDamage(target, SpellSlot.R)) > target.Health + 50)
+                    {
+                        if (R.CastCheck(Target, "ComboRKS"))
+                        {
+                            R.CastOnUnit(target, UsePackets);
+                            return;
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
@@ -72,7 +95,7 @@ namespace Support.Plugins
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboE", "Use E", true);
-            config.AddBool("ComboR", "Use R", true);
+            config.AddBool("ComboRKS", "Use R KS", true);
         }
 
         public override void InterruptMenu(Menu config)

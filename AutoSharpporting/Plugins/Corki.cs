@@ -30,37 +30,27 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, true);
+                    Q.Cast(Target, UsePackets);
                 }
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
 
                 if (R.CastCheck(Target, "ComboR"))
                 {
-                    R.Cast(Target, true);
+                    R.Cast(Target, UsePackets);
                 }
             }
 
             if (HarassMode)
             {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                    Q.Cast(Target, true);
-                }
                 if (E.CastCheck(Target, "HarassE"))
                 {
-                    E.Cast(Target, true);
-                }
-                if (R.CastCheck(Target, "HarassR"))
-                {
-                    R.Cast(Target, true);
+                    E.Cast(Target, UsePackets);
                 }
             }
         }
- 
-
 
         public override void ComboMenu(Menu config)
         {

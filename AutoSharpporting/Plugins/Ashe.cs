@@ -45,7 +45,7 @@ namespace Support.Plugins
                 {
                     R.Cast(targetR, UsePackets);
                 }
-                if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 50)
+                if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 30)
                 {
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }

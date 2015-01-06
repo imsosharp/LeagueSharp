@@ -41,7 +41,7 @@ namespace Support
         private static int _randSeconds, _randRange, _stepTime;
         private static float _lowHealthRatio = 0.3f;
         private static float _lowManaRatio = 0.1f;
-        private static float _lowHealthIfLowManaRatio = 0.5f;
+        private static float _lowHealthIfLowManaRatio = 0.6f;
         private static bool _byPassFountainCheck = false;
 
         public Autoplay()
@@ -124,7 +124,7 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio;
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling();
             }
             return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
 

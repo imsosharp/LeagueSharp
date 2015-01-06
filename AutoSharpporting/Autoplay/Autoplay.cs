@@ -27,6 +27,7 @@ namespace Support
         public static Obj_AI_Hero NearestAllyHero;
         public static Obj_AI_Turret NearestAllyTurret;
         public static Obj_AI_Hero Jungler;
+        public static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second);
         private static Obj_AI_Hero _tempcarry;
         private static Vector2 _lanepos;
         private static int _chosen;
@@ -37,7 +38,6 @@ namespace Support
         private static Vector2 _orbwalkingpos;
         private static int _loaded;
         private static bool _byPassLoadedCheck = false;
-        private static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second);
         private static int _randSeconds, _randRange, _stepTime;
         private static float _lowHealthRatio = 0.3f;
         private static float _lowManaRatio = 0.1f;

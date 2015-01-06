@@ -75,7 +75,15 @@ namespace Support
                 {
                     if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
-                        Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        int startingItem = Autoplay.Rand.Next(0, 1);
+                        if (startingItem == 0)
+                        {
+                            Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        }
+                        if (startingItem == 1)
+                        {
+                            Autoplay.Bot.BuyItem(ItemId.Ancient_Coin);
+                        }
                         Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
                     foreach (var item in GetDefaultItemArray())

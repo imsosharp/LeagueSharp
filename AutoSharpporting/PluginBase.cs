@@ -232,8 +232,8 @@ namespace Support
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
 
             // misc
-            MiscConfig.AddBool("UsePackets", "Use Packets?", true);
-            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Smart", "Never", "Always" });
+            MiscConfig.AddBool("UsePackets", "Use Packets?", false);
+            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Always", "Never", "Smart" });
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
@@ -356,7 +356,7 @@ namespace Support
         /// </summary>
         public Obj_AI_Hero Target
         {
-            get { return TargetSelector.GetTarget(2500, TargetSelector.DamageType.Magical); }
+            get { return TargetSelector.GetTarget(1200, TargetSelector.DamageType.Magical); }
         }
 
         /// <summary>

@@ -43,18 +43,12 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
+                    Q.Cast(Target, UsePackets);
                 }
-
-                if (W.CastCheck(Target, "ComboW"))
+                if (Player.Distance(Target) <= E.Range && Player.HealthPercentage() > 30 && E.CastCheck(Target, "ComboE"))
                 {
-                }
-
-                if (E.CastCheck(Target, "ComboE"))
-                {
-                }
-
-                if (R.CastCheck(Target, "ComboR"))
-                {
+                    E.Cast();
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
             }
         }
@@ -67,46 +61,6 @@ namespace Support.Plugins
         {
         }
 
-        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-            if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
-            {
-            }
-
-            if (W.CastCheck(gapcloser.Sender, "GapcloserW"))
-            {
-            }
-
-            if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
-            {
-            }
-
-            if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
-            {
-            }
-        }
-
-        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
-                return;
-
-            if (Q.CastCheck(unit, "InterruptQ"))
-            {
-            }
-
-            if (W.CastCheck(unit, "InterruptW"))
-            {
-            }
-
-            if (E.CastCheck(unit, "InterruptE"))
-            {
-            }
-
-            if (R.CastCheck(unit, "InterruptR"))
-            {
-            }
-        }
 
         public override void ComboMenu(Menu config)
         {
@@ -122,15 +76,7 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddBool("GapcloserQ", "Use Q to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserW", "Use W to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserE", "Use E to Interrupt Gapcloser", true);
-            config.AddBool("GapcloserR", "Use R to Interrupt Gapcloser", true);
 
-            config.AddBool("InterruptQ", "Use Q to Interrupt Spells", true);
-            config.AddBool("InterruptW", "Use W to Interrupt Spells", true);
-            config.AddBool("InterruptE", "Use E to Interrupt Spells", true);
-            config.AddBool("InterruptR", "Use R to Interrupt Spells", true);
         }
     }
 }

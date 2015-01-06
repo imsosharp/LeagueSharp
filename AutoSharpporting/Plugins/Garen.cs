@@ -11,41 +11,39 @@ using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
 {
-    public class Tristana : PluginBase
+    public class Garen : PluginBase
     {
-        public Tristana()
+        public Garen()
         {
-            Q = new Spell(SpellSlot.Q, 703);
-            W = new Spell(SpellSlot.W, 900);
-            E = new Spell(SpellSlot.E, 703);
-            R = new Spell(SpellSlot.R, 703);
 
-            W.SetSkillshot(500,270,1500,false,SkillshotType.SkillshotCone);
+            Q = new Spell(SpellSlot.Q);
+            W = new Spell(SpellSlot.W);
+            E = new Spell(SpellSlot.E,165);
+            R = new Spell(SpellSlot.R,400);
+
         }
+
 
         public override void OnUpdate(EventArgs args)
         {
+            KS();
             if (ComboMode)
             {
-                KS();
-                if (Q.CastCheck(Target, "ComboQ") && Orbwalking.InAutoAttackRange(Target))
+                if (Player.HealthPercentage() > 20 && Player.Distance(Target) < R.Range)
                 {
-                    Q.Cast();
-                }
-                if (W.CastCheck(Target, "ComboW") && W.IsKillable(Target))
-                {
-                    W.Cast(Target, UsePackets);
-                }
-                if (E.CastCheck(Target, "ComboE"))
-                {
-                    E.Cast(Target, UsePackets);
-                }
-                if (Orbwalking.InAutoAttackRange(Target) && (Player.HealthPercentage() > 50 || Player.GetAutoAttackDamage(Target) > Target.Health))
-                {
+                    if(W.IsReady()){
+                        W.Cast();
+                    }
+                    if(E.IsReady()){
+                        E.Cast();
+                    }
+                    if(Q.IsReady()){
+                        Q.Cast();
+                    }
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                    
                 }
             }
-        
 
         }
 
@@ -66,29 +64,9 @@ namespace Support.Plugins
                             return;
                         }
                     }
-
-
                 }
             }
         }
-
-
-
-        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
-            {
-                return;
-            }
-
-            if (R.CastCheck(unit, "Interrupt.R"))
-            {
-                R.Cast(unit, UsePackets);
-                return;
-            }
-
-        }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -98,9 +76,7 @@ namespace Support.Plugins
             config.AddBool("ComboRKS", "Use R KS", true);
         }
 
-        public override void InterruptMenu(Menu config)
-        {
-            config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
-        }
     }
 }
+
+

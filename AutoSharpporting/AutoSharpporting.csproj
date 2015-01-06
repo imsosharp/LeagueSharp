@@ -84,6 +84,7 @@
     <Compile Include="Plugins\Default.cs" />
     <Compile Include="Plugins\Ezreal.cs" />
     <Compile Include="Plugins\Garen.cs" />
+    <Compile Include="Plugins\Lucian.cs" />
     <Compile Include="Plugins\Teemo.cs" />
     <Compile Include="Plugins\Tristana.cs" />
     <Compile Include="Plugins\Vayne.cs" />

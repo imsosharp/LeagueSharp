@@ -124,9 +124,11 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling();
+                    //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
+                //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
 
         }
 

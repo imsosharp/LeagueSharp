@@ -1,6 +1,0 @@
-This assembly is fully h3h3's work. I take no credit over it. My plugin is in the Autoplay folder.
-
-This assembly is a work in progress. and is only meant to be used when you're away from the PC.
-
-You can find the original assembly here:
-https://github.com/h3h3/LeagueSharp/

@@ -1,6 +1,4 @@
-﻿
-
-//xaxixeo *-*
+﻿//xaxixeo *-*
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,21 +16,26 @@ namespace Support.Plugins
     {
         public Lucian()
         {
-            Q = new Spell(SpellSlot.Q, 500);
-            W = new Spell(SpellSlot.W, 1000);
-            E = new Spell(SpellSlot.E, 445);
-            R = new Spell(SpellSlot.R, 1400);
+            Q = new Spell(SpellSlot.Q, 675);
+            Q.SetTargetted(0.25f, float.MaxValue);
 
-            Q.SetTargetted(0.5f, float.MaxValue);
-            W.SetSkillshot(300, 80, 1600, true, SkillshotType.SkillshotLine);
-            E.SetSkillshot(250, 1, float.MaxValue, false, SkillshotType.SkillshotLine);
-            R.SetSkillshot(10, 110, 2800, true, SkillshotType.SkillshotLine);
+            W = new Spell(SpellSlot.W, 1000);
+            W.SetSkillshot(0.3f, 80, 1600, true, SkillshotType.SkillshotLine);
+
+            E = new Spell(SpellSlot.E, 425);
+            E.SetSkillshot(.25f, 1f, float.MaxValue, false, SkillshotType.SkillshotLine);
+
+            R = new Spell(SpellSlot.R, 1400);
+            R.SetSkillshot(.1f, 110, 2800, true, SkillshotType.SkillshotLine);
         }
 
         public override void OnUpdate(EventArgs args)
         {
+
+            var targetR = TargetSelector.GetTarget(10000, TargetSelector.DamageType.Magical);
             if (ComboMode)
             {
+
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target, UsePackets);
@@ -41,25 +44,28 @@ namespace Support.Plugins
                 {
                     W.Cast(Target, UsePackets);
                 }
-
-                if (R.CastCheck(Target, "ComboR") || R.IsKillable(Target))
+                if (R.CastCheck(Target, "ComboR"))
                 {
-                    R.Cast(Target, UsePackets);
+                    if (R.IsKillable(Target))
+                    {
+                        R.Cast(Target, UsePackets);
+                    }
+                    if (!Q.IsReady() && !W.IsReady())
+                    {
+                        R.Cast(Target, UsePackets);
+                    }
+                }
+                if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 20)
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
             }
 
-            if (HarassMode)
-            {
-                if (Q.CastCheck(Target, "HarassQ"))
-                {
-                    Q.Cast(Target, UsePackets);
-                }
-                if (W.CastCheck(Target, "HarassW"))
-                {
-                    W.Cast(Target, UsePackets);
-                }
-            }
+           
         }
+
+       
+
 
         public override void ComboMenu(Menu config)
         {
@@ -68,11 +74,5 @@ namespace Support.Plugins
             config.AddBool("ComboR", "Use R", true);
         }
 
-        public override void HarassMenu(Menu config)
-        {
-            config.AddBool("HarassQ", "Use Q", true);
-            config.AddBool("HarassW", "Use W", true);
-        }
     }
 }
-

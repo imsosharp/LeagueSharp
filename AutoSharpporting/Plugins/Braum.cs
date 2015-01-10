@@ -178,6 +178,11 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
+                if (Q.CastCheck(Target, "Combo.W"))
+                {
+                    Q.Cast(Target, UsePackets);
+                }
+
                 if (R.CastCheck(Target, "Combo.R"))
                 {
                     R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value - 1, UsePackets);
@@ -217,6 +222,7 @@ namespace Support.Plugins
         public override void ComboMenu(Menu config)
         {
             config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.W", "Use W", true);
             config.AddBool("Combo.R", "Use R", true);
             config.AddSlider("Combo.R.Count", "Targets hit by R", 2, 1, 5);
         }

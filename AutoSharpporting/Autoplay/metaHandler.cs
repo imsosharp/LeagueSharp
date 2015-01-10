@@ -42,6 +42,7 @@ namespace Support
         static readonly ItemId[] CrystalScar = { ItemId.Rod_of_Ages_Crystal_Scar, ItemId.Wooglets_Witchcap, ItemId.Void_Staff, ItemId.Athenes_Unholy_Grail, ItemId.Abyssal_Scepter, ItemId.Liandrys_Torment, ItemId.Morellonomicon, ItemId.Rylais_Crystal_Scepter, ItemId.Sorcerers_Shoes };
         static readonly ItemId[] Other = { };
         static ItemId[] CustomBuild = { };
+        static int LastShopAttempt;
 
         public static void DoChecks()
         {
@@ -75,7 +76,15 @@ namespace Support
                 {
                     if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
-                        Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        int startingItem = Autoplay.Rand.Next(-6, 7);
+                        if (startingItem <= 0)
+                        {
+                            Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        }
+                        if (startingItem > 0)
+                        {
+                            Autoplay.Bot.BuyItem(ItemId.Ancient_Coin);
+                        }
                         Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
                     foreach (var item in GetDefaultItemArray())
@@ -95,7 +104,11 @@ namespace Support
 
         public static void BuyItem(ItemId item)
         {
-            Autoplay.Bot.BuyItem(item);
+            if (Environment.TickCount - LastShopAttempt > Autoplay.Rand.Next(0, 670))
+            {
+                Autoplay.Bot.BuyItem(item);
+                LastShopAttempt = Environment.TickCount;
+            }
         }
 
         public static ItemId[] GetDefaultItemArray()
@@ -180,6 +193,12 @@ namespace Support
                 }
             }
             return false;
+        }
+
+        public static int NearbyAllyMinions(Obj_AI_Base x, int distance)
+        {
+            return ObjectManager.Get<Obj_AI_Minion>()
+                    .Count(minion => minion.IsAlly && !minion.IsDead && minion.Distance(x) < distance);
         }
     }
        

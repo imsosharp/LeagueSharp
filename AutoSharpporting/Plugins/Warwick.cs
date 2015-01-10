@@ -11,59 +11,71 @@ using SpellData = LeagueSharp.SpellData;
 
 namespace Support.Plugins
 {
-    public class Teemo : PluginBase
+    public class Warwick : PluginBase
     {
-        private  readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second);
-        private  Vector2 pos;
-
-        public Teemo()
+        public Warwick()
         {
+            Q = new Spell(SpellSlot.Q, 400);
+            W = new Spell(SpellSlot.W, 1000);
+            E = new Spell(SpellSlot.E, 1500);
+            R = new Spell(SpellSlot.R, 700);
 
-            Q = new Spell(SpellSlot.Q, 680);
-            W = new Spell(SpellSlot.W);
-            R = new Spell(SpellSlot.R, 230);
-            Q.SetTargetted(0f, 2000f);
-            R.SetSkillshot(0.1f, 75f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
+
 
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
-
-
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target, UsePackets);
                 }
-
-                if (R.CastCheck(Target, "ComboR"))
+                if (R.CastCheck(Target, "ComboR") && R.IsKillable(Target))
                 {
                     R.Cast(Target, UsePackets);
                 }
-                if (R.IsReady())
-                {
-                    int _randRange = Rand.Next(-15, 15);
-                    pos.X = Player.Position.X + _randRange;
-                    pos.Y = Player.Position.Y + _randRange;
-                    R.Cast(pos.To3D(),UsePackets);
-                }
-                if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 30)
+                if (Player.HealthPercentage() > 20 && Player.Distance(Target) < 300)
                 {
                     if (W.IsReady())
                     {
                         W.Cast();
                     }
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                   
                 }
             }
+       }
+
+        public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
+        {
+            if (spell.DangerLevel < InterruptableDangerLevel.High || unit.IsAlly)
+            {
+                return;
+            }
+                if (R.CastCheck(unit, "Interrupt.R"))
+                {
+                    R.Cast(unit, UsePackets);
+                    return;
+                }
+            
         }
+
+
+
 
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
+            config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
+        }
+
+        public override void InterruptMenu(Menu config)
+        {
+            config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
 
     }

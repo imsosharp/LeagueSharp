@@ -217,6 +217,7 @@ namespace Support.Plugins
         public override void ComboMenu(Menu config)
         {
             config.AddBool("Combo.Q", "Use Q", true);
+            config.AddBool("Combo.W", "Use W", true);
             config.AddBool("Combo.R", "Use R", true);
             config.AddSlider("Combo.R.Count", "Targets hit by R", 2, 1, 5);
         }

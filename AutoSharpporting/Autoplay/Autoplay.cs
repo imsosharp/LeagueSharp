@@ -39,10 +39,9 @@ namespace Support
         private static int _loaded;
         private static bool _byPassLoadedCheck = false;
         private static int _randSeconds, _randRange, _stepTime;
-        private static float _lowHealthRatio = 0.3f;
-        private static float _lowManaRatio = 0.1f;
-        private static float _lowHealthIfLowManaRatio = 0.6f;
-        private static bool _byPassFountainCheck = false;
+        private const float LOWHEALTHRATIO = 0.3f;
+        private const float LOWMANARATIO = 0.1f;
+        private const float LOWHEALTHRATIOIFLOWMANARATIO = 0.6f;
 
         public Autoplay()
         {
@@ -87,11 +86,6 @@ namespace Support
                     _safe = Blue;
                 }
             }
-            if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
-            {
-                _lowHealthRatio = 0.0f;
-                _byPassFountainCheck = true;
-            }
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
             FileHandler.DoChecks();
@@ -103,7 +97,6 @@ namespace Support
             DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
-            //FileHandler.DoChecks(); no need for it at onupdate, lulz
         }
 
         public static void OnGameEnd(EventArgs args)
@@ -120,14 +113,14 @@ namespace Support
             }
             if (Bot.InFountain())
             {
-                return (Bot.Health > Bot.MaxHealth * 0.9f) || _byPassFountainCheck;
+                return (Bot.Health > Bot.MaxHealth * 0.9f);
             }
-            if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
+            if (Bot.Mana < Bot.MaxMana * LOWMANARATIO)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling();
+                return Bot.Health > Bot.MaxHealth * LOWHEALTHRATIOIFLOWMANARATIO && !Bot.IsRecalling();
                     //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling();
+            return (Bot.Health > Bot.MaxHealth * LOWHEALTHRATIO) && !Bot.IsRecalling();
                 //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
 
         }
@@ -139,13 +132,11 @@ namespace Support
             {
                 try
                 {
-                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(Bot, 400) > 2)
+                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot) < 1200);
+                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2)
                     {
-                        foreach (var turret in MetaHandler.EnemyTurrets)
-                        {
                             if (turret.Distance(Bot) < Bot.AttackRange)
                                 Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
-                        }
                     }
                     else
                     {
@@ -156,7 +147,7 @@ namespace Support
                             Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
                         }
                     }
-                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(Bot, 400) < 2)
+                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) < 2)
                     {
                         _safepos.X = (Bot.Position.X + _safe);
                         _safepos.Y = (Bot.Position.Y + _safe);
@@ -352,7 +343,7 @@ namespace Support
         private static void WalkAround(Obj_AI_Hero follow)
         {
             _randRange = Rand.Next(-267, 276);
-            _randSeconds = Rand.Next(1000, 4000);
+            _randSeconds = Rand.Next(500, 3500);
             if (Environment.TickCount - _stepTime >= _randSeconds)
             {
                 if (Bot.Team == GameObjectTeam.Order)

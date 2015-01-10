@@ -178,11 +178,6 @@ namespace Support.Plugins
                     Q.Cast(Target, UsePackets);
                 }
 
-                if (Q.CastCheck(Target, "Combo.W"))
-                {
-                    Q.Cast(Target, UsePackets);
-                }
-
                 if (R.CastCheck(Target, "Combo.R"))
                 {
                     R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value - 1, UsePackets);

@@ -37,6 +37,9 @@ namespace Support.Plugins
         {
 
             KS();
+            StealBlue();
+            StealRed();
+
             if (ComboMode)
             {
                 if (Q.CastCheck(Target, "ComboQ"))
@@ -51,10 +54,41 @@ namespace Support.Plugins
 
         }
 
+        private void StealBlue()
+        {
+            if (!R.IsReady()) return;
+
+            var blueBuffs = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.ToUpper().Equals("SRU_BLUE"));
+            foreach (
+                var blueBuff in
+                    blueBuffs.Where(
+                        blueBuff => Player.GetSpellDamage(blueBuff, SpellSlot.R) > blueBuff.Health))
+            {
+                R.Cast(blueBuff, UsePackets);
+            }
+        }
+
+        private void StealRed()
+        {
+            if (!R.IsReady()) return;
+
+            var redBuffs = ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Name.ToUpper().Equals("SRU_RED"));
+            foreach (
+                var redBuff in
+                    redBuffs.Where(
+                        redBuff => Player.GetSpellDamage(redBuff, SpellSlot.R) > redBuff.Health))
+            {
+                R.Cast(redBuff, UsePackets);
+            }
+        }
+
         public  bool EActivated
         {
             get { return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1 || EGameObject != null; }
         }
+
+
+
 
         private void CastE(Obj_AI_Hero target)
         {

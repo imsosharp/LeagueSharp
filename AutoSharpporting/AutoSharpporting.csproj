@@ -81,6 +81,7 @@
     <Compile Include="Plugins\Darius.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />
+    <Compile Include="Plugins\Masteryi.cs" />
     <Compile Include="Plugins\Ryze.cs" />
     <Compile Include="Plugins\Warwick.cs" />
     <Compile Include="Plugins\Amumu.cs" />

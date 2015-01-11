@@ -43,7 +43,8 @@ namespace Support.Plugins
                 }
                 if (R.IsReady())
                 {
-                    int _randRange = Rand.Next(-15, 15);
+                    int _randRange = Rand.Next(-100, 100);
+ 
                     pos.X = Player.Position.X + _randRange;
                     pos.Y = Player.Position.Y + _randRange;
                     R.Cast(pos.To3D(),UsePackets);

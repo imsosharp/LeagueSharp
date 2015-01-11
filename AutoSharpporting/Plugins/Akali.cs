@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using LeagueSharp;
+using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
+
+namespace Support.Plugins
+{
+    public class Akali : PluginBase
+    {
+        public Akali()
+        {
+            Q = new Spell(SpellSlot.Q, 600);
+
+            W = new Spell(SpellSlot.W, 700);
+
+            E = new Spell(SpellSlot.E, 325);
+
+            R = new Spell(SpellSlot.R, 800);
+        }
+
+        public override void OnUpdate(EventArgs args)
+        {
+            KS();
+            if (ComboMode)
+            {
+                if (Q.CastCheck(Target, "ComboQ"))
+                {
+                    Q.Cast(Target, UsePackets);
+                }
+                if (W.IsReady() && (Player.HealthPercentage() < 20 || (!Q.IsReady() && !E.IsReady() && !R.IsReady())))
+                {
+                    W.Cast(Player.Position, UsePackets);
+                }
+                if (E.CastCheck(Target, "ComboE"))
+                {
+                    E.Cast(Target, UsePackets);
+                }
+                if (R.CastCheck(Target, "ComboRKS"))
+                {
+                    R.Cast(Target, UsePackets);
+                }
+            }
+
+
+        }
+
+        public void KS()
+        {
+
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+            {
+                if (target != null)
+                {
+                    //R
+                    if (Player.Distance(target.ServerPosition) <= R.Range &&
+                        (Player.GetSpellDamage(target, SpellSlot.R)) > target.Health + 50)
+                    {
+                        if (R.CastCheck(Target, "ComboRKS"))
+                        {
+                            R.CastOnUnit(target, UsePackets);
+                            return;
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        public override void ComboMenu(Menu config)
+        {
+            config.AddBool("ComboQ", "Use Q", true);
+            config.AddBool("ComboW", "Use W", true);
+            config.AddBool("ComboE", "Use E", true);
+            config.AddBool("ComboRKS", "Use R", true);
+        }
+    }
+}

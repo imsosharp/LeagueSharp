@@ -32,22 +32,18 @@ namespace Support.Plugins
             var targetR = TargetSelector.GetTarget(10000, TargetSelector.DamageType.Magical);
             if (ComboMode)
             {
-               /* if (Orbwalking.InAutoAttackRange(Target) && Q.Instance.ToggleState == 1)
+                if (Orbwalking.InAutoAttackRange(Target) && Q.Instance.ToggleState == 1)
                 {
                     Q.Cast();
-                }*/
+                }
                 if (W.CastCheck(Target, "ComboW"))
                 {
                     W.Cast(Target, UsePackets);
                 }
 
-                if (R.CastCheck(targetR, "ComboR") && R.IsKillable(targetR))
+                if (R.CastCheck(targetR, "ComboR") && R.IsKillable(targetR) )
                 {
                     R.Cast(targetR, UsePackets);
-                }
-                if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 30)
-                {
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
             }
 

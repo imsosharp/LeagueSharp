@@ -64,7 +64,7 @@
       <HintPath>C:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>..\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\LeagueSharp\\System\SharpDX.dll</HintPath>
@@ -78,6 +78,12 @@
     <Compile Include="Autoplay\MetaHandler.cs" />
     <Compile Include="Autoplay\FileHandler.cs" />
     <Compile Include="Autoplay\TreesAutoLevel.cs" />
+    <Compile Include="Plugins\Aatrox.cs" />
+    <Compile Include="Plugins\Ahri.cs" />
+    <Compile Include="Plugins\Akali.cs" />
+    <Compile Include="Plugins\Anivia.cs" />
+    <Compile Include="Plugins\Azir.cs" />
+    <Compile Include="Plugins\Brand.cs" />
     <Compile Include="Plugins\Darius.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />

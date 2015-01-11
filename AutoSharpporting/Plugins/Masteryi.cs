@@ -51,7 +51,7 @@ namespace Support.Plugins
         {
             if (ComboMode)
             {
-                if (R.IsReady() && Config.Item("useR").GetValue<bool>())
+                if (R.IsReady())
                 {
 
                     R.Cast();
@@ -61,6 +61,10 @@ namespace Support.Plugins
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Qlogic();
+                }
+                if (Q.CastCheck(Target, "ComboQ"))
+                {
+                    Q.Cast(Target);
                 }
                 if (E.IsReady() && Orbwalking.InAutoAttackRange(Target))
                 {

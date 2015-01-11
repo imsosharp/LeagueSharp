@@ -57,11 +57,6 @@ namespace Support
             }
             if (Autoplay.Bot.InFountain())
             {
-                if (map.Type == Utility.Map.MapType.HowlingAbyss && !Autoplay.Bot.IsDead)
-                {
-                    return;
-                }
-                
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
                         int startingItem = Autoplay.Rand.Next(-6, 7);

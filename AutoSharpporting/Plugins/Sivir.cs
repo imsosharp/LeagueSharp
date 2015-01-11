@@ -52,7 +52,7 @@ namespace Support.Plugins
                 {
                     Q.Cast(Target, UsePackets);
                 }
-                if(Orbwalking.InAutoAttackRange(Target) && R.IsReady()){
+                if(R.IsReady() && Player.CountEnemysInRange(600) > 2){
                     R.Cast();
                 }
             }

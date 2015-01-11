@@ -88,6 +88,8 @@ namespace Support
                     _safe = Blue;
                 }
             }
+			
+			
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
             FileHandler.DoChecks();

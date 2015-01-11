@@ -38,7 +38,7 @@ namespace NiceGuySharp
         {
             if (file != null)
             {
-                
+
             }
             return new string[1];
         }
@@ -69,13 +69,17 @@ namespace NiceGuySharp
 
             if (!Directory.Exists(Folder))
             {
+                Game.PrintChat("You have ran Nice-Guy Sharp for the first time");
+                Game.PrintChat("Please add your phrases here:");
+                Game.PrintChat(Folder);
+                Game.PrintChat("and reload the assembly.");
                 Directory.CreateDirectory(Folder);
             }
             if (!File.Exists(OnGameStartTxt))
             {
                 var newfile = File.Create(OnGameStartTxt);
                 newfile.Close();
-                var content = "glhf\ngl hf\nhi";
+                var content = "glhf\ngl hf\nhi\nhey\nhi sup guys";
                 var separator = new string[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnGameStartTxt, lines);
@@ -84,7 +88,7 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnDeathTxt);
                 newfile.Close();
-                var content = "oups\nwot\nwtf\ndat dmg\nthat damage\nfug\nfugg :DDD\nfml\ndamn I suck\nsorry";
+                var content = "oups\nwot\nwtf\ndat dmg\nthat damage\nfug\nfugg :DDD\nfml\ndamn I suck\nsorry\nlag";
                 var separator = new string[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnDeathTxt, lines);
@@ -93,7 +97,7 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnGameEndTxt);
                 newfile.Close();
-                var content = "oups\nwot\nwtf\ndat dmg\nthat damage\nfug\nfugg :DDD\nfml\ndamn I suck\nsorry";
+                var content = "gg\nggwp";
                 var separator = new string[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnGameEndTxt, lines);
@@ -138,7 +142,7 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnPentaTxt);
                 newfile.Close();
-                var content = "PENTAKIRRU\nNULLED\nMe > Ur Whole Team\nLel REKT\nSo REKT\nREKT n ROLL baby\nomg I did it mom\nokay";
+                var content = "PENTAKIRRU\nNULLED\nMe > Ur Whole Team\nLel REKT\nSo REKT\nREKT n ROLL baby\nomg I did it mom\nokay\nso rekt\nrekterino\nrekterino\nripperino in pepperonis";
                 var separator = new string[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnPentaTxt, lines);

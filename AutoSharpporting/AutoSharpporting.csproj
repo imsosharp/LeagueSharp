@@ -86,7 +86,13 @@
     <Compile Include="Plugins\Brand.cs" />
     <Compile Include="Plugins\Caitlyn.cs" />
     <Compile Include="Plugins\Cassiopeia.cs" />
+    <Compile Include="Plugins\Chogath.cs" />
     <Compile Include="Plugins\Darius.cs" />
+    <Compile Include="Plugins\Diana.cs" />
+    <Compile Include="Plugins\Draven.cs" />
+    <Compile Include="Plugins\Drmundo.cs" />
+    <Compile Include="Plugins\Evelynn.cs" />
+    <Compile Include="Plugins\Fiora.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />

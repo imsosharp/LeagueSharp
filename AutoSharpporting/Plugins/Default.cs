@@ -1,7 +1,7 @@
 ﻿#region LICENSE
 
-// Copyright 2014 - 2014 Support
-// Braum.cs is part of Support.
+// Copyright 2014 - 2015 Support
+// Default.cs is part of Support.
 // Support is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
@@ -33,8 +33,9 @@ namespace Support.Plugins
             Q = new Spell(SpellSlot.Q, 600);
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 200);
-            R = new Spell(SpellSlot.R, 500);
-            Q.SetSkillshot(0.25f, 60, 1600, true, SkillshotType.SkillshotLine);
+            R = new Spell(SpellSlot.R, 600);
+            Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
+            W.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
         }
 
 

@@ -20,8 +20,8 @@ namespace Support
 {
     internal class Autoplay
     {
-        private const int Blue = 200;
-        private const int Purple = -200;
+        public const int Blue = 200;
+        public const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
         public static Obj_AI_Hero Carry;
         public static Obj_AI_Hero NearestAllyHero;
@@ -29,7 +29,8 @@ namespace Support
         public static Obj_AI_Hero Jungler;
         public static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
         private static Obj_AI_Hero _tempcarry;
-        private static Vector2 _lanepos;
+        private static Vector2 _botlanepos;
+        private static Vector2 _toplanepos;
         private static int _chosen;
         private static int _safe;
         private static Vector2 _frontline;
@@ -39,9 +40,10 @@ namespace Support
         private static int _loaded;
         private static bool _byPassLoadedCheck = false;
         private static int _randSeconds, _randRange, _stepTime;
-        private const float LOWHEALTHRATIO = 0.3f;
-        private const float LOWMANARATIO = 0.1f;
-        private const float LOWHEALTHRATIOIFLOWMANARATIO = 0.6f;
+        private static float _lowHealthRatio = 0.3f;
+        private static float _lowManaRatio = 0.1f;
+        private static float _lowHealthIfLowManaRatio = 0.6f;
+        private static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
 
         public Autoplay()
         {
@@ -61,15 +63,15 @@ namespace Support
                 {
                     _chosen = Blue + Rand.Next(-76, 76);
                     _safe = Purple + Rand.Next(-67, 67);
-                    _lanepos.X = 11376 + Rand.Next(-50, 50);
-                    _lanepos.Y = 1062 + Rand.Next(-50, 50);
+                    _botlanepos.X = 11376 + Rand.Next(-50, 50);
+                    _botlanepos.Y = 1062 + Rand.Next(-50, 50);
                 }
                 if (Bot.Team == GameObjectTeam.Chaos)
                 {
                     _chosen = Purple + Rand.Next(-67, 67);
                     _safe = Blue + Rand.Next(-76, 76);
-                    _lanepos.X = 13496 + Rand.Next(-50, 50);
-                    _lanepos.Y = 4218 + Rand.Next(-50, 50);
+                    _botlanepos.X = 13496 + Rand.Next(-50, 50);
+                    _botlanepos.Y = 4218 + Rand.Next(-50, 50);
                 }
             }
             else
@@ -115,12 +117,12 @@ namespace Support
             {
                 return (Bot.Health > Bot.MaxHealth * 0.9f);
             }
-            if (Bot.Mana < Bot.MaxMana * LOWMANARATIO)
+            if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * LOWHEALTHRATIOIFLOWMANARATIO && !Bot.IsRecalling();
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack);
                     //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
             }
-            return (Bot.Health > Bot.MaxHealth * LOWHEALTHRATIO) && !Bot.IsRecalling();
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack);
                 //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
 
         }
@@ -156,13 +158,13 @@ namespace Support
                     #region Carry is null
                     if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000 && !_byPassLoadedCheck)
                     {
-                        if (Bot.InFountain() || Bot.Distance(_lanepos) > 400)
+                        if (Bot.InFountain() || Bot.Distance(_botlanepos) > 400)
                         {
-                            Bot.IssueOrder(GameObjectOrder.MoveTo, _lanepos.To3D());
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, _botlanepos.To3D());
                         }
-                        if (Bot.Distance(_lanepos) < 1000)
+                        if (Bot.Distance(_botlanepos) < 1000)
                         {
-                            WalkAround(_lanepos.To3D());
+                            WalkAround(_botlanepos.To3D());
                             if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 8000 && !MetaHandler.HasSmite(hero)) != null)
                             {
                                 Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 8000 && !MetaHandler.HasSmite(hero));
@@ -322,14 +324,14 @@ namespace Support
                 if (Bot.Team == GameObjectTeam.Order)
                 {
                     int orbwalkingAdditionInteger = _randRange * (-1);
-                    _orbwalkingpos.X = Bot.Position.X + orbwalkingAdditionInteger;
-                    _orbwalkingpos.Y = Bot.Position.Y + orbwalkingAdditionInteger;
+                    _orbwalkingpos.X = pos.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = pos.Y + orbwalkingAdditionInteger;
                 }
                 else
                 {
                     int orbwalkingAdditionInteger = _randRange;
-                    _orbwalkingpos.X = Bot.Position.X + orbwalkingAdditionInteger;
-                    _orbwalkingpos.Y = Bot.Position.Y + orbwalkingAdditionInteger;
+                    _orbwalkingpos.X = pos.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = pos.Y + orbwalkingAdditionInteger;
                 }
                 if (_orbwalkingpos != null)
                 {

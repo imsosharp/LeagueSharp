@@ -84,11 +84,14 @@
     <Compile Include="Plugins\Anivia.cs" />
     <Compile Include="Plugins\Azir.cs" />
     <Compile Include="Plugins\Brand.cs" />
+    <Compile Include="Plugins\Caitlyn.cs" />
+    <Compile Include="Plugins\Cassiopeia.cs" />
     <Compile Include="Plugins\Darius.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />
     <Compile Include="Plugins\Ryze.cs" />
+    <Compile Include="Plugins\Sivir.cs" />
     <Compile Include="Plugins\Warwick.cs" />
     <Compile Include="Plugins\Amumu.cs" />
     <Compile Include="Plugins\Ashe.cs" />

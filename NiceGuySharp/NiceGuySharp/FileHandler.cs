@@ -23,6 +23,7 @@ namespace NiceGuySharp
         public static string OnPentaTxt;
 
         public static string OnAllyKillTxt;
+        public static string OnAllyDeathTxt;
         public static string OnAllyDoubleTxt;
         public static string OnAllyTripleTxt;
         public static string OnAllyQuadraTxt;
@@ -56,6 +57,7 @@ namespace NiceGuySharp
             OnPentaTxt = Folder + "OnPenta.txt";
 
             OnAllyKillTxt = Folder + "OnAllyKill.txt";
+            OnAllyDeathTxt = Folder + "OnAllyDeath.txt";
             OnAllyDoubleTxt = Folder + "OnAllyDouble.txt";
             OnAllyTripleTxt = Folder + "OnAllyTriple.txt";
             OnAllyQuadraTxt = Folder + "OnAllyQuadra.txt";
@@ -88,7 +90,7 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnDeathTxt);
                 newfile.Close();
-                var content = "oups\nwot\nwtf\ndat dmg\nthat damage\nfug\nfugg :DDD\nfml\ndamn I suck\nsorry\nlag";
+                var content = "oups\nwot\nwtf\ndat dmg\nthat damage\nfug\nfugg :DDD\nfml\ndamn I suck\nsorry\nlag\nlagg\nlaggg\nomg\npls\nhelp me\nhelp me pls\nteam where we at?\nmeh";
                 var separator = new string[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnDeathTxt, lines);
@@ -150,6 +152,11 @@ namespace NiceGuySharp
             if (!File.Exists(OnAllyKillTxt))
             {
                 var newfile = File.Create(OnAllyKillTxt);
+                newfile.Close();
+            } 
+            if (!File.Exists(OnAllyDeathTxt))
+            {
+                var newfile = File.Create(OnAllyDeathTxt);
                 newfile.Close();
             }
             if (!File.Exists(OnAllyDoubleTxt))

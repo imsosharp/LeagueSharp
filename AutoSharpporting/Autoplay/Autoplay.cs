@@ -146,7 +146,7 @@ namespace Support
                     {
                         Obj_AI_Hero target = TargetSelector.GetTarget(
                             Bot.AttackRange, TargetSelector.DamageType.Physical);
-                        if (target != null && target.IsValid && target.IsDead && IsBotSafe())
+                        if (target != null && target.IsValid && !target.IsDead && IsBotSafe())
                         {
                             Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
                         }

@@ -135,7 +135,7 @@ namespace Support
                 try
                 {
                     var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot) < 1200);
-                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2)
+                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe())
                     {
                             if (turret.Distance(Bot) < Bot.AttackRange)
                                 Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
@@ -144,7 +144,7 @@ namespace Support
                     {
                         Obj_AI_Hero target = TargetSelector.GetTarget(
                             Bot.AttackRange, TargetSelector.DamageType.Physical);
-                        if (target != null && target.IsValid && target.IsDead)
+                        if (target != null && target.IsValid && target.IsDead && IsBotSafe())
                         {
                             Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
                         }

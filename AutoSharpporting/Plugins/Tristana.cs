@@ -40,10 +40,6 @@ namespace Support.Plugins
                 {
                     E.Cast(Target, UsePackets);
                 }
-                if (Orbwalking.InAutoAttackRange(Target) && (Player.HealthPercentage() > 50 || Player.GetAutoAttackDamage(Target) > Target.Health))
-                {
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-                }
             }
         
 

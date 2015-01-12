@@ -93,6 +93,11 @@
     <Compile Include="Plugins\Drmundo.cs" />
     <Compile Include="Plugins\Evelynn.cs" />
     <Compile Include="Plugins\Fiora.cs" />
+    <Compile Include="Plugins\Fizz.cs" />
+    <Compile Include="Plugins\Galio.cs" />
+    <Compile Include="Plugins\Gangplank.cs" />
+    <Compile Include="Plugins\Gragas.cs" />
+    <Compile Include="Plugins\Graves.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />

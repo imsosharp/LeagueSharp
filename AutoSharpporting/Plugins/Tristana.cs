@@ -32,10 +32,6 @@ namespace Support.Plugins
                 {
                     Q.Cast();
                 }
-                if (W.CastCheck(Target, "ComboW") && W.IsKillable(Target))
-                {
-                    W.Cast(Target, UsePackets);
-                }
                 if (E.CastCheck(Target, "ComboE"))
                 {
                     E.Cast(Target, UsePackets);
@@ -60,6 +56,10 @@ namespace Support.Plugins
                         {
                             R.CastOnUnit(target, UsePackets);
                             return;
+                        }
+                        if (W.CastCheck(Target, "ComboW"))
+                        {
+                            W.Cast(Target, UsePackets);
                         }
                     }
 

@@ -30,6 +30,11 @@ namespace Support.Plugins
                 if (W.IsReady())
                 {
                     W.Cast();
+                    
+                }
+                if (R.IsReady())
+                {
+                    R.Cast();
                 }
             }
 

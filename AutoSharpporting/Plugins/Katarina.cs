@@ -21,13 +21,20 @@ namespace Support.Plugins
             R = new Spell(SpellSlot.R, 550);
 
             Q.SetTargetted(400, 1400);
+            R.SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
         }
 
 
         public override void OnUpdate(EventArgs args)
         {
+            if (!R.IsCharging)
+            {
+                Orbwalker.SetMovement(true);
+                Orbwalker.SetAttack(true);
+            }
 
             KS();
+
 
             if (Player.IsChannelingImportantSpell() || Player.HasBuff("katarinarsound", true) )
             {
@@ -44,6 +51,7 @@ namespace Support.Plugins
                 {
                     W.Cast();
                 }
+
             }
         }
 
@@ -56,19 +64,19 @@ namespace Support.Plugins
             {
                 if (target != null)
                 {
-                    //R
+                   
                     if (Player.Distance(target.ServerPosition) <= E.Range &&
-                        (Player.GetSpellDamage(target, SpellSlot.E)) > target.Health + 50)
+                        (Player.GetSpellDamage(target, SpellSlot.E)) > target.Health)
                     {
                         if (E.CastCheck(Target, "ComboE"))
                         {                       
                             E.CastOnUnit(target, UsePackets);
-
                             if (R.IsReady())
-                            {								
-                                R.Cast();								
+                            {
+                                R.CastIfWillHit(Target, 2);
+                                Orbwalker.SetMovement(false);
+                                Orbwalker.SetAttack(false);
                             }
-                            return;
                         }
                     }
 

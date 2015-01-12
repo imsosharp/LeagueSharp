@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
 
 namespace Support
 {
@@ -184,6 +185,24 @@ namespace Support
         {
             return ObjectManager.Get<Obj_AI_Minion>()
                     .Count(minion => minion.IsAlly && !minion.IsDead && minion.Distance(x) < distance);
+        }
+        public static int NearbyAllies(Obj_AI_Base x, int distance)
+        {
+            return ObjectManager.Get<Obj_AI_Hero>()
+                    .Count(hero => hero.IsAlly && !hero.IsDead && !HasSmite(hero) && !hero.IsMe && hero.Distance(x) < distance);
+        }
+        public static int NearbyAllies(Vector3 x, int distance)
+        {
+            return ObjectManager.Get<Obj_AI_Hero>()
+                    .Count(hero => hero.IsAlly && !hero.IsDead && !HasSmite(hero) && !hero.IsMe && hero.Distance(x) < distance);
+        }
+
+        public static bool ShouldSupportTopLane
+        {
+            get
+            {
+                return false;
+            }
         }
     }
        

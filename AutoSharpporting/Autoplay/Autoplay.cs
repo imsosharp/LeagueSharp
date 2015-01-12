@@ -29,8 +29,8 @@ namespace Support
         public static Obj_AI_Hero Jungler;
         public static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
         private static Obj_AI_Hero _tempcarry;
-        private static Vector2 _botlanepos;
-        private static Vector2 _toplanepos;
+        public static Vector2 BotLanePos;
+        public static Vector2 TopLanePos;
         private static int _chosen;
         private static int _safe;
         private static Vector2 _frontline;
@@ -63,15 +63,19 @@ namespace Support
                 {
                     _chosen = Blue + Rand.Next(-76, 76);
                     _safe = Purple + Rand.Next(-67, 67);
-                    _botlanepos.X = 11376 + Rand.Next(-50, 50);
-                    _botlanepos.Y = 1062 + Rand.Next(-50, 50);
+                    BotLanePos.X = 11376 + Rand.Next(-50, 50);
+                    BotLanePos.Y = 1062 + Rand.Next(-50, 50);
+                    TopLanePos.X = 1302 + Rand.Next(-50, 50);
+                    TopLanePos.Y = 10249 + Rand.Next(-50, 50);
                 }
                 if (Bot.Team == GameObjectTeam.Chaos)
                 {
                     _chosen = Purple + Rand.Next(-67, 67);
                     _safe = Blue + Rand.Next(-76, 76);
-                    _botlanepos.X = 13496 + Rand.Next(-50, 50);
-                    _botlanepos.Y = 4218 + Rand.Next(-50, 50);
+                    BotLanePos.X = 13496 + Rand.Next(-50, 50);
+                    BotLanePos.Y = 4218 + Rand.Next(-50, 50);
+                    TopLanePos.X = 4849 + Rand.Next(-50, 50);
+                    TopLanePos.Y = 13535 + Rand.Next(-50, 50);
                 }
             }
             else
@@ -160,16 +164,38 @@ namespace Support
                     #region Carry is null
                     if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000 && !_byPassLoadedCheck)
                     {
-                        if (Bot.InFountain() || Bot.Distance(_botlanepos) > 400)
+                        if (Bot.InFountain() || Bot.Distance(BotLanePos) > 400)
                         {
-                            Bot.IssueOrder(GameObjectOrder.MoveTo, _botlanepos.To3D());
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, BotLanePos.To3D());
                         }
-                        if (Bot.Distance(_botlanepos) < 1000)
+                        if (Bot.Distance(BotLanePos) < 1000)
                         {
-                            WalkAround(_botlanepos.To3D());
-                            if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 8000 && !MetaHandler.HasSmite(hero)) != null)
+                            WalkAround(BotLanePos.To3D());
+                            if (timeElapsed > 60000 && !MetaHandler.ShouldSupportTopLane)
                             {
-                                Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && hero.Distance(Bot) < 8000 && !MetaHandler.HasSmite(hero));
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && hero.Distance(Bot) < 4500 && !MetaHandler.HasSmite(hero)) !=
+                                    null)
+                                {
+                                    Carry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero =>
+                                                !hero.IsMe && hero.Distance(Bot) < 4500 && !MetaHandler.HasSmite(hero));
+                                }
+                            }
+                            if (timeElapsed > 60000 && MetaHandler.ShouldSupportTopLane)
+                            {
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && hero.Distance(TopLanePos) < 4500 && !MetaHandler.HasSmite(hero)) !=
+                                    null)
+                                {
+                                    Carry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero =>
+                                                !hero.IsMe && hero.Distance(TopLanePos) < 4500 && !MetaHandler.HasSmite(hero));
+                                }
                             }
                         }
                     }

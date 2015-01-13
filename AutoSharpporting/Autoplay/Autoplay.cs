@@ -142,13 +142,13 @@ namespace Support
         private static bool IsBotSafe()
         {
             var map = Utility.Map.GetMap();
-            if (_tookRecallDecision)
-            {
-                return false;
-            }
             if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
             {
                 return true;
+            }
+            if (_tookRecallDecision)
+            {
+                return false;
             }
             if (Bot.InFountain())
             {

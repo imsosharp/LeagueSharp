@@ -49,6 +49,7 @@ namespace Support
         private static bool _overrideAttackUnitAction = false;
         private static int _lastSwitched = 0;
         private static bool _tookRecallDecision = false;
+        private static int _lastTimeTookRecallDecision = 0;
 
         public Autoplay()
         {
@@ -60,7 +61,7 @@ namespace Support
 
         public static bool RandomDecision()
         {
-            return Rand.Next(0, 20) > 13; //Hi there riot games ^^
+            return Rand.Next(0, 20) > 10; //Hi there riot games ^^
         }
 
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -123,7 +124,12 @@ namespace Support
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
             if (Bot.InFountain()) _tookRecallDecision = false;
-            if (Carry != null && Carry.IsDead && RandomDecision()) _tookRecallDecision = true;
+            if (Carry != null && Carry.IsDead && RandomDecision() &&
+                Environment.TickCount - _lastTimeTookRecallDecision > Rand.Next(60000, 300000))
+            {
+                _tookRecallDecision = true;
+                _lastTimeTookRecallDecision = Environment.TickCount;
+            }
         }
 
         public static void OnGameEnd(EventArgs args)

@@ -60,7 +60,7 @@ namespace Support
 
         public static bool RandomDecision()
         {
-            return Rand.Next(-6, 7) > 0; //Hi there riot games ^^
+            return Rand.Next(0, 20) > 13; //Hi there riot games ^^
         }
 
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -384,7 +384,7 @@ namespace Support
                     if ((Bot.Level > 8 || Environment.TickCount - _loaded > 900000) && Environment.TickCount - _lastSwitched > 180000)
                     {
                         var alliesSortedByKDA =
-                            MetaHandler.AllyHeroes.OrderBy(hero => hero.ChampionsKilled / ((hero.Deaths != 0) ? hero.Deaths : 1)); //AsunaChan2Kawaii
+                            MetaHandler.AllyHeroes.OrderByDescending(hero => hero.ChampionsKilled / ((hero.Deaths != 0) ? hero.Deaths : 1)); //AsunaChan2Kawaii
                         Carry = alliesSortedByKDA.FirstOrDefault();
                         _lastSwitched = Environment.TickCount;
                     }

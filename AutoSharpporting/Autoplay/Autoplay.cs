@@ -152,7 +152,7 @@ namespace Support
             }
             if (Bot.InFountain())
             {
-                return (Bot.Health > Bot.MaxHealth * 0.9f);
+                return (Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f);
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {

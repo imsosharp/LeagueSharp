@@ -133,7 +133,7 @@ namespace Support
 
         public static bool HasSixItems()
         {
-            return Autoplay.Bot.InventoryItems.Length >= 6;
+            return Autoplay.Bot.InventoryItems.ToList().Count >= 6;
         }
 
         public static bool HasSmite(Obj_AI_Hero hero)

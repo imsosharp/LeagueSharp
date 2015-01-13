@@ -98,9 +98,14 @@
     <Compile Include="Plugins\Gangplank.cs" />
     <Compile Include="Plugins\Gragas.cs" />
     <Compile Include="Plugins\Graves.cs" />
+    <Compile Include="Plugins\Hecarim.cs" />
+    <Compile Include="Plugins\Heimerdinger.cs" />
+    <Compile Include="Plugins\Irelia.cs" />
+    <Compile Include="Plugins\JarvanIV.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />
+    <Compile Include="Plugins\Riven.cs" />
     <Compile Include="Plugins\Ryze.cs" />
     <Compile Include="Plugins\Sivir.cs" />
     <Compile Include="Plugins\Warwick.cs" />

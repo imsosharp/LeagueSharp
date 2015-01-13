@@ -46,6 +46,7 @@ namespace Support.Plugins
             W = new Spell(SpellSlot.W, 700);
             E = new Spell(SpellSlot.E, 550);
             R = new Spell(SpellSlot.R, 650);
+            R.SetCharged("NunuR", "NunuR", 650, 650,3.0f);
         }
 
         public override void OnProcessPacket(GamePacketEventArgs args)
@@ -63,6 +64,12 @@ namespace Support.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
+
+            if (!R.IsCharging)
+            {
+                Orbwalker.SetMovement(true);
+                Orbwalker.SetAttack(true);
+            }
             if (ComboMode)
             {
                 if (Q.IsReady() && ConfigValue<bool>("Combo.Q") &&
@@ -72,6 +79,7 @@ namespace Support.Plugins
                     if (minion.IsValidTarget(Q.Range))
                     {
                         Q.CastOnUnit(minion, UsePackets);
+
                     }
                 }
 
@@ -89,6 +97,12 @@ namespace Support.Plugins
                 if (E.IsReady() && Target.IsValidTarget(E.Range) && ConfigValue<bool>("Combo.E"))
                 {
                     E.CastOnUnit(Target, UsePackets && ConfigValue<bool>("Misc.E.NoFace"));
+                }
+                if (R.IsReady() && Player.CountEnemysInRange(R.Range) >= 2)
+                {
+                    R.StartCharging();
+                    Orbwalker.SetMovement(false);
+                    Orbwalker.SetAttack(false);
                 }
             }
 

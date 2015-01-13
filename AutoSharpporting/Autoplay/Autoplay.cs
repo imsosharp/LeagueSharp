@@ -134,8 +134,9 @@ namespace Support
 
         public static void OnGameEnd(EventArgs args)
         {
-            Process[] pN = Process.GetProcessesByName("League of Legends");
-            pN[0].Kill();
+            /*Process[] pN = Process.GetProcessesByName("League of Legends");
+             *pN[0].Kill();
+             */
         }
 
         private static bool IsBotSafe()

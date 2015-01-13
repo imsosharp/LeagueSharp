@@ -100,7 +100,7 @@ namespace Support
 
         public static void BuyItem(ItemId item)
         {
-            if (Environment.TickCount - LastShopAttempt > Autoplay.Rand.Next(0, 670))
+            if (Environment.TickCount - LastShopAttempt > Autoplay.Rand.Next(0, 670) && !HasSixItems())
             {
                 Autoplay.Bot.BuyItem(item);
                 LastShopAttempt = Environment.TickCount;
@@ -113,34 +113,42 @@ namespace Support
             var map = Utility.Map.GetMap();
             if (map.Type == Utility.Map.MapType.SummonersRift)
             {
-                return SRShopList;
+                return SRShopList.OrderBy(item => Autoplay.Rand.Next()).ToArray();
             }
             if (map.Type == Utility.Map.MapType.TwistedTreeline)
             {
-                return TTShopList;
+                return TTShopList.OrderBy(item => Autoplay.Rand.Next()).ToArray();
             }
             if (map.Type == Utility.Map.MapType.HowlingAbyss)
             {
                 if (AP.Any(apchamp => Autoplay.Bot.BaseSkinName.ToLower() == apchamp.ToLower())) return ARAMShopListAP;
-                return ARAMShopListAD;
+                return ARAMShopListAD.OrderBy(item => Autoplay.Rand.Next()).ToArray();
             }
             if (map.Type == Utility.Map.MapType.CrystalScar)
             {
-                return CrystalScar;
+                return CrystalScar.OrderBy(item => Autoplay.Rand.Next()).ToArray();
             }
             return Other;
         }
 
+        public static bool HasSixItems()
+        {
+            return Autoplay.Bot.InventoryItems.Length >= 6;
+        }
+
         public static bool HasSmite(Obj_AI_Hero hero)
         {
-            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown;
+            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown; //obsolete, use the one below.
+            //return hero.GetSpellSlot("SummonerSmite") != SpellSlot.Unknown;
         }
 
         public static void LoadObjects()
         {
             //Heroes
             AllHeroes = ObjectManager.Get<Obj_AI_Hero>().ToList();
-            AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero) && !HasSmite(hero)).ToList();
+            AllyHeroes = (Utility.Map.GetMap().Type != Utility.Map.MapType.HowlingAbyss)
+                ? AllHeroes.FindAll(hero => hero.IsAlly && !IsSupport(hero) && !hero.IsMe && !HasSmite(hero)).ToList()
+                : AllHeroes.FindAll(hero => hero.IsAlly && !hero.IsMe).ToList();
             EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
         }
 

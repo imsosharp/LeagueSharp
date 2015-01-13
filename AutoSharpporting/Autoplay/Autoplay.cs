@@ -9,8 +9,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Text;
 using System.Linq;
+using System.Net.Mime;
 using Support.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
@@ -44,12 +46,23 @@ namespace Support
         private static float _lowManaRatio = 0.1f;
         private static float _lowHealthIfLowManaRatio = 0.6f;
         private static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
+        private static bool _overrideAttackUnitAction = false;
+        private static int _lastSwitched = 0;
 
         public Autoplay()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnUpdate;
             Game.OnGameEnd += OnGameEnd;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+        }
+
+        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe && sender.UnderTurret(true) && args.Target.IsEnemy && args.Target.Type == GameObjectType.obj_AI_Hero)
+            {
+                _overrideAttackUnitAction = true;
+            }
         }
 
         private static void OnGameLoad(EventArgs args)
@@ -92,8 +105,6 @@ namespace Support
                     _safe = Blue;
                 }
             }
-			
-			
             AutoLevel levelUpSpells = new AutoLevel(TreesAutoLevel.GetSequence());
             AutoLevel.Enabled(true);
             FileHandler.DoChecks();
@@ -109,7 +120,8 @@ namespace Support
 
         public static void OnGameEnd(EventArgs args)
         {
-            //Game.Say("gg"); nope
+            Process[] pN = Process.GetProcessesByName("League of Legends");
+            pN[0].Kill();
         }
 
         private static bool IsBotSafe()
@@ -125,11 +137,9 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack);
-                    //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack);
-                //&& !(Bot.Gold > (2200 + Rand.Next(100, 1100)));
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
 
         }
 
@@ -141,16 +151,24 @@ namespace Support
                 try
                 {
                     var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot) < 1200);
+                    if (_overrideAttackUnitAction)
+                    {
+                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
+                    }
+                    if (!Bot.UnderTurret(true))
+                    {
+                        _overrideAttackUnitAction = false;
+                    }
                     if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe())
                     {
-                            if (turret.Distance(Bot) < Bot.AttackRange)
+                            if (turret.Distance(Bot) < Bot.AttackRange && !_overrideAttackUnitAction)
                                 Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
                     }
                     else
                     {
                         Obj_AI_Hero target = TargetSelector.GetTarget(
                             Bot.AttackRange, TargetSelector.DamageType.Physical);
-                        if (target != null && target.IsValid && !target.IsDead && IsBotSafe())
+                        if (target != null && target.IsValid && target.IsDead && IsBotSafe() && !_overrideAttackUnitAction)
                         {
                             Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
                         }
@@ -201,9 +219,9 @@ namespace Support
                     }
                     if (_byPassLoadedCheck && Carry == null)
                     {
-                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero)) != null)
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero)) != null)
                         {
-                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !MetaHandler.HasSmite(hero));
+                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero));
                         }
                     }
                     #endregion
@@ -235,6 +253,24 @@ namespace Support
                                         MetaHandler.AllyHeroes.FirstOrDefault(
                                             hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
                                 }
+                                if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.IsDead) == null) //everyone is dead
+                                {
+                                    NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+                                    if (NearestAllyTurret != null)
+                                    {
+                                        _saferecall.X = NearestAllyTurret.Position.X + _safe;
+                                        _saferecall.Y = NearestAllyTurret.Position.Y;
+                                        if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                                        {
+                                            Bot.Spellbook.CastSpell(SpellSlot.Recall);
+                                        }
+                                        else
+                                        {
+
+                                            Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
+                                        }
+                                    }
+                                }
                             }
                             if (_tempcarry != null)
                             {
@@ -244,7 +280,7 @@ namespace Support
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 if (!(_tempcarry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(_tempcarry, 400) < 2) && IsBotSafe())
                                 {
-                                    if (_tempcarry.Distance(Bot) > 450)
+                                    if (_tempcarry.Distance(Bot) > 550)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                         WalkAround(_tempcarry);
@@ -260,7 +296,7 @@ namespace Support
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
-                        if (Carry.Distance(Bot) > 450)
+                        if (Carry.Distance(Bot) > 550)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                         }
@@ -301,7 +337,7 @@ namespace Support
                             _frontline.Y = _tempcarry.Position.Y + _chosen;
                             if (!(_tempcarry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(_tempcarry, 400) < 2) && IsBotSafe())
                             {
-                                if (Bot.Distance(_frontline) > 450)
+                                if (Bot.Distance(_frontline) > 550)
                                 {
                                     Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                 }
@@ -313,10 +349,7 @@ namespace Support
                     #region Lowhealth mode
                     if (!IsBotSafe() && !Bot.InFountain())
                     {
-                        if (NearestAllyTurret == null)
-                        {
-                            NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
-                        }
+                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
                         if (NearestAllyTurret != null)
                         {
                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
@@ -330,9 +363,18 @@ namespace Support
 
                                 Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
                             }
-
                         }
 
+                    }
+                    #endregion
+                    #region Carry Switching
+
+                    if ((Bot.Level > 8 || Environment.TickCount - _loaded > 900000) && Environment.TickCount - _lastSwitched > 180000)
+                    {
+                        var alliesSortedByKDA =
+                            MetaHandler.AllyHeroes.OrderBy(hero => hero.ChampionsKilled / ((hero.Deaths != 0) ? hero.Deaths : 1)); //AsunaChan2Kawaii
+                        Carry = alliesSortedByKDA.FirstOrDefault();
+                        _lastSwitched = Environment.TickCount;
                     }
                     #endregion
                 }
@@ -347,7 +389,7 @@ namespace Support
         {
             _randRange = Rand.Next(-267, 276);
             _randSeconds = Rand.Next(1000, 4000);
-            if (Environment.TickCount - _stepTime >= _randSeconds)
+            if (Environment.TickCount - _stepTime >= _randSeconds && !_overrideAttackUnitAction)
             {
                 if (Bot.Team == GameObjectTeam.Order)
                 {
@@ -372,9 +414,9 @@ namespace Support
 
         private static void WalkAround(Obj_AI_Hero follow)
         {
-            _randRange = Rand.Next(-267, 276);
+            _randRange = Rand.Next(-467, 476);
             _randSeconds = Rand.Next(500, 3500);
-            if (Environment.TickCount - _stepTime >= _randSeconds)
+            if (Environment.TickCount - _stepTime >= _randSeconds && !_overrideAttackUnitAction)
             {
                 if (Bot.Team == GameObjectTeam.Order)
                 {

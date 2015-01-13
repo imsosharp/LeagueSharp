@@ -100,7 +100,7 @@ namespace Support
 
         public static void BuyItem(ItemId item)
         {
-            if (Environment.TickCount - LastShopAttempt > Autoplay.Rand.Next(0, 670) && !HasSixItems())
+            if (Environment.TickCount - LastShopAttempt > Autoplay.Rand.Next(0, 670))
             {
                 Autoplay.Bot.BuyItem(item);
                 LastShopAttempt = Environment.TickCount;

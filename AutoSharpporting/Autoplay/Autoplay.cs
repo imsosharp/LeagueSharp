@@ -48,6 +48,7 @@ namespace Support
         private static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
         private static bool _overrideAttackUnitAction = false;
         private static int _lastSwitched = 0;
+        private static bool _tookRecallDecision = false;
 
         public Autoplay()
         {
@@ -55,6 +56,11 @@ namespace Support
             Game.OnGameUpdate += OnUpdate;
             Game.OnGameEnd += OnGameEnd;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+        }
+
+        public static bool RandomDecision()
+        {
+            return Rand.Next(-6, 7) > 0; //Hi there riot games ^^
         }
 
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -116,6 +122,8 @@ namespace Support
             DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
+            if (Bot.InFountain()) _tookRecallDecision = false;
+            if (Carry != null && Carry.IsDead && RandomDecision()) _tookRecallDecision = true;
         }
 
         public static void OnGameEnd(EventArgs args)
@@ -127,6 +135,10 @@ namespace Support
         private static bool IsBotSafe()
         {
             var map = Utility.Map.GetMap();
+            if (_tookRecallDecision)
+            {
+                return false;
+            }
             if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
             {
                 return true;
@@ -414,7 +426,7 @@ namespace Support
 
         private static void WalkAround(Obj_AI_Hero follow)
         {
-            _randRange = Rand.Next(-467, 476);
+            _randRange = Rand.Next(-367, 376);
             _randSeconds = Rand.Next(500, 3500);
             if (Environment.TickCount - _stepTime >= _randSeconds && !_overrideAttackUnitAction)
             {
@@ -430,7 +442,7 @@ namespace Support
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
                 }
-                if (_orbwalkingpos != null)
+                if (_orbwalkingpos != null && Bot.Distance(follow) < 550)
                 {
                     Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
                     _stepTime = Environment.TickCount;

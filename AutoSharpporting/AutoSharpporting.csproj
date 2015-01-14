@@ -57,17 +57,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\LeagueSharp\\System\clipper_library.dll</HintPath>
+      <HintPath>D:\LeagueSharp\\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp, Version=1.0.0.25, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
+      <HintPath>D:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>D:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>D:\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\LeagueSharp\\System\SharpDX.dll</HintPath>
+      <HintPath>D:\LeagueSharp\\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -105,9 +105,11 @@
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />
+    <Compile Include="Plugins\Poppy.cs" />
     <Compile Include="Plugins\Riven.cs" />
     <Compile Include="Plugins\Ryze.cs" />
     <Compile Include="Plugins\Sivir.cs" />
+    <Compile Include="Plugins\Varus.cs" />
     <Compile Include="Plugins\Warwick.cs" />
     <Compile Include="Plugins\Amumu.cs" />
     <Compile Include="Plugins\Ashe.cs" />

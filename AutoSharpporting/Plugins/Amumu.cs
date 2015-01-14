@@ -13,6 +13,8 @@ namespace Support.Plugins
 {
     public class Amumu : PluginBase
     {
+
+        private bool wUse = false;
         public Amumu()
         {
             Q = new Spell(SpellSlot.Q, 1100);
@@ -30,14 +32,7 @@ namespace Support.Plugins
             if (ComboMode)
             {
 
-                if (Target == null)
-                {
-                    if (W.Instance.ToggleState == 2)
-                    {
-                        W.Cast();
-                    }
-                    return;
-                }
+                
 
                 var qPred = Q.GetPrediction(Target);
 
@@ -46,9 +41,15 @@ namespace Support.Plugins
                     Q.Cast(qPred.CastPosition, UsePackets);
                 }
 
-                if (W.Instance.ToggleState == 1 && R.CastCheck(Target, "ComboW"))
+                if (W.IsReady() && !wUse && Player.CountEnemysInRange(R.Range) >= 1)
                 {
                     W.Cast();
+                    wUse = true;
+                }
+                if (wUse && Player.CountEnemysInRange(R.Range) == 0)
+                {
+                    W.Cast();
+                    wUse = false;
                 }
 
                 if (E.CastCheck(Target, "ComboE"))
@@ -59,10 +60,6 @@ namespace Support.Plugins
                 if (R.CastCheck(Target, "ComboR"))
                 {
                     R.CastIfWillHit(Target, 2, UsePackets);
-                }
-                if ((Player.Distance(Target) < 400 || Orbwalking.InAutoAttackRange(Target) )&& Player.HealthPercentage() > 30)
-                {
-                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
                 }
 
             }

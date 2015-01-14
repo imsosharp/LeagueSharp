@@ -44,7 +44,7 @@ namespace Support.Plugins
         public void KS()
         {
 
-            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < R.Range && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
             {
                 if (target != null)
                 {
@@ -57,10 +57,12 @@ namespace Support.Plugins
                             R.CastOnUnit(target, UsePackets);
                             return;
                         }
-                        if (W.CastCheck(Target, "ComboW"))
-                        {
-                            W.Cast(Target, UsePackets);
-                        }
+                    }
+
+                    if (W.CastCheck(Target, "ComboW") && W.IsKillable(target))
+                    {
+                        W.Cast(Target, UsePackets);
+                        return;
                     }
 
 

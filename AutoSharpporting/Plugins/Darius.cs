@@ -22,12 +22,37 @@ namespace Support.Plugins
 
         }
 
+        public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
+        {
+
+            if (!unit.IsMe)
+            {
+                return;
+            }
+
+            var t = target as Obj_AI_Hero;
+            if (unit.IsMe && t != null)
+            {
+                if(W.IsReady())
+                {
+                    W.Cast();
+                    Orbwalking.ResetAutoAttackTimer();
+                }
+
+            }
+
+        }
+
         public override void OnUpdate(EventArgs args)
         {
             ExecuteKillsteal();
-            AutoQ();
             if (ComboMode)
             {
+
+                if (E.CastCheck(Target, "ComboE"))
+                {
+                    E.Cast(Target);
+                }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast();
@@ -36,39 +61,17 @@ namespace Support.Plugins
                 {
                     W.Cast();
                 }
-                if (E.CastCheck(Target, "ComboE"))
-                {
-                    E.Cast();
-                }
 
-            }
-        }
-
-        public void AutoQ()
-        {
-            if (!Q.IsReady()) return;
-            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < Q.Range-10 && Player.Distance(x) > 270 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
-            {
-                if (Q.IsReady())
-                {
-                    Q.Cast();
-                }
             }
         }
            
         public void ExecuteKillsteal()
         {
 
-            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < R.Range && x.IsEnemy && !x.IsDead))
             {
 
-                if (Q.IsReady() && Player.Distance(target.Position) < Q.Range && Player.GetSpellDamage(target, SpellSlot.Q) > (target.Health+20))
-                {
-                    Q.Cast();
-                }
-
-
-                if (R.IsReady() && Player.Distance(target.Position) < R.Range )
+                if (R.IsReady() && Player.Distance(target) <= R.Range  && R.IsKillable(target))
                 {
                     CastR(target);
                 }

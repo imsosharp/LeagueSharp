@@ -13,6 +13,7 @@ namespace Support.Plugins
 {
     public class Draven : PluginBase
     {
+        private bool blockR2 = false;
         public Draven()
         {
             Q = new Spell(SpellSlot.Q);
@@ -61,7 +62,12 @@ namespace Support.Plugins
         public override void OnUpdate(EventArgs args)
         {
 
+            if (R.Instance.Cooldown > 0)
+            {
+                blockR2 = false;
+            }
             KS();
+
             if (ComboMode)
             {
                 if (E.CastCheck(Target, "ComboE"))
@@ -86,9 +92,10 @@ namespace Support.Plugins
                     if (Player.Distance(target.ServerPosition) <= R.Range &&
                         (Player.GetSpellDamage(target, SpellSlot.R)) > target.Health + 100)
                     {
-                        if (R.CastCheck(Target, "ComboR"))
+                        if (R.CastCheck(Target, "ComboR") && !blockR2)
                         {
                             R.Cast(target, UsePackets);
+                            blockR2 = true;
                             return;
                         }
                     }

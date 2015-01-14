@@ -44,28 +44,22 @@ namespace Support.Plugins
         }
 
 
-
         // some part from Prunes
 
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-                if (R.IsReady())
+                if (Q.IsReady())
+                {
+                    Qlogic();
+                }
+                if (R.IsReady() && Player.CountEnemysInRange(Q.Range) >= 2)
                 {
 
                     R.Cast();
                 }
-
-
-                if (Q.CastCheck(Target, "ComboQ"))
-                {
-                    Qlogic();
-                }
-                if (Q.CastCheck(Target, "ComboQ"))
-                {
-                    Q.Cast(Target);
-                }
+                
                 if (E.IsReady() && Orbwalking.InAutoAttackRange(Target))
                 {
                     E.Cast();
@@ -78,7 +72,6 @@ namespace Support.Plugins
                     Player.IssueOrder(GameObjectOrder.AttackTo, Target);
                     Orbwalking.ResetAutoAttackTimer();
                 }
-
             }
         }
 

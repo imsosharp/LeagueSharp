@@ -123,7 +123,7 @@ namespace Support
             DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
-            if (Bot.InFountain()) _tookRecallDecision = false;
+            if (Bot.InFountain() || !Carry.IsDead) _tookRecallDecision = false;
             if (Carry != null && Carry.IsDead && RandomDecision() &&
                 Environment.TickCount - _lastTimeTookRecallDecision > Rand.Next(60000, 300000))
             {

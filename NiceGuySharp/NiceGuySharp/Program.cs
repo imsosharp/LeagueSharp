@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -33,7 +31,7 @@ namespace NiceGuySharp
             EnemyDoubles,
             EnemyTriples,
             EnemyQuadras,
-            EnemyPentas = 0;
+            EnemyPentas;
 
         public static int LastSentMessage;
         public static int MinTimeBeforeNewMessage = Rand.Next(5000, 60000);
@@ -54,10 +52,12 @@ namespace NiceGuySharp
             AllyHeroes = AllHeroes.FindAll(hero => hero.IsAlly).ToList();
             EnemyHeroes = AllHeroes.FindAll(hero => !hero.IsAlly).ToList();
             Game.PrintChat("NICE-GUY SHARP SUCCESFULLY LOADED.");
+            Game.PrintChat("Edit what it's going to say at:");
+            Game.PrintChat(FileHandler.Folder);
             
             string[] onGameStart = File.ReadAllLines(FileHandler.OnGameStartTxt);
             int randMessage = Rand.Next(onGameStart.Count());
-            if (onGameStart != null && onGameStart.Length > 0)
+            if (onGameStart.Length > 0)
             {
                 Game.Say(onGameStart[randMessage]);
             }
@@ -71,7 +71,7 @@ namespace NiceGuySharp
             {
                 string[] onDeath = File.ReadAllLines(FileHandler.OnDeathTxt);
                 int randMessage = Rand.Next(onDeath.Count());
-                if (onDeath != null && onDeath.Length > 0)
+                if (onDeath.Length > 0)
                 {
                     TryToSay(onDeath[randMessage]);
                 }
@@ -81,7 +81,7 @@ namespace NiceGuySharp
             {
                 string[] onDouble = File.ReadAllLines(FileHandler.OnDoubleTxt);
                 int randMessage = Rand.Next(onDouble.Count());
-                if (onDouble != null && onDouble.Length > 0)
+                if (onDouble.Length > 0)
                 {
                     TryToSay(onDouble[randMessage]);
                 }
@@ -91,7 +91,7 @@ namespace NiceGuySharp
             {
                 string[] onTriple = File.ReadAllLines(FileHandler.OnTripleTxt);
                 int randMessage = Rand.Next(onTriple.Count());
-                if (onTriple != null && onTriple.Length > 0)
+                if (onTriple.Length > 0)
                 {
                     TryToSay(onTriple[randMessage]);
                 }
@@ -101,7 +101,7 @@ namespace NiceGuySharp
             {
                 string[] onQuadra = File.ReadAllLines(FileHandler.OnQuadraTxt);
                 int randMessage = Rand.Next(onQuadra.Count());
-                if (onQuadra != null && onQuadra.Length > 0)
+                if (onQuadra.Length > 0)
                 {
                     TryToSay(onQuadra[randMessage]);
                 }
@@ -111,7 +111,7 @@ namespace NiceGuySharp
             {
                 string[] onPenta = File.ReadAllLines(FileHandler.OnPentaTxt);
                 int randMessage = Rand.Next(onPenta.Count());
-                if (onPenta != null && onPenta.Length > 0)
+                if (onPenta.Length > 0)
                 {
                     TryToSay(onPenta[randMessage]);
                 }
@@ -121,7 +121,7 @@ namespace NiceGuySharp
             {
                 string[] onKill = File.ReadAllLines(FileHandler.OnKillTxt);
                 int randMessage = Rand.Next(onKill.Count());
-                if (onKill != null && onKill.Length > 0)
+                if (onKill.Length > 0)
                 {
                     TryToSay(onKill[randMessage]);
                 }
@@ -131,7 +131,7 @@ namespace NiceGuySharp
             {
                 string[] onAllyKills = File.ReadAllLines(FileHandler.OnAllyKillTxt);
                 int randMessage = Rand.Next(onAllyKills.Count());
-                if (onAllyKills != null && onAllyKills.Length > 0)
+                if (onAllyKills.Length > 0)
                 {
                     TryToSay(onAllyKills[randMessage]);
                 }
@@ -141,7 +141,7 @@ namespace NiceGuySharp
             {
                 string[] onAllyDeath = File.ReadAllLines(FileHandler.OnAllyDeathTxt);
                 int randMessage = Rand.Next(onAllyDeath.Count());
-                if (onAllyDeath != null && onAllyDeath.Length > 0)
+                if (onAllyDeath.Length > 0)
                 {
                     TryToSay(onAllyDeath[randMessage]);
                 }
@@ -151,7 +151,7 @@ namespace NiceGuySharp
             {
                 string[] onAllyQuadra = File.ReadAllLines(FileHandler.OnAllyQuadraTxt);
                 int randMessage = Rand.Next(onAllyQuadra.Count());
-                if (onAllyQuadra != null && onAllyQuadra.Length > 0)
+                if (onAllyQuadra.Length > 0)
                 {
                     TryToSay(onAllyQuadra[randMessage]);
                 }
@@ -161,7 +161,7 @@ namespace NiceGuySharp
             {
                 string[] onAllyPenta = File.ReadAllLines(FileHandler.OnAllyPentaTxt);
                 int randMessage = Rand.Next(onAllyPenta.Count());
-                if (onAllyPenta != null && onAllyPenta.Length > 0)
+                if (onAllyPenta.Length > 0)
                 {
                     TryToSay(onAllyPenta[randMessage]);
                 }
@@ -171,7 +171,7 @@ namespace NiceGuySharp
             {
                 string[] onEnemyPenta = File.ReadAllLines(FileHandler.OnEnemyPentaTxt);
                 int randMessage = Rand.Next(onEnemyPenta.Count());
-                if (onEnemyPenta != null && onEnemyPenta.Length > 0)
+                if (onEnemyPenta.Length > 0)
                 {
                     TryToSay(onEnemyPenta[randMessage]);
                 }
@@ -182,77 +182,59 @@ namespace NiceGuySharp
 
         public static void TryToSay(string message)
         {
-            if (Menu.Item("enabled").GetValue<bool>())
+            try
             {
-                if (Environment.TickCount - LastSentMessage > MinTimeBeforeNewMessage)
+                if (Menu.Item("enabled").GetValue<bool>())
                 {
-                    Game.Say(message);
+                    if (Environment.TickCount - LastSentMessage > MinTimeBeforeNewMessage)
+                    {
+                        if (message != null)
+                        {
+                            Game.Say(message);
+                        }
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                Game.OnGameUpdate -= Game_OnGameUpdate;
             }
         }
 
         public static int RealAllyKills()
         {
-            int kills = 0;
-            foreach (var hero in AllyHeroes)
-            {
-                kills += hero.ChampionsKilled;
-            }
-            return kills;
+            return AllyHeroes.Sum(hero => hero.ChampionsKilled);
         }
+
         public static int RealAllyDoubles()
         {
-            int doublekills = 0;
-            foreach (var hero in AllyHeroes)
-            {
-                doublekills += hero.DoubleKills;
-            }
-            return doublekills;
+            return AllyHeroes.Sum(hero => hero.DoubleKills);
         }
+
         public static int RealAllyTriples()
         {
-            int triplekills = 0;
-            foreach (var hero in AllyHeroes)
-            {
-                triplekills += hero.TripleKills;
-            }
-            return triplekills;
+            return AllyHeroes.Sum(hero => hero.TripleKills);
         }
+
         public static int RealAllyQuadras()
         {
-            int quadrakills = 0;
-            foreach (var hero in AllyHeroes)
-            {
-                quadrakills += hero.QuadraKills;
-            }
-            return quadrakills;
+            return AllyHeroes.Sum(hero => hero.QuadraKills);
         }
+
         public static int RealAllyPentas()
         {
-            int pentakills = 0;
-            foreach (var hero in AllyHeroes)
-            {
-                pentakills += hero.PentaKills;
-            }
-            return pentakills;
+            return AllyHeroes.Sum(hero => hero.PentaKills);
         }
+
         public static int RealAllyDeaths()
         {
-            int deaths = 0;
-            foreach (var hero in AllyHeroes)
-            {
-                deaths += hero.Deaths;
-            }
-            return deaths;
+            return AllyHeroes.Sum(hero => hero.Deaths);
         }
+
         public static int RealEnemyPentas()
         {
-            int pentakills = 0;
-            foreach (var hero in EnemyHeroes)
-            {
-                pentakills += hero.PentaKills;
-            }
-            return pentakills;
+            return EnemyHeroes.Sum(hero => hero.PentaKills);
         }
     }
 }

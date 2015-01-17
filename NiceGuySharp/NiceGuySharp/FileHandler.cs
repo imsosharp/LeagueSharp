@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using System.IO;
-using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -81,8 +79,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnGameStartTxt);
                 newfile.Close();
-                var content = "glhf\ngl hf\nhi\nhey\nhi sup guys";
-                var separator = new string[] { "\n" };
+                const string content = "glhf\ngl hf\nhi\nhey\nhi sup guys";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnGameStartTxt, lines);
             }
@@ -90,8 +88,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnDeathTxt);
                 newfile.Close();
-                var content = "oups\nwot\nwtf\ndat dmg\nthat damage\nfug\nfugg :DDD\nfml\ndamn I suck\nsorry\nlag\nlagg\nlaggg\nomg\npls\nhelp me\nhelp me pls\nteam where we at?\nmeh";
-                var separator = new string[] { "\n" };
+                const string content = "oups\nwhat\nwhat the\nomg\nthat damage\nfuck\nfml\ndamn I suck\nsorry\nlag\nlagg\nlaggg\nomg\npls\nhelp me\nhelp me pls\nteam where we at?\nmeh";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnDeathTxt, lines);
             }
@@ -99,8 +97,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnGameEndTxt);
                 newfile.Close();
-                var content = "gg\nggwp";
-                var separator = new string[] { "\n" };
+                const string content = "gg\nggwp";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnGameEndTxt, lines);
             }
@@ -108,8 +106,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnKillTxt);
                 newfile.Close();
-                var content = "yay\nfk yeah\nowned\npwned\nkicked dat booty\nowned that ass\npwned that noob";
-                var separator = new string[] { "\n" };
+                const string content = "/all outplayed\n/all owned\n/all pwned";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnKillTxt, lines);
             }
@@ -117,8 +115,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnDoubleTxt);
                 newfile.Close();
-                var content = "yay\nfk yeah\nowned\npwned\nright in the balls";
-                var separator = new string[] { "\n" };
+                const string content = "/all plays\n/all big plays\n/all I salute you guys\ngg";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnDoubleTxt, lines);
             }
@@ -126,8 +124,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnTripleTxt);
                 newfile.Close();
-                var content = "oooh baby a triple!\ni = god";
-                var separator = new string[] { "\n" };
+                const string content = "oooh baby a triple!\nfk yeah";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnTripleTxt, lines);
             }
@@ -135,8 +133,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnQuadraTxt);
                 newfile.Close();
-                var content = "godlike\nhaha\nowned\nxD";
-                var separator = new string[] { "\n" };
+                const string content = "godlike\nhaha\nowned\nxD";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnQuadraTxt, lines);
             }
@@ -144,8 +142,8 @@ namespace NiceGuySharp
             {
                 var newfile = File.Create(OnPentaTxt);
                 newfile.Close();
-                var content = "PENTAKIRRU\nNULLED\nMe > Ur Whole Team\nLel REKT\nSo REKT\nREKT n ROLL baby\nomg I did it mom\nokay\nso rekt\nrekterino\nrekterino\nripperino in pepperonis";
-                var separator = new string[] { "\n" };
+                const string content = ":D\n/all :D\n/all :DD\nPenta <3";
+                var separator = new[] { "\n" };
                 string[] lines = content.Split(separator, StringSplitOptions.None);
                 File.WriteAllLines(OnPentaTxt, lines);
             }

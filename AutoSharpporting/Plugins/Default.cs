@@ -52,7 +52,7 @@ namespace Support.Plugins
                 if (W.CastCheck(Target, "ComboW"))
                 {
                     W.Cast(Target, false);
-
+				}
                 if (R.CastCheck(Target, "ComboR"))
                 {
                     R.Cast(Target, false);

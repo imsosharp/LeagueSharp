@@ -138,8 +138,8 @@ namespace Support
 
         public static bool HasSmite(Obj_AI_Hero hero)
         {
-            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown; //obsolete, use the one below.
-            //return hero.GetSpellSlot("SummonerSmite") != SpellSlot.Unknown;
+            //return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown; //obsolete, use the one below.
+            return hero.GetSpellSlot("SummonerSmite") != SpellSlot.Unknown;
         }
 
         public static void LoadObjects()
@@ -209,7 +209,8 @@ namespace Support
         {
             get
             {
-                return false;
+                return NearbyAllies(Autoplay.BotLanePos.To3D(), 4500) > 1 &&
+                    NearbyAllies(Autoplay.TopLanePos.To3D(), 4500) == 1;
             }
         }
     }

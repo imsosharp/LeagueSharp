@@ -209,8 +209,7 @@ namespace Support
         {
             get
             {
-                return NearbyAllies(Autoplay.BotLanePos.To3D(), 4500) > 1 &&
-                    NearbyAllies(Autoplay.TopLanePos.To3D(), 4500) == 1;
+                return false;
             }
         }
     }

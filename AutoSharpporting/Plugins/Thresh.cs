@@ -244,7 +244,7 @@ namespace Support.Plugins
                         hero =>
                             hero.IsAlly && !hero.IsMe && hero.Distance(Player) <= W.Range + 300 &&
                             hero.Distance(Player) <= W.Range - 300 && hero.Health / hero.MaxHealth * 100 >= 20 &&
-                            Player.CountEnemiesInRange(150) >= 1))
+                            Utility.CountEnemysInRange(150) >= 1))
             {
                 var center = Player.Position;
                 const int points = 36;

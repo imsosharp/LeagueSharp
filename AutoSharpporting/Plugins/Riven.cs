@@ -28,7 +28,7 @@ namespace Support.Plugins
         {
 
             var t = target as Obj_AI_Hero;
-            if (t != null && unit.IsMe)
+            if (t != null && !unit.IsMe) //lmao
             {
                 if (Q.IsReady())
                 {

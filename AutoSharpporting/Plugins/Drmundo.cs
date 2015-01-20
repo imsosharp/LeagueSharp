@@ -66,7 +66,7 @@ namespace Support.Plugins
                 E.Cast();
             }
 
-            int EnInRang = Utility.CountEnemysInRange(1000);
+            int EnInRang = Player.CountEnemiesInRange(1000);
 
             if (Player.HealthPercentage() < 30 && R.IsReady() && EnInRang >= 1 || EnInRang == 1)
             {

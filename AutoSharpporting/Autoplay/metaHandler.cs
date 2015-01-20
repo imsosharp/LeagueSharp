@@ -138,8 +138,8 @@ namespace Support
 
         public static bool HasSmite(Obj_AI_Hero hero)
         {
-            return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown; //obsolete, use the one below.
-            //return hero.GetSpellSlot("SummonerSmite") != SpellSlot.Unknown;
+            //return hero.GetSpellSlot("SummonerSmite", true) != SpellSlot.Unknown; //obsolete, use the one below.
+            return hero.GetSpellSlot("SummonerSmite") != SpellSlot.Unknown;
         }
 
         public static void LoadObjects()

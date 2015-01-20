@@ -62,7 +62,7 @@ namespace Support.Plugins
                     }
 
                     // TODO: speed adc/jungler/engage
-                    if (E.IsReady() && Utility.CountEnemysInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
+                    if (E.IsReady() && Player.CountEnemiesInRange(2000) > 0 && ConfigValue<bool>("ComboE"))
                     {
                         E.Cast(Player);
                     }

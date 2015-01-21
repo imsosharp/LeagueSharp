@@ -103,6 +103,7 @@
     <Compile Include="Plugins\Irelia.cs" />
     <Compile Include="Plugins\JarvanIV.cs" />
     <Compile Include="Plugins\Katarina.cs" />
+    <Compile Include="Plugins\Leblanc.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />
     <Compile Include="Plugins\Poppy.cs" />

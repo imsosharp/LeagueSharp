@@ -55,7 +55,6 @@ namespace Support
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
             Game.OnGameUpdate += OnUpdate;
-            Game.OnGameEnd += OnGameEnd;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 
@@ -132,13 +131,6 @@ namespace Support
             }
         }
 
-        public static void OnGameEnd(EventArgs args)
-        {
-            /*Process[] pN = Process.GetProcessesByName("League of Legends");
-             *pN[0].Kill();
-             */
-        }
-
         private static bool IsBotSafe()
         {
             var map = Utility.Map.GetMap();
@@ -164,6 +156,10 @@ namespace Support
 
         public static void DoAutoplay()
         {
+            if (Bot.InFountain() && RandomDecision())
+            {
+                WalkAround(Bot.Position);
+            }
             var timeElapsed = Environment.TickCount - _loaded;
             if (!Bot.IsDead)
             {
@@ -253,17 +249,21 @@ namespace Support
                             {
                                 if (
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) !=
-                                    null)
+                                        hero =>
+                                            !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
+                                            !MetaHandler.HasSmite(hero)) != null)
                                 {
                                     _tempcarry =
                                         MetaHandler.AllyHeroes.FirstOrDefault(
-                                            hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
+                                            hero =>
+                                                !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
+                                                !MetaHandler.HasSmite(hero));
                                 }
                                 if (
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) ==
-                                    null &&
+                                        hero =>
+                                            !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
+                                            !MetaHandler.HasSmite(hero)) == null &&
                                     MetaHandler.AllyHeroes.FirstOrDefault(
                                         hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                                 {
@@ -272,22 +272,26 @@ namespace Support
                                         MetaHandler.AllyHeroes.FirstOrDefault(
                                             hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
                                 }
-                                if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.IsDead) == null) //everyone is dead
+                                if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.IsDead) == null)
+                                    //everyone is dead
                                 {
-                                    NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
-                                    if (NearestAllyTurret != null)
+                                    if (!Bot.InFountain())
                                     {
-                                        _saferecall.X = NearestAllyTurret.Position.X + _safe;
-                                        _saferecall.Y = NearestAllyTurret.Position.Y;
-                                        _tookRecallDecision = true;
-                                        if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+                                        if (NearestAllyTurret != null)
                                         {
-                                            Bot.Spellbook.CastSpell(SpellSlot.Recall);
-                                        }
-                                        else
-                                        {
+                                            _saferecall.X = NearestAllyTurret.Position.X + _safe;
+                                            _saferecall.Y = NearestAllyTurret.Position.Y;
+                                            _tookRecallDecision = true;
+                                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                                            {
+                                                Bot.Spellbook.CastSpell(SpellSlot.Recall);
+                                            }
+                                            else
+                                            {
 
-                                            Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
+                                                Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
+                                            }
                                         }
                                     }
                                 }
@@ -392,9 +396,12 @@ namespace Support
                     if ((Bot.Level > 8 || Environment.TickCount - _loaded > 900000) && Environment.TickCount - _lastSwitched > 180000)
                     {
                         var alliesSortedByKDA =
-                            MetaHandler.AllyHeroes.OrderByDescending(hero => hero.ChampionsKilled / ((hero.Deaths != 0) ? hero.Deaths : 1)); //AsunaChan2Kawaii
-                        Carry = alliesSortedByKDA.FirstOrDefault();
-                        _lastSwitched = Environment.TickCount;
+                            MetaHandler.AllyHeroes.OrderByDescending(hero => (hero.ChampionsKilled / ((hero.Deaths != 0) ? hero.Deaths : 1))); //AsunaChan2Kawaii
+                        if (alliesSortedByKDA.FirstOrDefault() != null)
+                        {
+                            Carry = alliesSortedByKDA.FirstOrDefault();
+                            _lastSwitched = Environment.TickCount;
+                        }
                     }
                     #endregion
                 }

@@ -61,9 +61,13 @@ namespace Support
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
                         int startingItem = Autoplay.Rand.Next(-6, 7);
-                        if (startingItem <= 0)
+                        if (startingItem < 0)
                         {
                             Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                        }
+                        if (startingItem == 0)
+                        {
+                            Autoplay.Bot.BuyItem(ItemId.Dorans_Ring);
                         }
                         if (startingItem > 0)
                         {

@@ -81,7 +81,7 @@ namespace Support.Plugins
                        () =>
                        {
                            pet.IssueOrder(
-                               GameObjectOrder.MovePet,
+                               GameObjectOrder.MoveTo,
                                (pet.Position + 500 * ((pet.Position - Player.Position).Normalized())));
                        });
             }

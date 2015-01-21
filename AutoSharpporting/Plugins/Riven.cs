@@ -28,7 +28,7 @@ namespace Support.Plugins
         {
 
             var t = target as Obj_AI_Hero;
-            if (t != null && !unit.IsMe) //lmao
+            if (t != null && unit.IsMe) //lmao //this make castQ after autoattack champions
             {
                 if (Q.IsReady())
                 {

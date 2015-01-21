@@ -64,7 +64,7 @@
       <HintPath>C:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\LeagueSharp\\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\LeagueSharp\\System\SharpDX.dll</HintPath>
@@ -103,6 +103,7 @@
     <Compile Include="Plugins\Irelia.cs" />
     <Compile Include="Plugins\JarvanIV.cs" />
     <Compile Include="Plugins\Katarina.cs" />
+    <Compile Include="Plugins\Kogmaw.cs" />
     <Compile Include="Plugins\Leblanc.cs" />
     <Compile Include="Plugins\Lux.cs" />
     <Compile Include="Plugins\Masteryi.cs" />

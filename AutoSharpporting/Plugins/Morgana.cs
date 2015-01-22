@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Morgana.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Morgana.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -57,7 +57,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "ComboQ"))
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (W.CastCheck(Target, "ComboW"))
@@ -69,14 +69,14 @@ namespace Support.Plugins
                                         (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
                                          hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range))))
                         {
-                            W.Cast(enemy.Position, UsePackets);
+                            W.Cast(enemy.Position);
                             return;
                         }
 
                         foreach (var enemy in
                             ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsValidTarget(W.Range)))
                         {
-                            W.CastIfWillHit(enemy, 1, UsePackets);
+                            W.CastIfWillHit(enemy, 1);
                             return;
                         }
                     }
@@ -92,7 +92,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "HarassQ"))
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (W.CastCheck(Target, "HarassW"))
@@ -104,14 +104,14 @@ namespace Support.Plugins
                                         (hero.HasBuffOfType(BuffType.Snare) || hero.HasBuffOfType(BuffType.Stun) ||
                                          hero.HasBuffOfType(BuffType.Taunt) && hero.IsValidTarget(W.Range))))
                         {
-                            W.Cast(enemy.Position, UsePackets);
+                            W.Cast(enemy.Position);
                             return;
                         }
 
                         foreach (var enemy in
                             ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsValidTarget(W.Range)))
                         {
-                            W.CastIfWillHit(enemy, 1, UsePackets);
+                            W.CastIfWillHit(enemy, 1);
                             return;
                         }
                     }
@@ -132,7 +132,7 @@ namespace Support.Plugins
 
             if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender, UsePackets);
+                Q.Cast(gapcloser.Sender);
             }
         }
 

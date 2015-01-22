@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Blitzcrank.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Blitzcrank.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -28,14 +28,11 @@ namespace Support.Plugins
     #region
 
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using SharpDX;
     using Support.Util;
     using ActiveGapcloser = Support.Util.ActiveGapcloser;
-    using Collision = LeagueSharp.Common.Collision;
 
     #endregion
 
@@ -93,7 +90,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "ComboQ") && !BlockQ)
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (E.CastCheck(Target))
@@ -114,7 +111,7 @@ namespace Support.Plugins
                         }
                     }
 
-                    if (W.IsReady() && ConfigValue<bool>("ComboW") && Player.CountEnemysInRange(1500) > 0)
+                    if (W.IsReady() && ConfigValue<bool>("ComboW") && Player.CountEnemiesInRange(1500) > 0)
                     {
                         W.Cast();
                     }
@@ -132,7 +129,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "HarassQ") && !BlockQ)
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (E.CastCheck(Target))
@@ -157,22 +154,6 @@ namespace Support.Plugins
             catch (Exception e)
             {
                 Console.WriteLine(e);
-            }
-        }
-
-        public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
-        {
-            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) && !BlockQ &&
-                args.Caster == Target && args.Type == Packet.AttackTypePacket.TargetedAA)
-            {
-                var collision = Collision.GetCollision(
-                    new List<Vector3> { args.Caster.Position },
-                    new PredictionInput { Delay = 0.25f, Radius = 70, Speed = 1800 });
-
-                if (collision.Count == 0)
-                {
-                    Q.Cast(args.Caster.Position, UsePackets);
-                }
             }
         }
 
@@ -240,7 +221,7 @@ namespace Support.Plugins
 
             if (Q.CastCheck(Target, "InterruptQ"))
             {
-                Q.Cast(unit, UsePackets);
+                Q.Cast(unit);
             }
 
             if (R.CastCheck(unit, "InterruptR"))
@@ -259,7 +240,6 @@ namespace Support.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddBool("Misc.Q.OnAttack", "Hook Target on Attack", true);
             config.AddBool("Misc.Q.Block", "Block Q on close Targets", true);
             config.AddSlider("Misc.Q.Block.Distance", "Q Block Distance", 400, 0, 800);
         }

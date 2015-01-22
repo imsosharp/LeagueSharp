@@ -74,10 +74,10 @@ namespace Support.Plugins
 
         }
 
-        private void ThrowBarrel(Obj_AI_Hero tar, bool packet)
+        private void ThrowBarrel(Obj_AI_Hero tar)
         {
             if (BarrelIsCast) return;
-            if (Q.Cast(tar, packet) == Spell.CastStates.SuccessfullyCasted)
+            if (Q.Cast(tar) == Spell.CastStates.SuccessfullyCasted)
             {
                 BarrelIsCast = true;
                 CurrentQTarget = tar;
@@ -136,7 +136,7 @@ namespace Support.Plugins
             {
                 if (FirstQReady() && t.IsValidTarget(Q.Range))
                 {
-                    ThrowBarrel(t, UsePackets);
+                    ThrowBarrel(t);
                 }
                 if (SecondQReady() && CurrentQTarget != null)
                 {

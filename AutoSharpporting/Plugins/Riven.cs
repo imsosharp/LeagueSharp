@@ -28,7 +28,7 @@ namespace Support.Plugins
         {
 
             var t = target as Obj_AI_Hero;
-            if (t != null && unit.IsMe) //lmao //this make castQ after autoattack champions
+            if (t != null && unit.IsMe)
             {
                 if (Q.IsReady())
                 {
@@ -50,7 +50,7 @@ namespace Support.Plugins
             {
                 if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
                 if (RActive && Player.Distance(Target) < R.Range && R.IsKillable(Target))
                 {

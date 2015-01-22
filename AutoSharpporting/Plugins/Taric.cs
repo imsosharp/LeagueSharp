@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Taric.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Taric.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -52,7 +52,7 @@ namespace Support.Plugins
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthQ").Value, Q.Range);
                 if (Q.CastCheck(ally, "ComboQ", true, false))
                 {
-                    Q.Cast(ally, UsePackets);
+                    Q.Cast(ally);
                 }
 
                 if (W.CastCheck(Target, "ComboW"))
@@ -62,7 +62,7 @@ namespace Support.Plugins
 
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
 
                 if (R.CastCheck(Target, "ComboR"))
@@ -76,12 +76,12 @@ namespace Support.Plugins
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthQ").Value, Q.Range);
                 if (Q.CastCheck(ally, "HarassQ", true, false))
                 {
-                    Q.Cast(ally, UsePackets);
+                    Q.Cast(ally);
                 }
 
                 if (E.CastCheck(Target, "HarassE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace Support.Plugins
 
             if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
-                E.Cast(gapcloser.Sender, UsePackets);
+                E.Cast(gapcloser.Sender);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Support.Plugins
 
             if (E.CastCheck(unit, "InterruptE"))
             {
-                E.Cast(unit, UsePackets);
+                E.Cast(unit);
             }
         }
 

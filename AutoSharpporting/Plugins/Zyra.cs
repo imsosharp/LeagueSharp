@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Zyra.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Zyra.cs
 // Created:  25/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -52,29 +52,6 @@ namespace Support.Plugins
             Passive.SetSkillshot(0.5f, 70f, 1400f, false, SkillshotType.SkillshotLine);
         }
 
-        #region UltimateCarry2 https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Zyra.cs
-
-        private bool ZyraisZombie()
-        {
-            return Player.Spellbook.GetSpell(SpellSlot.Q).Name == Player.Spellbook.GetSpell(SpellSlot.E).Name ||
-                   Player.Spellbook.GetSpell(SpellSlot.W).Name == Player.Spellbook.GetSpell(SpellSlot.R).Name;
-        }
-
-        private void CastPassive()
-        {
-            if (!Passive.IsReady())
-            {
-                return;
-            }
-            if (!Target.IsValidTarget(E.Range))
-            {
-                return;
-            }
-            Passive.CastIfHitchanceEquals(Target, HitChance.High, UsePackets);
-        }
-
-        #endregion
-
         private Spell Passive { get; set; }
 
         private int WCount
@@ -91,13 +68,13 @@ namespace Support.Plugins
 
             if (WCount == 1)
             {
-                Utility.DelayAction.Add(50, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
+                Utility.DelayAction.Add(50, () => W.Cast(new Vector2(v.X - 5, v.Y - 5)));
             }
 
             if (WCount == 2)
             {
-                Utility.DelayAction.Add(50, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
-                Utility.DelayAction.Add(180, () => W.Cast(new Vector2(v.X - 5, v.Y - 5), UsePackets));
+                Utility.DelayAction.Add(50, () => W.Cast(new Vector2(v.X - 5, v.Y - 5)));
+                Utility.DelayAction.Add(180, () => W.Cast(new Vector2(v.X - 5, v.Y - 5)));
             }
         }
 
@@ -115,7 +92,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "Combo.Q"))
                     {
-                        if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        if (Q.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                         {
                             CastW(Q.GetPrediction(Target).CastPosition);
                         }
@@ -123,7 +100,7 @@ namespace Support.Plugins
 
                     if (E.CastCheck(Target, "Combo.E"))
                     {
-                        if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        if (E.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                         {
                             CastW(E.GetPrediction(Target).CastPosition);
                         }
@@ -131,7 +108,7 @@ namespace Support.Plugins
 
                     if (R.CastCheck(Target, "Combo.R"))
                     {
-                        R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value, UsePackets);
+                        R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value);
                     }
                 }
 
@@ -139,7 +116,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "Harass.Q"))
                     {
-                        if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        if (Q.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                         {
                             CastW(Q.GetPrediction(Target).CastPosition);
                         }
@@ -147,7 +124,7 @@ namespace Support.Plugins
 
                     if (E.CastCheck(Target, "Harass.E"))
                     {
-                        if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        if (E.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                         {
                             CastW(E.GetPrediction(Target).CastPosition);
                         }
@@ -164,7 +141,7 @@ namespace Support.Plugins
         {
             if (E.CastCheck(gapcloser.Sender, "Gapcloser.E"))
             {
-                if (E.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                if (E.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                 {
                     CastW(E.GetPrediction(Target).CastPosition);
                 }
@@ -180,7 +157,7 @@ namespace Support.Plugins
 
             if (R.CastCheck(unit, "Interrupt.R"))
             {
-                R.Cast(unit, UsePackets);
+                R.Cast(unit);
             }
         }
 
@@ -203,5 +180,28 @@ namespace Support.Plugins
             config.AddBool("Gapcloser.E", "Use E to Interrupt Gapcloser", true);
             config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
+
+        #region UltimateCarry2 https://github.com/LXMedia1/UltimateCarry2/blob/master/LexxersAIOCarry/Zyra.cs
+
+        private bool ZyraisZombie()
+        {
+            return Player.Spellbook.GetSpell(SpellSlot.Q).Name == Player.Spellbook.GetSpell(SpellSlot.E).Name ||
+                   Player.Spellbook.GetSpell(SpellSlot.W).Name == Player.Spellbook.GetSpell(SpellSlot.R).Name;
+        }
+
+        private void CastPassive()
+        {
+            if (!Passive.IsReady())
+            {
+                return;
+            }
+            if (!Target.IsValidTarget(E.Range))
+            {
+                return;
+            }
+            Passive.CastIfHitchanceEquals(Target, HitChance.High);
+        }
+
+        #endregion
     }
 }

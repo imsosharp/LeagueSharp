@@ -47,17 +47,17 @@ namespace Support.Plugins
                 {
                     W.Cast();
                 }
-                Q.CastOnUnit(target, UsePackets);
+                Q.CastOnUnit(target);
             }
 
             if (E.IsReady())
             {
-                E.CastOnUnit(target, UsePackets);
+                E.CastOnUnit(target);
             }
 
             if (R.IsReady() && Player.Distance(target) < R.Range)
             {
-                R.Cast(target, UsePackets);
+                R.Cast(target);
             }
         }
 

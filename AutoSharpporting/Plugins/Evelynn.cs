@@ -48,7 +48,7 @@ namespace Support.Plugins
                 }
                 if (R.IsReady() && R.IsKillable(Target))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
             }
 

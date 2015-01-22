@@ -64,7 +64,7 @@
       <HintPath>C:\LeagueSharp\\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>D:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>..\..\..\..\..\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
       <HintPath>C:\LeagueSharp\\System\SharpDX.dll</HintPath>
@@ -75,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Autoplay\Autoplay.cs" />
+    <Compile Include="Autoplay\AutoPot.cs" />
     <Compile Include="Autoplay\MetaHandler.cs" />
     <Compile Include="Autoplay\FileHandler.cs" />
     <Compile Include="Autoplay\TreesAutoLevel.cs" />

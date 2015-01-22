@@ -36,7 +36,7 @@ namespace Support.Plugins
                 }
                 if (Q.CastCheck(Target, "ComboQ") && Target.HasBuffOfType(BuffType.Charm))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
@@ -48,7 +48,7 @@ namespace Support.Plugins
                 }
                 if (R.IsReady() && (R.IsKillable(Target) || IsRActive()))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }           
             }
 

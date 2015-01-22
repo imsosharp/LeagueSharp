@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Karma.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Karma.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -53,33 +53,33 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "Combo.Q") && R.IsReady() && Q.GetPrediction(Target).Hitchance >= HitChance.High &&
                     Q.GetPrediction(Target).CollisionObjects.Count == 0 &&
-                    Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
+                    Q.GetPrediction(Target).UnitPosition.CountEnemiesInRange(250) >=
                     ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
-                    R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(200, () => Q.Cast(Target, UsePackets));
+                    R.CastOnUnit(Player);
+                    Utility.DelayAction.Add(200, () => Q.Cast(Target));
                 }
                 if (Q.CastCheck(Target, "Combo.Q"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
 
                 if (W.CastCheck(Target, "Combo.W") && R.IsReady() &&
                     Player.HealthPercentage() <= ConfigValue<Slider>("Misc.W.Hp").Value)
                 {
-                    R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(200, () => W.CastOnUnit(Target, UsePackets));
+                    R.CastOnUnit(Player);
+                    Utility.DelayAction.Add(200, () => W.CastOnUnit(Target));
                 }
                 if (W.CastCheck(Target, "Combo.W"))
                 {
-                    W.CastOnUnit(Target, UsePackets);
+                    W.CastOnUnit(Target);
                 }
 
                 if (E.IsReady() && R.IsReady() &&
                     Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Misc.E.Count").Value)
                 {
-                    R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(200, () => E.CastOnUnit(Player, UsePackets));
+                    R.CastOnUnit(Player);
+                    Utility.DelayAction.Add(200, () => E.CastOnUnit(Player));
                 }
             }
 
@@ -88,22 +88,22 @@ namespace Support.Plugins
                 if (Q.CastCheck(Target, "Harass.Q") && R.IsReady() &&
                     Q.GetPrediction(Target).Hitchance >= HitChance.High &&
                     Q.GetPrediction(Target).CollisionObjects.Count == 0 &&
-                    Q.GetPrediction(Target).UnitPosition.CountEnemysInRange(250) >=
+                    Q.GetPrediction(Target).UnitPosition.CountEnemiesInRange(250) >=
                     ConfigValue<Slider>("Misc.Q.Count").Value)
                 {
-                    R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(200, () => Q.Cast(Target, UsePackets));
+                    R.CastOnUnit(Player);
+                    Utility.DelayAction.Add(200, () => Q.Cast(Target));
                 }
                 if (Q.CastCheck(Target, "Harass.Q"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
 
                 if (E.IsReady() && R.IsReady() &&
                     Helpers.AllyInRange(600).Count >= ConfigValue<Slider>("Misc.E.Count").Value)
                 {
-                    R.CastOnUnit(Player, UsePackets);
-                    Utility.DelayAction.Add(200, () => E.CastOnUnit(Player, UsePackets));
+                    R.CastOnUnit(Player);
+                    Utility.DelayAction.Add(200, () => E.CastOnUnit(Player));
                 }
             }
         }
@@ -117,7 +117,7 @@ namespace Support.Plugins
 
             if (W.CastCheck(gapcloser.Sender, "Gapcloser.W"))
             {
-                W.CastOnUnit(gapcloser.Sender, UsePackets);
+                W.CastOnUnit(gapcloser.Sender);
             }
         }
 

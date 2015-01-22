@@ -30,16 +30,16 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
 
                 if (R.CastCheck(Target, "ComboR"))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
             }
 
@@ -47,7 +47,7 @@ namespace Support.Plugins
             {
                 if (E.CastCheck(Target, "HarassE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
             }
         }

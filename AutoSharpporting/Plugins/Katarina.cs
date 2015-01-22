@@ -45,7 +45,7 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (W.IsReady() && Player.Distance(Target) <= W.Range)
                 {
@@ -70,7 +70,7 @@ namespace Support.Plugins
                     {
                         if (E.CastCheck(Target, "ComboE"))
                         {                       
-                            E.CastOnUnit(target, UsePackets);
+                            E.CastOnUnit(target);
                             if (R.IsReady())
                             {
                                 R.CastIfWillHit(Target, 2);

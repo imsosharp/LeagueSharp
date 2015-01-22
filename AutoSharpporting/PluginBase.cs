@@ -34,6 +34,7 @@ namespace Support
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
+    using System.Drawing;
     using Support.Util;
     using ActiveGapcloser = Support.Util.ActiveGapcloser;
     using AntiGapcloser = Support.Util.AntiGapcloser;
@@ -47,21 +48,6 @@ namespace Support
     /// </summary>
     public abstract class PluginBase
     {
-        #region BeforeEnemyAttack
-
-        public delegate void BeforeEnemyAttackEvenH(BeforeEnemyAttackEventArgs args);
-
-        public static event BeforeEnemyAttackEvenH BeforeEnemyAttack;
-
-        public class BeforeEnemyAttackEventArgs
-        {
-            public Obj_AI_Base Caster { get; set; }
-            public Obj_AI_Base Target { get; set; }
-            public Packet.AttackTypePacket Type { get; set; }
-            public Vector3 Position { get; set; }
-        }
-
-        #endregion
 
         /// <summary>
         ///     Init BaseClass
@@ -89,7 +75,6 @@ namespace Support
         {
             Game.OnGameUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
-            BeforeEnemyAttack += OnBeforeEnemyAttack;
             Orbwalking.BeforeAttack += OnBeforeAttack;
             Orbwalking.AfterAttack += OnAfterAttack;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
@@ -102,12 +87,15 @@ namespace Support
         private void DrawSpell(Spell spell)
         {
             if (spell == null)
+            {
                 return;
+            }
 
             var menu = ConfigValue<Circle>(spell.Slot + "Range");
             if (menu.Active && spell.Level > 0)
             {
-                Utility.DrawCircle(Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
+                Render.Circle.DrawCircle(
+                    Player.Position, spell.Range, spell.IsReady() ? menu.Color : Color.FromArgb(150, Color.Red));
             }
         }
 
@@ -157,7 +145,7 @@ namespace Support
 
                     if (Target != null && ConfigValue<Circle>("Target").Active)
                     {
-                        Utility.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
+                        Render.Circle.DrawCircle(Target.Position, 125, ConfigValue<Circle>("Target").Color);
                     }
 
                     DrawSpell(Q);
@@ -170,46 +158,6 @@ namespace Support
                     Console.WriteLine(e);
                 }
             };
-
-            // TODO: 4.21 Packets
-            //Game.OnGameProcessPacket += args =>
-            //{
-            //    try
-            //    {
-            //        if (args.PacketData[0] != Packet.MultiPacket.Header ||
-            //            args.PacketData[5] != Packet.MultiPacket.OnAttack.SubHeader)
-            //        {
-            //            return;
-            //        }
-
-            //        var basePacket = Packet.MultiPacket.DecodeHeader(args.PacketData);
-            //        var attackPacket = Packet.MultiPacket.OnAttack.Decoded(args.PacketData);
-            //        var caster = ObjectManager.GetUnitByNetworkId<GameObject>(basePacket.NetworkId) as Obj_AI_Base;
-            //        var target =
-            //            ObjectManager.GetUnitByNetworkId<GameObject>(attackPacket.TargetNetworkId) as Obj_AI_Base;
-
-            //        if (!caster.IsValid<Obj_AI_Hero>() || caster == null || caster.IsAlly)
-            //        {
-            //            return;
-            //        }
-
-            //        if (BeforeEnemyAttack != null)
-            //        {
-            //            BeforeEnemyAttack(
-            //                new BeforeEnemyAttackEventArgs
-            //                {
-            //                    Caster = caster,
-            //                    Target = target,
-            //                    Position = attackPacket.Position,
-            //                    Type = attackPacket.Type
-            //                });
-            //        }
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Console.WriteLine(e);
-            //    }
-            //};
         }
 
         /// <summary>
@@ -217,7 +165,7 @@ namespace Support
         /// </summary>
         private void InitConfig()
         {
-            Config = new Menu("Support: " + Player.ChampionName, Player.ChampionName, true);
+            Config = new Menu("AutoSharp: " + Player.ChampionName, Player.ChampionName, true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
             TargetSelector.AddToMenu(Config.AddSubMenu(new Menu("Target Selector", "Target Selector")));
 
@@ -232,8 +180,7 @@ namespace Support
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
 
             // misc
-            MiscConfig.AddBool("UsePackets", "Use Packets?", false);
-            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Always", "Never", "Smart" });
+            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Smart", "Never", "Always" });
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
@@ -494,15 +441,6 @@ namespace Support
         /// </remarks>
         /// <param name="args">EventArgs</param>
         public virtual void OnUpdate(EventArgs args) { }
-
-        /// <summary>
-        ///     OnBeforeEnemyAttack
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement OnBeforeEnemyAttack logic
-        /// </remarks>
-        /// <param name="args">BeforeEnemyAttackEventArgs</param>
-        public virtual void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args) { }
 
         /// <summary>
         ///     OnBeforeAttack

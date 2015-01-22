@@ -101,7 +101,7 @@ namespace Support.Util
 
         public static bool EnemyInRange(int numOfEnemy, float range)
         {
-            return Utility.CountEnemysInRange(ObjectManager.Player, (int)range) >= numOfEnemy;
+            return ObjectManager.Player.CountEnemiesInRange((int) range) >= numOfEnemy;
         }
         public static List<Obj_AI_Hero> AllyInRange(float range)
         {
@@ -109,32 +109,17 @@ namespace Support.Util
             ObjectManager.Get<Obj_AI_Hero>()
             .Where(
             h =>
-            Geometry.Distance(ObjectManager.Player, h.Position) < range && h.IsAlly && !h.IsMe &&
-            h.IsValid && !h.IsDead)
-            .OrderBy(h => Geometry.Distance(ObjectManager.Player, h.Position))
-            .ToList();
+            ObjectManager.Player.Distance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid && !h.IsDead).OrderBy(h => ObjectManager.Player.Distance(h.Position)).ToList();
         }
         public static Obj_AI_Hero AllyBelowHp(int percentHp, float range)
         {
-            foreach (var ally in ObjectManager.Get<Obj_AI_Hero>())
-            {
-                if (ally.IsMe)
-                {
-                    if (((ObjectManager.Player.Health / ObjectManager.Player.MaxHealth) * 100) < percentHp)
-                    {
-                        return ally;
-                    }
-                }
-                else if (ally.IsAlly)
-                {
-                    if (Vector3.Distance(ObjectManager.Player.Position, ally.Position) < range &&
-                    ((ally.Health / ally.MaxHealth) * 100) < percentHp)
-                    {
-                        return ally;
-                    }
-                }
-            }
-            return null;
+            var allyBelowHp = 
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .First(
+                        h =>
+                            !h.IsMe && ((h.Health / h.MaxHealth) * 100) < percentHp &&
+                            h.Distance(ObjectManager.Player) < range);
+            return allyBelowHp;
         }
     }
 }

@@ -72,7 +72,7 @@ namespace Support.Plugins
             {
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
             }
 
@@ -94,7 +94,7 @@ namespace Support.Plugins
                     {
                         if (R.CastCheck(Target, "ComboR") && !blockR2)
                         {
-                            R.Cast(target, UsePackets);
+                            R.Cast(target);
                             blockR2 = true;
                             return;
                         }

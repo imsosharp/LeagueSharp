@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Braum.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Braum.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -64,7 +64,7 @@ namespace Support.Plugins
                 return;
             }
 
-            E.Cast(v, UsePackets);
+            E.Cast(v);
             IsShieldActive = true;
             Utility.DelayAction.Add(4000, () => IsShieldActive = false);
         }
@@ -108,7 +108,7 @@ namespace Support.Plugins
                         return;
                     }
 
-                    W.CastOnUnit(target, UsePackets);
+                    W.CastOnUnit(target);
                     Utility.DelayAction.Add((int) jumpTime, () => CastShield(caster.Position));
                 }
             }
@@ -159,7 +159,7 @@ namespace Support.Plugins
                         return;
                     }
 
-                    W.CastOnUnit(target, UsePackets);
+                    W.CastOnUnit(target);
                     Utility.DelayAction.Add((int) jumpTime, () => CastShield(max.Start.To3D()));
                 }
             }
@@ -175,12 +175,12 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "Combo.Q"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
 
                 if (R.CastCheck(Target, "Combo.R"))
                 {
-                    R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value - 1, UsePackets);
+                    R.CastIfWillHit(Target, ConfigValue<Slider>("Combo.R.Count").Value - 1);
                 }
             }
 
@@ -188,7 +188,7 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "Harass.Q"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
             }
         }
@@ -197,7 +197,7 @@ namespace Support.Plugins
         {
             if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
-                Q.Cast(gapcloser.Sender, UsePackets);
+                Q.Cast(gapcloser.Sender);
             }
         }
 
@@ -210,14 +210,13 @@ namespace Support.Plugins
 
             if (R.CastCheck(unit, "Interrupt.R"))
             {
-                R.Cast(unit, UsePackets);
+                R.Cast(unit);
             }
         }
 
         public override void ComboMenu(Menu config)
         {
             config.AddBool("Combo.Q", "Use Q", true);
-            config.AddBool("Combo.W", "Use W", true);
             config.AddBool("Combo.R", "Use R", true);
             config.AddSlider("Combo.R.Count", "Targets hit by R", 2, 1, 5);
         }

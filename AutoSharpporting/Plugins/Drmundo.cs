@@ -49,7 +49,7 @@ namespace Support.Plugins
 
             if (Q.CastCheck(target,"ComboQ"))
             {
-                Q.Cast(target, UsePackets);
+                Q.Cast(target);
             }
 
             if (target.IsValidTarget() && W.IsReady() && Player.Distance(target) <= W.Range && !ActiveW)

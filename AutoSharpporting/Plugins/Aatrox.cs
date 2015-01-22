@@ -49,7 +49,7 @@ namespace Support.Plugins
 
                 if (R.CastCheck(Target, "ComboR"))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
             }
 
@@ -65,7 +65,7 @@ namespace Support.Plugins
 
             if (Q.CastCheck(unit, "Interrupt.Q"))
             {
-                Q.Cast(unit, UsePackets);
+                Q.Cast(unit);
                 return;
             }
 

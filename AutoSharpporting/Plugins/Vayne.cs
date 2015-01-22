@@ -27,7 +27,7 @@ namespace Support.Plugins
             {
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
                 if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 20)
                 {

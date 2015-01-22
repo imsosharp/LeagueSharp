@@ -32,21 +32,21 @@ namespace Support.Plugins
 
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (R.CastCheck(Target, "ComboR"))
                 {
                     if (R.IsKillable(Target))
                     {
-                        R.Cast(Target, UsePackets);
+                        R.Cast(Target);
                     }
                     else 
                     { 
-                        R.CastIfWillHit(Target, 2, UsePackets); 
+                        R.CastIfWillHit(Target, 2); 
                     }
 
                 }

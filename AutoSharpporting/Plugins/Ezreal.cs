@@ -38,11 +38,11 @@ namespace Support.Plugins
 
                 if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.CastIfHitchanceEquals(Target, HitChance.Medium, UsePackets);
+                    Q.CastIfHitchanceEquals(Target, HitChance.Medium);
                 }
             }
 
@@ -61,7 +61,7 @@ namespace Support.Plugins
                     {
                         if (R.CastCheck(Target, "ComboRKS"))
                         {
-                            R.CastOnUnit(target, UsePackets);
+                            R.CastOnUnit(target);
                             return;
                         }
                     }

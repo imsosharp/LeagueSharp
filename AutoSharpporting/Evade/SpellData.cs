@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // SpellData.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/SpellData.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -69,9 +69,6 @@ namespace Support.Evade
         public string SpellName;
         public string ToggleParticleName = "";
         public SkillShotType Type;
-        private int _radius;
-        private int _range;
-
         public SpellData() {}
 
         public SpellData(string championName,
@@ -92,7 +89,7 @@ namespace Support.Evade
             Type = type;
             Delay = delay;
             Range = range;
-            _radius = radius;
+            RawRadius = radius;
             MissileSpeed = missileSpeed;
             AddHitbox = addHitbox;
             FixedRange = fixedRange;
@@ -106,24 +103,17 @@ namespace Support.Evade
 
         public int Radius
         {
-            get { return (!AddHitbox) ? _radius : _radius + (int) ObjectManager.Player.BoundingRadius; }
-            set { _radius = value; }
+            get { return (!AddHitbox) ? RawRadius : RawRadius + (int) ObjectManager.Player.BoundingRadius; }
+            set { RawRadius = value; }
         }
 
-        public int RawRadius
-        {
-            get { return _radius; }
-        }
-
-        public int RawRange
-        {
-            get { return _range; }
-        }
+        public int RawRadius { get; private set; }
+        public int RawRange { get; private set; }
 
         public int Range
         {
-            get { return _range; }
-            set { _range = value; }
+            get { return RawRange; }
+            set { RawRange = value; }
         }
     }
 }

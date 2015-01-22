@@ -1,6 +1,6 @@
 #region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Utils.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Utils.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -29,6 +29,7 @@ namespace Support.Evade
 
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
@@ -40,17 +41,7 @@ namespace Support.Evade
     {
         public static List<Vector2> To2DList(this Vector3[] v)
         {
-            var result = new List<Vector2>();
-            foreach (var point in v)
-            {
-                result.Add(point.To2D());
-            }
-            return result;
-        }
-
-        public static void SendMovePacket(this Obj_AI_Base v, Vector2 point)
-        {
-            Packet.C2S.Move.Encoded(new Packet.C2S.Move.Struct(point.X, point.Y)).Send();
+            return v.Select(point => point.To2D()).ToList();
         }
 
         public static Obj_AI_Base Closest(List<Obj_AI_Base> targetList, Vector2 from)
@@ -90,7 +81,6 @@ namespace Support.Evade
 
             return (result == 0f) ? -1 : (int) (Environment.TickCount + (result - Game.Time) * 1000);
         }
-
 
         public static void DrawLineInWorld(Vector3 start, Vector3 end, int width, Color color)
         {

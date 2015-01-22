@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Skillshot.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Skillshot.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -43,13 +43,13 @@ namespace Support.Evade
         SkillshotMissileLine,
         SkillshotCone,
         SkillshotMissileCone,
-        SkillshotRing,
+        SkillshotRing
     }
 
     public enum DetectionType
     {
         RecvPacket,
-        ProcessSpell,
+        ProcessSpell
     }
 
     public struct SafePathResult
@@ -85,28 +85,22 @@ namespace Support.Evade
 
     public class Skillshot
     {
+        private Vector2 _collisionEnd;
+        private int _lastCollisionCalc;
         public Geometry.Circle Circle;
         public DetectionType DetectionType;
         public Vector2 Direction;
         public Geometry.Polygon DrawingPolygon;
-
         public Vector2 End;
-
         public bool ForceDisabled;
         public Vector2 MissilePosition;
         public Geometry.Polygon Polygon;
         public Geometry.Rectangle Rectangle;
         public Geometry.Ring Ring;
         public Geometry.Sector Sector;
-
         public SpellData SpellData;
         public Vector2 Start;
         public int StartTick;
-
-        private bool _cachedValue;
-        private int _cachedValueTick;
-        private Vector2 _collisionEnd;
-        private int _lastCollisionCalc;
 
         public Skillshot(DetectionType detectionType,
             SpellData spellData,
@@ -181,7 +175,6 @@ namespace Support.Evade
 
         public Geometry.Polygon EvadePolygon { get; set; }
         public Obj_AI_Base Unit { get; set; }
-
         //public T ConfigValue<T>(string name)
         //{
         //    return Config.Menu.Item(name + SpellData.MenuItemName).ConfigValue<T>();
@@ -328,7 +321,7 @@ namespace Support.Evade
                 x = t * SpellData.MissileSpeed / 1000;
             }
 
-                //Missile with constant acceleration.
+            //Missile with constant acceleration.
             else
             {
                 var t1 = (SpellData.MissileAccel > 0
@@ -355,7 +348,6 @@ namespace Support.Evade
             t = (int) Math.Max(0, Math.Min(CollisionEnd.Distance(Start), x));
             return Start + Direction * t;
         }
-
 
         /// <summary>
         ///     Returns if the skillshot will hit you when trying to blink to the point.
@@ -588,22 +580,5 @@ namespace Support.Evade
 
             return false;
         }
-
-        //public void Draw(Color color, Color missileColor, int width = 1)
-        //{
-        //    if (!ConfigValue<bool>("Draw"))
-        //    {
-        //        return;
-        //    }
-        //    DrawingPolygon.Draw(color, width);
-
-        //    if (SpellData.Type == SkillShotType.SkillshotMissileLine)
-        //    {
-        //        var position = GetMissilePosition(0);
-        //        Utils.DrawLineInWorld(
-        //            (position + SpellData.Radius * Direction.Perpendicular()).To3D(),
-        //            (position - SpellData.Radius * Direction.Perpendicular()).To3D(), 2, missileColor);
-        //    }
-        //}
     }
 }

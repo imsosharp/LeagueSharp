@@ -30,11 +30,11 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (R.CastCheck(Target, "ComboR") && R.IsKillable(Target))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
                 if (Player.HealthPercentage() > 20 && Player.Distance(Target) < 300)
                 {
@@ -56,7 +56,7 @@ namespace Support.Plugins
             }
                 if (R.CastCheck(unit, "Interrupt.R"))
                 {
-                    R.Cast(unit, UsePackets);
+                    R.Cast(unit);
                     return;
                 }
             

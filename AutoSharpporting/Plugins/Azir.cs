@@ -35,19 +35,19 @@ namespace Support.Plugins
 
                 if (ShouldR(Target) && R.CastCheck(Target, "ComboR"))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
                 if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
 
             }
@@ -84,7 +84,7 @@ namespace Support.Plugins
 
             if (E.CastCheck(unit, "Interrupt.R"))
             {
-                R.Cast(unit, UsePackets);
+                R.Cast(unit);
                 return;
             }
 

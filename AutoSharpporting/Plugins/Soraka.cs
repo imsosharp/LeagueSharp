@@ -45,10 +45,10 @@ namespace Support.Plugins
             var unit = gapcloser.Sender;
 
             if (ConfigValue<bool>("GapcloserQ") && unit.IsValidTarget(Q.Range) && Q.IsReady())
-                Q.Cast(unit, UsePackets);
+                Q.Cast(unit);
 
             if (ConfigValue<bool>("GapcloserE") && unit.IsValidTarget(E.Range) && E.IsReady())
-                E.Cast(unit, UsePackets);
+                E.Cast(unit);
         }
 
         public override void OnPossibleToInterrupt(Obj_AI_Base target, InterruptableSpell spell)
@@ -64,7 +64,7 @@ namespace Support.Plugins
             if (!E.IsReady())
                 return;
 
-            E.Cast(target, UsePackets);
+            E.Cast(target);
         }
 
         public override void OnUpdate(EventArgs args)
@@ -73,12 +73,12 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
 
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
             }
 
@@ -86,12 +86,12 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "HarassQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
 
                 if (E.CastCheck(Target, "HarassE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
             }
 

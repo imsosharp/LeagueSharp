@@ -41,7 +41,7 @@ namespace Support.Plugins
                 } 
                 if (R.IsReady())
                 {
-                    R.CastIfWillHit(Target, 2, UsePackets);
+                    R.CastIfWillHit(Target, 2);
                 }
             
             }

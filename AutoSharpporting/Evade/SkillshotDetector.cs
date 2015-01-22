@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // SkillshotDetector.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/SkillshotDetector.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -44,7 +44,7 @@ namespace Support.Evade
         static SkillshotDetector()
         {
             //Detect when the skillshots are created.
-            Game.OnGameProcessPacket += GameOnOnGameProcessPacket; // Used only for viktor's Laser :^)
+            //Game.OnGameProcessPacket += GameOnOnGameProcessPacket; // Used only for viktor's Laser :^)
             Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
 
             //Detect when projectiles collide.
@@ -52,11 +52,6 @@ namespace Support.Evade
             GameObject.OnCreate += ObjSpellMissileOnOnCreate;
             //GameObject.OnCreate += GameObject_OnCreate; //TODO: Detect lux R and other large skillshots.
             GameObject.OnDelete += GameObject_OnDelete;
-
-            if (false && ObjectManager.Get<Obj_AI_Hero>().Count() == 1)
-            {
-                Game.OnWndProc += Game_OnWndProc;
-            }
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
@@ -208,7 +203,6 @@ namespace Support.Evade
         ///     This event is fired after a skillshot missile collides.
         /// </summary>
         public static event OnDeleteMissileH OnDeleteMissile;
-
 
         private static void TriggerOnDetectSkillshot(DetectionType detectionType,
             SpellData spellData,

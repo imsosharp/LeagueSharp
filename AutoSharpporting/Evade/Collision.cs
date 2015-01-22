@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Collision.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Collision.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -41,7 +41,7 @@ namespace Support.Evade
     {
         Minion,
         Champions,
-        YasuoWall,
+        YasuoWall
     }
 
     internal class FastPredResult
@@ -70,7 +70,6 @@ namespace Support.Evade
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Hero_OnProcessSpellCast;
         }
 
-
         private static void Obj_AI_Hero_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsValid && sender.Team == ObjectManager.Player.Team && args.SData.Name == "YasuoWMovingWall")
@@ -92,7 +91,7 @@ namespace Support.Evade
                 {
                     IsMoving = true,
                     CurrentPos = unit.ServerPosition.To2D(),
-                    PredictedPos = path.CutPath((int) d)[0],
+                    PredictedPos = path.CutPath((int) d)[0]
                 };
             }
             if (path.Count == 0)
@@ -101,14 +100,14 @@ namespace Support.Evade
                 {
                     IsMoving = false,
                     CurrentPos = unit.ServerPosition.To2D(),
-                    PredictedPos = unit.ServerPosition.To2D(),
+                    PredictedPos = unit.ServerPosition.To2D()
                 };
             }
             return new FastPredResult
             {
                 IsMoving = false,
                 CurrentPos = path[path.Count - 1],
-                PredictedPos = path[path.Count - 1],
+                PredictedPos = path[path.Count - 1]
             };
         }
 
@@ -148,7 +147,7 @@ namespace Support.Evade
                                         Unit = minion,
                                         Type = CollisionObjectTypes.Minion,
                                         Distance = pos.Distance(from),
-                                        Diff = w,
+                                        Diff = w
                                     });
                             }
                         }
@@ -181,7 +180,7 @@ namespace Support.Evade
                                         Unit = hero,
                                         Type = CollisionObjectTypes.Minion,
                                         Distance = pos.Distance(from),
-                                        Diff = w,
+                                        Diff = w
                                     });
                             }
                         }

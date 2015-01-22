@@ -54,7 +54,7 @@ namespace Support.Plugins
                 {
                     Qlogic();
                 }
-                if (R.IsReady() && Player.CountEnemysInRange(Q.Range) >= 2)
+                if (R.IsReady() && Player.CountEnemiesInRange(Q.Range) >= 2)
                 {
 
                     R.Cast();

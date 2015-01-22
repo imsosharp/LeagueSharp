@@ -34,7 +34,7 @@ namespace Support.Plugins
                 }
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
             }
         
@@ -54,14 +54,14 @@ namespace Support.Plugins
                     {
                         if (R.CastCheck(Target, "ComboRKS"))
                         {
-                            R.CastOnUnit(target, UsePackets);
+                            R.CastOnUnit(target);
                             return;
                         }
                     }
 
                     if (W.CastCheck(Target, "ComboW") && W.IsKillable(target))
                     {
-                        W.Cast(Target, UsePackets);
+                        W.Cast(Target);
                         return;
                     }
 
@@ -81,7 +81,7 @@ namespace Support.Plugins
 
             if (R.CastCheck(unit, "Interrupt.R"))
             {
-                R.Cast(unit, UsePackets);
+                R.Cast(unit);
                 return;
             }
 

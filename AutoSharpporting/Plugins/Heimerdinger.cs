@@ -41,11 +41,11 @@ namespace Support.Plugins
                     var pred = E.GetPrediction(Target);
                     E.Cast(pred.CastPosition);
                 }
-                if (R.IsReady() && Player.CountEnemysInRange(W.Range) > 2)
+                if (R.IsReady() && Player.CountEnemiesInRange(W.Range) > 2)
                 {
                     R.Cast();
                 }
-                if (Q.IsReady() && Player.CountEnemysInRange(1300)>2)
+                if (Q.IsReady() && Player.CountEnemiesInRange(1300)>2)
                 {
                     Random rnd = new Random();
                     pos.X = Player.Position.X + rnd.Next(-20,20); 

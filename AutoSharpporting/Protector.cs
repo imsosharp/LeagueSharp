@@ -142,7 +142,10 @@ namespace Support
 
         private static void CreateMenu()
         {
-            Menu = new Menu("Support: Protector", "Protector", true);
+            Menu = new Menu("AutoSharp: Protector", "Protector", true);
+
+            // Marksman Potion Manager
+            new PotionManager(Menu);
 
             // detector
             var detector = Menu.AddSubMenu(new Menu("Detector", "Detector"));
@@ -201,6 +204,7 @@ namespace Support
             var misc = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             misc.AddItem(new MenuItem("UsePackets", "Use Packets").SetValue(true));
 
+
             Menu.AddToMainMenu();
         }
 
@@ -239,7 +243,7 @@ namespace Support
                     {
                         if (hero.HasBuffOfType(buff) && Menu.SubMenu("CC").Item(buff.ToString()).GetValue<bool>())
                         {
-                            if (mikael.IsActive(hero) && hero.CountEnemysInRange(800) > 0)
+                            if (mikael.IsActive(hero) && hero.CountEnemiesInRange(800) > 0)
                             {
                                 mikael.Item.Cast(hero);
                                 Console.WriteLine(
@@ -274,7 +278,7 @@ namespace Support
                     {
                         if (ps.Targeted)
                         {
-                            ps.Spell.CastOnUnit(target, UsePackets);
+                            ps.Spell.CastOnUnit(target);
                         }
                         else
                         {

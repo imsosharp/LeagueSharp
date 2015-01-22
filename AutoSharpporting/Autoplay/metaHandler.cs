@@ -99,6 +99,10 @@ namespace Support
         }
         public static bool HasItem(ItemId item)
         {
+            if (item == ItemId.Mana_Potion || item == ItemId.Health_Potion)
+            {
+                return Autoplay.RandomDecision();
+            }
             return Items.HasItem((int)item, Autoplay.Bot);
         }
 
@@ -211,10 +215,7 @@ namespace Support
 
         public static bool ShouldSupportTopLane
         {
-            get
-            {
-                return false;
-            }
+            get { return false; }
         }
     }
        

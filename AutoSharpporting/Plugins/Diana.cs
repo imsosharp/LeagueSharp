@@ -54,8 +54,8 @@ namespace Support.Plugins
             {
                 if (Q.GetPrediction(target).Hitchance >= HitChance.High && Player.Mana > qmana + rmana)
                 {
-                    R.Cast(target, UsePackets);
-                    Q.CastIfHitchanceEquals(target, HitChance.High, UsePackets);
+                    R.Cast(target);
+                    Q.CastIfHitchanceEquals(target, HitChance.High);
 
                 }
             }
@@ -69,7 +69,7 @@ namespace Support.Plugins
             }
             if (Player.Distance(target) <= R.Range && R.IsReady() && !W.IsReady() && !Q.IsReady())
             {
-                R.Cast(target, UsePackets);
+                R.Cast(target);
             }
         }
 
@@ -86,7 +86,7 @@ namespace Support.Plugins
 
             if (Player.Distance(target) <= R.Range && R.IsReady() && (target.HasBuff("dianamoonlight", true)))
             {
-                R.Cast(target, UsePackets);
+                R.Cast(target);
             }
 
             if (Player.Distance(target) <= W.Range && W.IsReady() &&
@@ -100,7 +100,7 @@ namespace Support.Plugins
             }
             if (Player.Distance(target) <= R.Range && R.IsReady() && !W.IsReady() && !Q.IsReady())
             {
-                R.Cast(target, UsePackets);
+                R.Cast(target);
             }
         }
 

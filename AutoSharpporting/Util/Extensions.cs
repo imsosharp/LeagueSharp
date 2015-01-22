@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Extensions.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Extensions.cs
 // Created:  26/11/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -30,7 +30,6 @@ namespace Support.Util
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using SharpDX;
 
     #endregion
 
@@ -116,61 +115,9 @@ namespace Support.Util
             return hero.Health - (hero.MaxHealth * buffer / 100);
         }
 
-        public static void IssueOrderEx(this Obj_AI_Base hero,
-            GameObjectOrder order,
-            GameObject target,
-            bool packet = false)
-        {
-            if (packet)
-            {
-                var p = new Packet.C2S.Move.Struct { MoveType = (byte) order, SourceNetworkId = hero.NetworkId };
-
-                switch (order)
-                {
-                    case GameObjectOrder.AttackUnit:
-                        p.TargetNetworkId = target.NetworkId;
-                        break;
-                }
-
-                Packet.C2S.Move.Encoded(p).Send();
-            }
-            else
-            {
-                hero.IssueOrder(order, target);
-            }
-        }
-
-        public static void IssueOrderEx(this Obj_AI_Base hero, GameObjectOrder order, Vector3 point, bool packet = false)
-        {
-            if (packet)
-            {
-                var p = new Packet.C2S.Move.Struct
-                {
-                    MoveType = (byte) order,
-                    SourceNetworkId = hero.NetworkId,
-                    X = point.X,
-                    Y = point.Y
-                };
-
-                switch (order)
-                {
-                    case GameObjectOrder.HoldPosition:
-                        p.X = hero.ServerPosition.X;
-                        p.Y = hero.ServerPosition.Y;
-                        break;
-                }
-
-                Packet.C2S.Move.Encoded(p).Send();
-            }
-            else
-            {
-                hero.IssueOrder(order, point);
-            }
-        }
-
         public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
         {
-            return item != null && item.IsReady() && target.IsValidTarget(item.Range);
+            return item.IsReady() && target.IsValidTarget(item.Range);
         }
 
         public static bool CastCheck(this Spell spell,

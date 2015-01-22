@@ -58,22 +58,22 @@ namespace Support.Plugins
             
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.CastOnUnit(Target, UsePackets);
+                    Q.CastOnUnit(Target);
                 }
 
                 if (Player.Distance(Target) >= 575 && !Target.IsFacing(Player) && W.CastCheck(Target, "ComboW"))
                 {
-                    W.CastOnUnit(Target, UsePackets);
+                    W.CastOnUnit(Target);
                 }
 
                 if (Target.IsValidTarget(W.Range) && W.CastCheck(Target, "ComboW"))
                 {
-                    W.CastOnUnit(Target, UsePackets);
+                    W.CastOnUnit(Target);
                 }
 
                 if (Target.IsValidTarget(E.Range) && W.CastCheck(Target, "ComboE"))
                 {
-                    E.CastOnUnit(Target, UsePackets);
+                    E.CastOnUnit(Target);
                 }
 
                 if (R.IsReady())

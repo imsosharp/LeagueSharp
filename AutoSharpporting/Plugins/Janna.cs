@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Janna.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Janna.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -38,8 +38,6 @@ namespace Support.Plugins
 
     public class Janna : PluginBase
     {
-        private int LastQInterrupt { get; set; }
-
         public Janna()
         {
             Q = new Spell(SpellSlot.Q, 1100);
@@ -47,12 +45,13 @@ namespace Support.Plugins
             E = new Spell(SpellSlot.E, 800);
             R = new Spell(SpellSlot.R, 550);
 
-            Q.SetSkillshot(0.25f, 150f, 900f, false, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 120f, 900f, false, SkillshotType.SkillshotLine);
             GameObject.OnCreate += TowerAttackOnCreate;
             GameObject.OnCreate += RangeAttackOnCreate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 
+        private int LastQInterrupt { get; set; }
         private bool IsUltChanneling { get; set; }
 
         public override void OnUpdate(EventArgs args)
@@ -78,18 +77,18 @@ namespace Support.Plugins
                         var pred = Q.GetPrediction(Target);
                         if (pred.Hitchance >= HitChance.High)
                         {
-                            Q.Cast(pred.CastPosition, UsePackets);
+                            Q.Cast(pred.CastPosition);
                             Q.Cast();
                         }
                     }
 
                     if (W.CastCheck(Target, "Combo.W"))
                     {
-                        W.CastOnUnit(Target, UsePackets);
+                        W.CastOnUnit(Target);
                     }
 
                     var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.R.Health").Value, R.Range);
-                    if (R.CastCheck(ally, "Combo.R", true, false) && Player.CountEnemysInRange(1000) > 0)
+                    if (R.CastCheck(ally, "Combo.R", true, false) && Player.CountEnemiesInRange(1000) > 0)
                     {
                         R.Cast();
                     }
@@ -99,7 +98,7 @@ namespace Support.Plugins
                 {
                     if (W.CastCheck(Target, "Harass.W"))
                     {
-                        W.CastOnUnit(Target, UsePackets);
+                        W.CastOnUnit(Target);
                     }
                 }
             }
@@ -130,26 +129,26 @@ namespace Support.Plugins
                 var spell = args.SData.Name;
                 var caster = (Obj_AI_Hero) sender;
 
-                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.CountEnemysInRange(2000) > 0)
+                if (DamageBoostDatabase.Spells.Any(s => s.Spell == spell) && caster.CountEnemiesInRange(2000) > 0)
                 {
                     switch (ConfigValue<Slider>("Misc.E.Spell." + args.SData.Name).Value) // prio 0 = disabled
                     {
                         case 1:
                             if (Player.ManaPercentage() > ConfigValue<Slider>("Mana.E.Priority.1").Value)
                             {
-                                E.CastOnUnit(caster, UsePackets);
+                                E.CastOnUnit(caster);
                             }
                             break;
                         case 2:
                             if (Player.ManaPercentage() > ConfigValue<Slider>("Mana.E.Priority.2").Value)
                             {
-                                E.CastOnUnit(caster, UsePackets);
+                                E.CastOnUnit(caster);
                             }
                             break;
                         case 3:
                             if (Player.ManaPercentage() > ConfigValue<Slider>("Mana.E.Priority.3").Value)
                             {
-                                E.CastOnUnit(caster, UsePackets);
+                                E.CastOnUnit(caster);
                             }
                             break;
                     }
@@ -185,7 +184,7 @@ namespace Support.Plugins
             if (E.IsReady() && E.IsInRange(caster) && (ComboMode || HarassMode) &&
                 ConfigValue<bool>("Misc.E.AA." + caster.ChampionName))
             {
-                E.CastOnUnit(caster, UsePackets);
+                E.CastOnUnit(caster);
             }
         }
 
@@ -208,7 +207,7 @@ namespace Support.Plugins
 
                     if (E.IsInRange(turret))
                     {
-                        E.CastOnUnit(turret, UsePackets);
+                        E.CastOnUnit(turret);
                     }
                 }
             }
@@ -226,14 +225,14 @@ namespace Support.Plugins
                 var pred = Q.GetPrediction(gapcloser.Sender);
                 if (pred.Hitchance >= HitChance.Medium)
                 {
-                    Q.Cast(pred.CastPosition, UsePackets);
+                    Q.Cast(pred.CastPosition);
                     Q.Cast();
                 }
             }
 
             if (W.CastCheck(gapcloser.Sender, "Gapcloser.W"))
             {
-                W.CastOnUnit(gapcloser.Sender, UsePackets);
+                W.CastOnUnit(gapcloser.Sender);
             }
         }
 
@@ -249,7 +248,7 @@ namespace Support.Plugins
                 var pred = Q.GetPrediction(unit);
                 if (pred.Hitchance >= HitChance.Medium)
                 {
-                    Q.Cast(pred.CastPosition, UsePackets);
+                    Q.Cast(pred.CastPosition);
                     Q.Cast();
                     LastQInterrupt = Environment.TickCount;
                     return;

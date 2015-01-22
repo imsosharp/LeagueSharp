@@ -31,19 +31,19 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (W.IsReady() && (Player.HealthPercentage() < 20 || (!Q.IsReady() && !E.IsReady() && !R.IsReady())))
                 {
-                    W.Cast(Player.Position, UsePackets);
+                    W.Cast(Player.Position);
                 }
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target, UsePackets);
+                    E.Cast(Target);
                 }
                 if (R.CastCheck(Target, "ComboRKS"))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
             }
 
@@ -63,7 +63,7 @@ namespace Support.Plugins
                     {
                         if (R.CastCheck(Target, "ComboRKS"))
                         {
-                            R.CastOnUnit(target, UsePackets);
+                            R.CastOnUnit(target);
                             return;
                         }
                     }

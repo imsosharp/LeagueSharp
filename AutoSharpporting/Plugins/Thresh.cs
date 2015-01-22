@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Thresh.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Thresh.cs
 // Created:  06/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -28,14 +28,12 @@ namespace Support.Plugins
     #region
 
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
     using Support.Util;
     using ActiveGapcloser = Support.Util.ActiveGapcloser;
-    using Collision = LeagueSharp.Common.Collision;
 
     #endregion
 
@@ -81,7 +79,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "ComboQ") && FollowQBlock)
                     {
-                        if (Q.Cast(Target, UsePackets) == Spell.CastStates.SuccessfullyCasted)
+                        if (Q.Cast(Target) == Spell.CastStates.SuccessfullyCasted)
                         {
                             _qTick = Environment.TickCount;
                             _qTarget = Target;
@@ -104,11 +102,11 @@ namespace Support.Plugins
                     {
                         if (Helpers.AllyBelowHp(ConfigValue<Slider>("ComboHealthE").Value, E.Range) != null)
                         {
-                            E.Cast(Target.Position, UsePackets);
+                            E.Cast(Target.Position);
                         }
                         else
                         {
-                            E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
+                            E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position));
                         }
                     }
 
@@ -125,7 +123,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "HarassQ") && FollowQBlock)
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (W.CastCheck(Target, "HarassW"))
@@ -137,11 +135,11 @@ namespace Support.Plugins
                     {
                         if (Helpers.AllyBelowHp(ConfigValue<Slider>("HarassHealthE").Value, E.Range) != null)
                         {
-                            E.Cast(Target.Position, UsePackets);
+                            E.Cast(Target.Position);
                         }
                         else
                         {
-                            E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position), UsePackets);
+                            E.Cast(Helpers.ReversePosition(ObjectManager.Player.Position, Target.Position));
                         }
                     }
                 }
@@ -149,22 +147,6 @@ namespace Support.Plugins
             catch (Exception e)
             {
                 Console.WriteLine(e);
-            }
-        }
-
-        public override void OnBeforeEnemyAttack(BeforeEnemyAttackEventArgs args)
-        {
-            if (Q.CastCheck(args.Caster, "Misc.Q.OnAttack") && (ComboMode || HarassMode) && args.Caster == Target &&
-                args.Type == Packet.AttackTypePacket.TargetedAA)
-            {
-                var collision = Collision.GetCollision(
-                    new List<Vector3> { args.Caster.Position },
-                    new PredictionInput { Delay = 0.5f, Radius = 70, Speed = 1900 });
-
-                if (collision.Count == 0)
-                {
-                    Q.Cast(args.Caster.Position, UsePackets);
-                }
             }
         }
 
@@ -177,7 +159,7 @@ namespace Support.Plugins
 
             if (E.CastCheck(gapcloser.Sender, "GapcloserE"))
             {
-                E.Cast(gapcloser.Start, UsePackets);
+                E.Cast(gapcloser.Start);
             }
         }
 
@@ -190,7 +172,7 @@ namespace Support.Plugins
 
             if (E.CastCheck(unit, "InterruptE"))
             {
-                E.Cast(unit.Position, UsePackets);
+                E.Cast(unit.Position);
             }
         }
 
@@ -211,11 +193,6 @@ namespace Support.Plugins
             config.AddBool("HarassW", "Use W for Safe", true);
             config.AddBool("HarassE", "Use E", true);
             config.AddSlider("HarassHealthE", "Push Targets away if low HP", 20, 1, 100);
-        }
-
-        public override void MiscMenu(Menu config)
-        {
-            config.AddBool("Misc.Q.OnAttack", "Hook Target on Attack", true);
         }
 
         public override void InterruptMenu(Menu config)

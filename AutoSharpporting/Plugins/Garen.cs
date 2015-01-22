@@ -60,7 +60,7 @@ namespace Support.Plugins
                     {
                         if (R.CastCheck(Target, "ComboRKS"))
                         {
-                            R.CastOnUnit(target, UsePackets);
+                            R.CastOnUnit(target);
                             return;
                         }
                     }

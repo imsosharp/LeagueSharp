@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Alistar.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Alistar.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -58,9 +58,9 @@ namespace Support.Plugins
 
                 if (Q.IsReady() && W.CastCheck(Target, "Combo.W"))
                 {
-                    W.CastOnUnit(Target, UsePackets);
+                    W.CastOnUnit(Target);
                     var jumpTime = Math.Max(0, Player.Distance(Target) - 500) * 10 / 25 + 25;
-                    Utility.DelayAction.Add((int)jumpTime, () => Q.Cast());
+                    Utility.DelayAction.Add((int) jumpTime, () => Q.Cast());
                 }
 
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("Combo.E.Health").Value, E.Range);
@@ -94,7 +94,7 @@ namespace Support.Plugins
 
             if (W.CastCheck(gapcloser.Sender, "Gapcloser.W"))
             {
-                W.CastOnUnit(gapcloser.Sender, UsePackets);
+                W.CastOnUnit(gapcloser.Sender);
             }
         }
 
@@ -112,7 +112,7 @@ namespace Support.Plugins
 
             if (W.CastCheck(unit, "Interrupt.W"))
             {
-                W.CastOnUnit(unit, UsePackets);
+                W.CastOnUnit(unit);
             }
         }
 

@@ -38,12 +38,12 @@ namespace Support.Plugins
                 }
                 if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
 
                 if (R.CastCheck(targetR, "ComboR") && R.IsKillable(targetR) )
                 {
-                    R.Cast(targetR, UsePackets);
+                    R.Cast(targetR);
                 }
             }
 
@@ -51,7 +51,7 @@ namespace Support.Plugins
             {
                 if (W.CastCheck(Target, "HarassW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
             }
         }
@@ -65,7 +65,7 @@ namespace Support.Plugins
 
             if (R.CastCheck(unit, "Interrupt.R"))
             {
-                R.Cast(unit, UsePackets);
+                R.Cast(unit);
                 return;
             }
         

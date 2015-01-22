@@ -43,7 +43,7 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target, UsePackets);
+                    Q.Cast(Target);
                 }
                 if (Player.Distance(Target) <= E.Range && Player.HealthPercentage() > 30 && E.CastCheck(Target, "ComboE"))
                 {

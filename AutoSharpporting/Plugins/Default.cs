@@ -32,7 +32,7 @@ namespace Support.Plugins
         {
             Q = new Spell(SpellSlot.Q, 600);
             W = new Spell(SpellSlot.W, 450);
-            E = new Spell(SpellSlot.E);
+            E = new Spell(SpellSlot.E, 200);
             R = new Spell(SpellSlot.R, 600);
             Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
@@ -52,7 +52,12 @@ namespace Support.Plugins
                 if (W.CastCheck(Target, "ComboW"))
                 {
                     W.Cast(Target, false);
-				}
+                }
+                if (E.CastCheck(Target, "ComboE"))
+                {
+                    E.Cast(Target, false);
+                }
+
                 if (R.CastCheck(Target, "ComboR"))
                 {
                     R.Cast(Target, false);

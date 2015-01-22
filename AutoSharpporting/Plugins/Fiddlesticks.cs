@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // FiddleSticks.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/FiddleSticks.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -51,12 +51,12 @@ namespace Support.Plugins
             {
                 if (Q.CastCheck(Target, "Combo.Q"))
                 {
-                    Q.CastOnUnit(Target, UsePackets);
+                    Q.CastOnUnit(Target);
                 }
 
                 if (E.CastCheck(Target, "Combo.E"))
                 {
-                    E.CastOnUnit(Target, UsePackets);
+                    E.CastOnUnit(Target);
                 }
             }
 
@@ -64,7 +64,7 @@ namespace Support.Plugins
             {
                 if (E.CastCheck(Target, "Harass.E"))
                 {
-                    E.CastOnUnit(Target, UsePackets);
+                    E.CastOnUnit(Target);
                 }
             }
         }
@@ -78,7 +78,7 @@ namespace Support.Plugins
 
             if (Q.CastCheck(gapcloser.Sender, "Gapcloser.Q"))
             {
-                Q.CastOnUnit(gapcloser.Sender, UsePackets);
+                Q.CastOnUnit(gapcloser.Sender);
             }
         }
 
@@ -91,13 +91,13 @@ namespace Support.Plugins
 
             if (Q.CastCheck(unit, "Interrupt.Q"))
             {
-                Q.CastOnUnit(unit, UsePackets);
+                Q.CastOnUnit(unit);
                 return;
             }
 
             if (E.CastCheck(unit, "Interrupt.E"))
             {
-                E.CastOnUnit(unit, UsePackets);
+                E.CastOnUnit(unit);
             }
         }
 

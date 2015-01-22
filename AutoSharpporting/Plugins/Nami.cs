@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Nami.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Nami.cs
 // Created:  01/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -85,7 +85,7 @@ namespace Support.Plugins
 
             if (E.IsReady() && E.IsInRange(missile.SpellCaster) && ConfigValue<bool>("Misc.E.AA." + caster.ChampionName))
             {
-                E.CastOnUnit(caster, UsePackets); // add delay
+                E.CastOnUnit(caster); // add delay
             }
         }
 
@@ -97,7 +97,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "ComboQ")) // TODO: add check for slowed targets by E or FrostQeen
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (W.IsReady() && ConfigValue<bool>("ComboW"))
@@ -107,7 +107,7 @@ namespace Support.Plugins
 
                     if (R.CastCheck(Target, "ComboR"))
                     {
-                        R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value, UsePackets);
+                        R.CastIfWillHit(Target, ConfigValue<Slider>("ComboCountR").Value);
                     }
                 }
 
@@ -115,7 +115,7 @@ namespace Support.Plugins
                 {
                     if (Q.CastCheck(Target, "HarassQ"))
                     {
-                        Q.Cast(Target, UsePackets);
+                        Q.Cast(Target);
                     }
 
                     if (W.IsReady() && ConfigValue<bool>("HarassW"))
@@ -165,12 +165,12 @@ namespace Support.Plugins
 
             if (Q.CastCheck(gapcloser.Sender, "GapcloserQ"))
             {
-                Q.Cast(gapcloser.Sender, UsePackets);
+                Q.Cast(gapcloser.Sender);
             }
 
             if (R.CastCheck(gapcloser.Sender, "GapcloserR"))
             {
-                R.Cast(gapcloser.Sender, UsePackets);
+                R.Cast(gapcloser.Sender);
             }
         }
 
@@ -183,12 +183,12 @@ namespace Support.Plugins
 
             if (Q.CastCheck(unit, "InterruptQ"))
             {
-                Q.Cast(unit, UsePackets);
+                Q.Cast(unit);
             }
 
             if (!Q.IsReady() && R.CastCheck(unit, "InterruptR"))
             {
-                R.Cast(unit, UsePackets);
+                R.Cast(unit);
             }
         }
 

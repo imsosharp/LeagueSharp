@@ -36,7 +36,7 @@ namespace Support.Plugins
             {
                 if (E.CastCheck(Target, "ComboE") && ShouldE(Target))
                 {
-                    E.CastOnUnit(Target, UsePackets);
+                    E.CastOnUnit(Target);
                 }
 
                 //Q
@@ -74,8 +74,8 @@ namespace Support.Plugins
                 {
                     if (R.IsReady() && E.IsReady())
                     {
-                        E.CastOnUnit(target, UsePackets);
-                        R.CastOnUnit(target, UsePackets);
+                        E.CastOnUnit(target);
+                        R.CastOnUnit(target);
                         return;
                     }
                 }
@@ -87,7 +87,7 @@ namespace Support.Plugins
                 {
                     if (W.IsReady() && R.IsReady())
                     {
-                        W.Cast(target, UsePackets);
+                        W.Cast(target);
                         return;
                     }
                 }
@@ -109,7 +109,7 @@ namespace Support.Plugins
                 {
                     if (E.IsReady())
                     {
-                        E.CastOnUnit(target, UsePackets);
+                        E.CastOnUnit(target);
                         return;
                     }
                 }
@@ -124,7 +124,7 @@ namespace Support.Plugins
             Vector3 castBehind = pred.CastPosition + Vector3.Normalize(vec) * 125;
 
             if (W.IsReady())
-                W.Cast(castBehind, UsePackets);
+                W.Cast(castBehind);
         }
 
 

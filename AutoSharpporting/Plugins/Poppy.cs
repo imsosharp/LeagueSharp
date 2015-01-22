@@ -82,7 +82,7 @@ namespace Support.Plugins
             if (target == null) return;
 
 
-            if (Player.CountEnemysInRange(500) >= 2)
+            if (Player.CountEnemiesInRange(500) >= 2)
             {
                 foreach (
                    var hero in from hero in ObjectManager.Get<Obj_AI_Hero>().Where(hero => hero.IsValidTarget(R.Range) && hero.IsEnemy && !hero.IsDead && IsSupport(hero))

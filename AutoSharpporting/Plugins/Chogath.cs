@@ -33,15 +33,15 @@ namespace Support.Plugins
 
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
                 if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target, UsePackets);
+                    W.Cast(Target);
                 }
                 if (R.CastCheck(Target, "ComboR") && R.IsKillable(Target))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target);
                 }
             }
         
@@ -81,12 +81,12 @@ namespace Support.Plugins
 
             if (Q.CastCheck(unit, "Interrupt.Q"))
             {
-                Q.Cast(unit, UsePackets);
+                Q.Cast(unit);
                 return;
             }
             if (W.CastCheck(unit, "Interrupt.W"))
             {
-                W.Cast(unit, UsePackets);
+                W.Cast(unit);
                 return;
             }
 

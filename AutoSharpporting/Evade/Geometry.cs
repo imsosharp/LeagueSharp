@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // Geometry.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/Geometry.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -91,7 +91,6 @@ namespace Support.Evade
             return polygon;
         }
 
-
         public static List<List<IntPoint>> ClipPolygons(List<Polygon> polygons)
         {
             var subj = new List<List<IntPoint>>(polygons.Count);
@@ -111,7 +110,6 @@ namespace Support.Evade
 
             return solution;
         }
-
 
         public class Circle
         {
@@ -213,7 +211,6 @@ namespace Support.Evade
                 return result;
             }
         }
-
 
         public class Ring
         {

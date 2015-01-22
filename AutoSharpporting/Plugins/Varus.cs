@@ -35,7 +35,7 @@ namespace Support.Plugins
                 {
                     E.Cast(Target);
                 }
-                if (R.IsReady() && Target.CountEnemysInRange(1000) >=2)
+                if (R.IsReady() && Target.CountEnemiesInRange(1000) >=2)
                 {
                         Vector3 searchPos;
 

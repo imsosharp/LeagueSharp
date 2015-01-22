@@ -1,6 +1,6 @@
 ﻿#region LICENSE
 
-// Copyright 2014 Support
+// Copyright 2014-2015 Support
 // EvadeSpellData.cs is part of Support.
 // 
 // Support is free software: you can redistribute it and/or modify
@@ -18,7 +18,7 @@
 // 
 // Filename: Support/Support/EvadeSpellData.cs
 // Created:  05/10/2014
-// Date:     26/12/2014/16:23
+// Date:     20/01/2015/11:20
 // Author:   h3h3
 
 #endregion
@@ -40,7 +40,7 @@ namespace Support.Evade
         EnemyWards,
 
         AllyChampions,
-        EnemyChampions,
+        EnemyChampions
     }
 
     /// <summary>
@@ -50,12 +50,12 @@ namespace Support.Evade
     {
         public delegate float MoveSpeedAmount();
 
+        public int _dangerLevel;
         public bool CanShieldAllies;
         public string CheckSpellName = "";
         public int Delay;
         public bool FixedRange;
         public bool Invert;
-
         public bool IsBlink;
         public bool IsDash;
         public bool IsInvulnerability;
@@ -63,19 +63,14 @@ namespace Support.Evade
         public bool IsShield;
         public bool IsSpellShield;
         public bool IsSummonerSpell;
-
         public float MaxRange;
         public MoveSpeedAmount MoveSpeedTotalAmount;
         public string Name;
         public bool RequiresPreMove;
         public bool SelfCast;
         public SpellSlot Slot;
-
         public int Speed;
         public SpellValidTargets[] ValidTargets;
-
-        public int _dangerLevel;
-
         public EvadeSpellData() {}
 
         public EvadeSpellData(string name, int dangerLevel)

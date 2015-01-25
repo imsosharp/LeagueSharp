@@ -132,7 +132,7 @@ namespace Support.Util
 
         public static bool CastCheck(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
         {
-            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team);
+            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team) && !ObjectManager.Player.UnderTurret(true);
         }
 
         public static bool IsInRange(this Spell spell, Obj_AI_Base target)

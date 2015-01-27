@@ -43,7 +43,7 @@
                     {
                             pressedf5 = false;
                     }
-					cout << "Paused for 5 seconds -- CPU LOAD FIX" << endl;
+					cout << "Waiting for new LoL instance" << endl;
      
             }
     }

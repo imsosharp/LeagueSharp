@@ -190,7 +190,7 @@ namespace NiceGuySharp
                     {
                         if (message != null)
                         {
-                            Game.Say(message);
+                            Utility.DelayAction.Add(message.Length * (new Random(Environment.TickCount).Next(100, 300)), () => Game.Say(message));
                         }
                     }
                 }

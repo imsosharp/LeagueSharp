@@ -146,7 +146,16 @@ namespace Support
             }
             if (Bot.InFountain())
             {
-                return (Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f);
+                if ((Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f))
+                {
+                    Console.WriteLine("Infountain check true");
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Infountain check false");
+                    return false;
+                }
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {

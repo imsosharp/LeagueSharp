@@ -61,7 +61,7 @@ namespace Support
 
         public static bool RandomDecision()
         {
-            return Rand.Next(0, 20) > 10; //Hi there riot games ^^
+            return Rand.Next(0, 20) > 5; //Hi there riot games ^^
         }
 
         private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -158,10 +158,12 @@ namespace Support
 
         public static void DoAutoplay()
         {
+            /*
             if (Bot.InFountain() && RandomDecision())
             {
                 WalkAround(Bot.Position);
             }
+             */
             var timeElapsed = Environment.TickCount - _loaded;
             if (!Bot.IsDead)
             {

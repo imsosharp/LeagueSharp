@@ -167,7 +167,7 @@ namespace Support
             {
                 try
                 {
-                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot) < 1200);
+                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot.ServerPosition) < 1200);
                     if (_overrideAttackUnitAction && !_tookRecallDecision)
                     {
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
@@ -178,7 +178,7 @@ namespace Support
                     }
                     if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe() && !_tookRecallDecision)
                     {
-                            if (turret.Distance(Bot) < Bot.AttackRange && !_overrideAttackUnitAction)
+                            if (turret.Distance(Bot.ServerPosition) < Bot.AttackRange && !_overrideAttackUnitAction)
                                 Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
                     }
                     else
@@ -213,13 +213,13 @@ namespace Support
                             {
                                 if (
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && hero.Distance(Bot) < 4500 && !MetaHandler.HasSmite(hero)) !=
+                                        hero => !hero.IsMe && hero.Distance(Bot.ServerPosition) < 4500 && !MetaHandler.HasSmite(hero)) !=
                                     null)
                                 {
                                     Carry =
                                         MetaHandler.AllyHeroes.FirstOrDefault(
                                             hero =>
-                                                !hero.IsMe && hero.Distance(Bot) < 4500 && !MetaHandler.HasSmite(hero));
+                                                !hero.IsMe && hero.Distance(Bot.ServerPosition) < 4500 && !MetaHandler.HasSmite(hero));
                                 }
                             }
                             if (timeElapsed > 60000 && MetaHandler.ShouldSupportTopLane)
@@ -309,7 +309,7 @@ namespace Support
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 if (!(_tempcarry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(_tempcarry, 400) < 2) && IsBotSafe())
                                 {
-                                    if (_tempcarry.Distance(Bot) > 550 && !_tookRecallDecision)
+                                    if (_tempcarry.Distance(Bot.ServerPosition) > 550 && !_tookRecallDecision)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                         WalkAround(_tempcarry);
@@ -325,7 +325,7 @@ namespace Support
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
-                        if (Carry.Distance(Bot) > 550 && !_tookRecallDecision)
+                        if (Carry.Distance(Bot.ServerPosition) > 550 && !_tookRecallDecision)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                         }
@@ -466,7 +466,7 @@ namespace Support
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
                 }
-                if (_orbwalkingpos != null && Bot.Distance(follow) < 550 && !_tookRecallDecision)
+                if (_orbwalkingpos != null && Bot.Distance(follow.ServerPosition) < 550 && !_tookRecallDecision)
                 {
                     Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
                     _stepTime = Environment.TickCount;

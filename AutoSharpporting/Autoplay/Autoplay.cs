@@ -24,6 +24,11 @@ namespace Support
     {
         public const int Blue = 200;
         public const int Purple = -200;
+        public const List<string> Manaless = new List<string> { "DrMundo", "Aatrox", "Mordekaiser",
+                                                                "Vladimir", "Zac", "Akali", "Kennen", "LeeSin", 
+                                                                "Shen", "Zed", "Garen", "Gnar", "Katarina", 
+                                                                "RekSai", "Renekton", "Rengar", "Riven", "Rumble", 
+                                                                "Shyvana", "Tryndamere", "Yasuo" };
         public static Obj_AI_Hero Bot = ObjectManager.Player;
         public static Obj_AI_Hero Carry;
         public static Obj_AI_Hero NearestAllyHero;
@@ -146,7 +151,7 @@ namespace Support
             }
             if (Bot.InFountain())
             {
-                if ((Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f) || (Bot.Health > Bot.MaxHealth * 0.9f) && Bot.MaxMana == 0)
+                if ((Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f) || (Bot.Health > Bot.MaxHealth * 0.9f) && Manaless.Any(s => s.Equals(ObjectManager.Player.ChampionName, StringComparison.OrdinalIgnoreCase)))
                 {  
                     return true;
                 }

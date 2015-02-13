@@ -151,7 +151,7 @@ namespace Support
             }
             if (Bot.InFountain())
             {
-                if ((Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f) || (Bot.Health > Bot.MaxHealth * 0.9f) && Manaless.Any(s => s.Equals(ObjectManager.Player.ChampionName, StringComparison.OrdinalIgnoreCase)))
+                if ((Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f) || (Bot.Health > Bot.MaxHealth * 0.9f) && Manaless.Any(s => s.Equals(ObjectManager.Player.ChampionName)))
                 {  
                     return true;
                 }

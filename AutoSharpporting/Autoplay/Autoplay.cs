@@ -24,7 +24,7 @@ namespace Support
     {
         public const int Blue = 200;
         public const int Purple = -200;
-        public static readonly List<string> Manaless = new List<string> { "DrMundo", "Aatrox", "Mordekaiser",
+        public static List<string> Manaless = new List<string> { "DrMundo", "Aatrox", "Mordekaiser",
                                                                 "Vladimir", "Zac", "Akali", "Kennen", "LeeSin", 
                                                                 "Shen", "Zed", "Garen", "Gnar", "Katarina", 
                                                                 "RekSai", "Renekton", "Rengar", "Riven", "Rumble", 

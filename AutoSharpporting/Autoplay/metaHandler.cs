@@ -215,7 +215,11 @@ namespace Support
 
         public static bool ShouldSupportTopLane
         {
-            get { return false; }
+            get
+            {
+                return NearbyAllies(Autoplay.BotLanePos.To3D(), 4500) > 1 &&
+                    NearbyAllies(Autoplay.TopLanePos.To3D(), 4500) == 1;
+            }
         }
     }
        

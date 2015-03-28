@@ -55,7 +55,7 @@ namespace Support
         public Autoplay()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
-            Game.OnGameUpdate += OnUpdate;
+            Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 

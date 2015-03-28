@@ -73,7 +73,7 @@ namespace Support
         /// </summary>
         private void InitPluginEvents()
         {
-            Game.OnGameUpdate += OnUpdate;
+            Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += OnBeforeAttack;
             Orbwalking.AfterAttack += OnAfterAttack;

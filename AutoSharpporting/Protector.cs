@@ -119,14 +119,14 @@ namespace Support
                 Revealer = new AutoBushRevealer(Menu.SubMenu("Misc"));
 
                 // Internal events
-                Game.OnGameUpdate += OnGameUpdate;
+                Game.OnUpdate += OnGameUpdate;
                 SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
                 Obj_AI_Base.OnProcessSpellCast += HeroOnProcessSpellCast;
                 Obj_AI_Base.OnProcessSpellCast += TurretOnProcessSpellCast;
                 GameObject.OnCreate += SpellMissile_OnCreate;
 
                 // Actives
-                Game.OnGameUpdate += CcCheck;
+                Game.OnUpdate += CcCheck;
                 OnSkillshotProtection += ProtectorOnOnSkillshotProtection;
                 OnTargetedProtection += ProtectorOnOnTargetedProtection;
 

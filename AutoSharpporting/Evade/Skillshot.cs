@@ -222,7 +222,7 @@ namespace Support.Evade
         //    return _cachedValue;
         //}
 
-        public void Game_OnGameUpdate()
+        public void Game_OnUpdate()
         {
             //Even if it doesnt consume a lot of resources with 20 updatest second works k
             if (SpellData.CollisionObjects.Count() > 0 && SpellData.CollisionObjects != null &&

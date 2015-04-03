@@ -40,29 +40,8 @@ namespace Support
             CustomEvents.Game.OnGameLoad += a =>
             {
                 Helpers.UpdateCheck();
-                try
-                {
-                    var type = Type.GetType("Support.Plugins." + ObjectManager.Player.ChampionName);
-
-                    if (type != null)
-                    {
-                        Protector.Init();
-                        Activator.CreateInstance(type);
-                        return;
-                    }
-                        type = Type.GetType("Support.Plugins.Default");
-                    if (type != null)
-                    {
-                        Protector.Init();
-                        Activator.CreateInstance(type);
-                        return;
-                    }
-                    Game.PrintChat("Something went wrong, tell sosharp.");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                Protector.Init();
+                new PluginLoader();
             };
 
             //Utils.EnableConsoleEditMode();

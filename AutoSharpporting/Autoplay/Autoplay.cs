@@ -55,7 +55,7 @@ namespace Support
         public Autoplay()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
-            Game.OnGameUpdate += OnUpdate;
+            Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 
@@ -167,7 +167,7 @@ namespace Support
             {
                 try
                 {
-                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot) < 1200);
+                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot.Position) < 1200);
                     if (_overrideAttackUnitAction && !_tookRecallDecision)
                     {
                         Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
@@ -178,7 +178,7 @@ namespace Support
                     }
                     if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe() && !_tookRecallDecision)
                     {
-                            if (turret.Distance(Bot) < Bot.AttackRange && !_overrideAttackUnitAction)
+                            if (turret.Distance(Bot.Position) < Bot.AttackRange && !_overrideAttackUnitAction)
                                 Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
                     }
                     else
@@ -213,13 +213,13 @@ namespace Support
                             {
                                 if (
                                     MetaHandler.AllyHeroes.FirstOrDefault(
-                                        hero => !hero.IsMe && hero.Distance(Bot) < 4500 && !MetaHandler.HasSmite(hero)) !=
+                                        hero => !hero.IsMe && hero.Distance(Bot.Position) < 4500 && !MetaHandler.HasSmite(hero)) !=
                                     null)
                                 {
                                     Carry =
                                         MetaHandler.AllyHeroes.FirstOrDefault(
                                             hero =>
-                                                !hero.IsMe && hero.Distance(Bot) < 4500 && !MetaHandler.HasSmite(hero));
+                                                !hero.IsMe && hero.Distance(Bot.Position) < 4500 && !MetaHandler.HasSmite(hero));
                                 }
                             }
                             if (timeElapsed > 60000 && MetaHandler.ShouldSupportTopLane)

@@ -90,10 +90,14 @@ namespace Support
                 .SubMenu("Mana")
                 .AddItem(new MenuItem("ManaPercent", "MP Trigger Percent").SetValue(new Slider(30)));
 
-            Game.OnGameUpdate += OnGameUpdate;
+<<<<<<< HEAD
+            Game.OnUpdate += OnUpdate;
+=======
+            Game.OnUpdate += OnGameUpdate;
+>>>>>>> origin/master
         }
 
-        private void OnGameUpdate(EventArgs args)
+        private void OnUpdate(EventArgs args)
         {
             if (ObjectManager.Player.HasBuff("Recall") || ObjectManager.Player.InFountain())
                 return;

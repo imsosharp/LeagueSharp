@@ -93,17 +93,17 @@ namespace Support.Evade
 
             var missile = (Obj_SpellMissile) sender;
 
+<<<<<<< HEAD
+=======
 #if DEBUG
             if (missile.SpellCaster is Obj_AI_Hero)
             {
-                Console.WriteLine(
-                    Environment.TickCount + " Projectile Created: " + missile.SData.Name + " distance: " +
-                    missile.StartPosition.Distance(missile.EndPosition) + "Radius: " +
-                    missile.SData.CastRadiusSecondary[0] + " Speed: " + missile.SData.MissileSpeed);
+                
             }
 
 #endif
 
+>>>>>>> origin/master
 
             var unit = missile.SpellCaster;
             if (!unit.IsValid || (unit.Team == ObjectManager.Player.Team))

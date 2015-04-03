@@ -89,12 +89,7 @@ namespace Support
             ExtrasMenu.SubMenu("PotionManager")
                 .SubMenu("Mana")
                 .AddItem(new MenuItem("ManaPercent", "MP Trigger Percent").SetValue(new Slider(30)));
-
-<<<<<<< HEAD
             Game.OnUpdate += OnUpdate;
-=======
-            Game.OnUpdate += OnGameUpdate;
->>>>>>> origin/master
         }
 
         private void OnUpdate(EventArgs args)

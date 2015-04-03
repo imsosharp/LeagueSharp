@@ -119,11 +119,7 @@ namespace Support
                 Revealer = new AutoBushRevealer(Menu.SubMenu("Misc"));
 
                 // Internal events
-<<<<<<< HEAD
                 Game.OnUpdate += OnUpdate;
-=======
-                Game.OnUpdate += OnGameUpdate;
->>>>>>> origin/master
                 SkillshotDetector.OnDetectSkillshot += OnDetectSkillshot;
                 Obj_AI_Base.OnProcessSpellCast += HeroOnProcessSpellCast;
                 Obj_AI_Base.OnProcessSpellCast += TurretOnProcessSpellCast;

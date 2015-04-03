@@ -513,11 +513,7 @@ namespace Support.Util
 
             #endregion
 
-<<<<<<< HEAD
             Game.OnUpdate += Game_OnUpdate;
-=======
-            Game.OnUpdate += Game_OnGameUpdate;
->>>>>>> origin/master
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 

@@ -71,7 +71,7 @@ namespace Support.Util
                 useWardsMenu.AddItem(new MenuItem("AutoBush" + ward.Key, ward.Value).SetValue(true));
             }
 
-            //Game.OnUpdate += Game_OnUpdate; // TODO: wait for update
+            //Game.OnGameUpdate += Game_OnGameUpdate; // TODO: wait for update
         }
 
         private InventorySlot GetWardSlot()
@@ -90,7 +90,7 @@ namespace Support.Util
                 .FirstOrDefault(x => x.Name == name && x.Distance(pos) <= maxDistance);
         }
 
-        private void Game_OnUpdate(EventArgs args)
+        private void Game_OnGameUpdate(EventArgs args)
         {
             var time = Environment.TickCount;
 

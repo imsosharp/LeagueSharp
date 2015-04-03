@@ -513,13 +513,13 @@ namespace Support.Util
 
             #endregion
 
-            Game.OnUpdate += Game_OnUpdate;
+            Game.OnGameUpdate += Game_OnGameUpdate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         public static event OnGapcloseH OnEnemyGapcloser;
 
-        private static void Game_OnUpdate(EventArgs args)
+        private static void Game_OnGameUpdate(EventArgs args)
         {
             try
             {

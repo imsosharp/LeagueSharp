@@ -79,7 +79,6 @@
     <Compile Include="Autoplay\MetaHandler.cs" />
     <Compile Include="Autoplay\FileHandler.cs" />
     <Compile Include="Autoplay\TreesAutoLevel.cs" />
-    <Compile Include="PluginLoader.cs" />
     <Compile Include="Plugins\Aatrox.cs" />
     <Compile Include="Plugins\Ahri.cs" />
     <Compile Include="Plugins\Akali.cs" />
@@ -104,19 +103,15 @@
     <Compile Include="Plugins\Heimerdinger.cs" />
     <Compile Include="Plugins\Irelia.cs" />
     <Compile Include="Plugins\JarvanIV.cs" />
-    <Compile Include="Plugins\Karthus.cs" />
     <Compile Include="Plugins\Katarina.cs" />
     <Compile Include="Plugins\Kogmaw.cs" />
     <Compile Include="Plugins\Leblanc.cs" />
     <Compile Include="Plugins\Lux.cs" />
-    <Compile Include="Plugins\Malzahar.cs" />
     <Compile Include="Plugins\Masteryi.cs" />
     <Compile Include="Plugins\Poppy.cs" />
     <Compile Include="Plugins\Riven.cs" />
     <Compile Include="Plugins\Ryze.cs" />
-    <Compile Include="Plugins\Shaco.cs" />
     <Compile Include="Plugins\Sivir.cs" />
-    <Compile Include="Plugins\Skarner.cs" />
     <Compile Include="Plugins\Varus.cs" />
     <Compile Include="Plugins\Warwick.cs" />
     <Compile Include="Plugins\Amumu.cs" />

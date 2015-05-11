@@ -23,7 +23,7 @@
 
 #endregion
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
     #region
 
@@ -32,8 +32,8 @@ namespace Support.Plugins
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
-    using Support.Util;
-    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using AutoSharpporting.Util;
+    using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
 
     #endregion
 

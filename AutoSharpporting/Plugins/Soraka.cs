@@ -19,13 +19,13 @@
 
 using LeagueSharp;
 using LeagueSharp.Common;
-using Support.Util;
+using AutoSharpporting.Util;
 using System;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
 
 #endregion
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
     public class Soraka : PluginBase
     {

@@ -9,7 +9,7 @@ using LeagueSharp.Common;
 
 #endregion
 
-namespace Support
+namespace AutoSharpporting.Autoplay
 {
     internal class TreesAutoLevel
     {

@@ -23,7 +23,7 @@
 
 #endregion
 
-namespace Support
+namespace AutoSharpporting
 {
     #region
 
@@ -35,9 +35,9 @@ namespace Support
     using LeagueSharp.Common;
     using SharpDX;
     using System.Drawing;
-    using Support.Util;
-    using ActiveGapcloser = Support.Util.ActiveGapcloser;
-    using AntiGapcloser = Support.Util.AntiGapcloser;
+    using AutoSharpporting.Util;
+    using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+    using AntiGapcloser = AutoSharpporting.Util.AntiGapcloser;
     using Color = System.Drawing.Color;
     using Version = System.Version;
 
@@ -238,7 +238,7 @@ namespace Support
         /// <summary>
         ///     Orbwalker
         /// </summary>
-        public Orbwalking.Orbwalker Orbwalker { get; set; }
+        public static Orbwalking.Orbwalker Orbwalker { get; set; }
 
         /// <summary>
         ///     ActiveMode

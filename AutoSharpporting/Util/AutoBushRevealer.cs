@@ -23,7 +23,7 @@
 
 #endregion
 
-namespace Support.Util
+namespace AutoSharpporting.Util
 {
     #region
 

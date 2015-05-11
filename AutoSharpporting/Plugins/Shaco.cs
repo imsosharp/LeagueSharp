@@ -1,11 +1,11 @@
 ﻿using System;
-using Support.Util;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using LeagueSharp.Common.Data;
 using SharpDX;
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
 	public class Shaco : PluginBase
 	{

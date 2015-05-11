@@ -23,14 +23,14 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using Support.Evade;
-using Support.Util;
-using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using AutoSharpporting.Evade;
+using AutoSharpporting.Util;
+using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
 using SpellData = LeagueSharp.SpellData;
 
 #endregion
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
     public class Masteryi : PluginBase
     {

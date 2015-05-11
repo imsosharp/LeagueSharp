@@ -27,7 +27,7 @@
 
 #endregion
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
     #region
 
@@ -35,7 +35,7 @@ namespace Support.Plugins
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using Support.Util;
+    using AutoSharpporting.Util;
 
     #endregion
 

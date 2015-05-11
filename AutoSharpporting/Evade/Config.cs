@@ -23,7 +23,7 @@
 
 #endregion
 
-namespace Support.Evade
+namespace AutoSharpporting.Evade
 {
     internal static class Config
     {

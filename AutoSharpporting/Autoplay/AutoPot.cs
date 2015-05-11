@@ -7,7 +7,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace Support
+namespace AutoSharpporting.Autoplay
 {
     class PotionManager
     {

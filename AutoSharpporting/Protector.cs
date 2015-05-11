@@ -23,7 +23,7 @@
 
 #endregion
 
-namespace Support
+namespace AutoSharpporting
 {
     #region
 
@@ -33,8 +33,8 @@ namespace Support
     using LeagueSharp;
     using LeagueSharp.Common;
     using SharpDX;
-    using Support.Evade;
-    using Support.Util;
+    using AutoSharpporting.Evade;
+    using AutoSharpporting.Util;
     using Collision = Support.Evade.Collision;
     using SpellData = LeagueSharp.SpellData;
 

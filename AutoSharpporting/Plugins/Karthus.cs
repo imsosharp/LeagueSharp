@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Support.Util;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
     public class Karthus : PluginBase
     {

@@ -20,11 +20,11 @@
 using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-using Support.Util;
+using AutoSharpporting.Util;
 
 #endregion
 
-namespace Support.Plugins
+namespace AutoSharpporting.Plugins
 {
     public class Default : PluginBase
     {

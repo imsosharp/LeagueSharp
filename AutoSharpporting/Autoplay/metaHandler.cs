@@ -15,7 +15,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-namespace Support
+namespace AutoSharpporting.Autoplay
 {
     internal class MetaHandler
     {
@@ -26,24 +26,95 @@ namespace Support
         public static List<Obj_AI_Hero> AllHeroes;
         public static List<Obj_AI_Hero> AllyHeroes;
         public static List<Obj_AI_Hero> EnemyHeroes;
-        public static string[] Supports = { "Alistar", "Annie", "Blitzcrank", "Braum", "Fiddlesticks", "Janna", "Karma", "Kayle", "Leona", "Lulu", "Morgana", "Nunu", "Nami", "Soraka", "Sona", "Taric", "Thresh", "Zilean", "Zyra" };
+
+        public static string[] Supports =
+        {
+            "Alistar", "Annie", "Blitzcrank", "Braum", "Fiddlesticks", "Janna", "Karma",
+            "Kayle", "Leona", "Lulu", "Morgana", "Nunu", "Nami", "Soraka", "Sona", "Taric", "Thresh", "Zilean", "Zyra"
+        };
+
         public static string[] AP =
         {
-            "Ahri", "Akali", "Alistar", "Amumu", "Anivia", "Annie", "Azir", "Blitzcrank",
-            "Brand", "Braum", "Cassiopeia", "Chogath", "Diana", "Elise", "Evelynn", "Ezreal", "FiddleSticks", "Fizz",
-            "Galio", "Gragas", "Hecarim", "Heimerdinger", "Irelia", "Janna", "Jax", "Karma", "Karthus", "Kassadin",
-            "Katarina", "Kayle", "Kennen", "KogMaw", "LeBlanc", "Lissandra", "Lulu", "Lux", "Malphite", "Malzahar",
+            "Ahri",  "Alistar", "Anivia", "Annie", "Azir", 
+            "Brand", "Braum", "Cassiopeia", "Chogath", "Diana", "Elise", "Evelynn", "ezreal", "FiddleSticks", "Fizz",
+            "Galio", "Gragas", "Heimerdinger", "Janna", "Karma", "Karthus", "Kassadin",
+            "Kayle",  "KogMaw", "LeBlanc", "Lissandra", "Lulu", "Lux", "Malphite", "Malzahar",
             "Maokai", "Morderkaiser", "Morgana", "Nami", "Nautilus", "Nidalee", "Nunu", "Orianna", "RekSai", "Rumble",
-            "Ryze", "Shaco", "Singed", "Sona", "Soraka", "Swain", "Syndra", "Teemo", "Thresh", "TwistedFate", "veigar", "VelKoz",
-            "Viktor", "Vladimir", "Xerath", "XinZhao", "Yorick", "Ziggs", "Zilean", "Zyra"
+            "Ryze", "Shaco", "Singed", "Sona", "Soraka", "Swain", "Syndra", "Teemo", "Thresh", "TwistedFate", "veigar",
+            "VelKoz", "Viktor", "Vladimir", "Xerath", "Ziggs", "Zilean", "Zyra"
         };
-        static readonly ItemId[] SRShopList = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Morellonomicon, ItemId.Athenes_Unholy_Grail, ItemId.Rylais_Crystal_Scepter, ItemId.Mikaels_Crucible, ItemId.Frost_Queens_Claim, ItemId.Liandrys_Torment, ItemId.Lich_Bane, ItemId.Locket_of_the_Iron_Solari, ItemId.Rod_of_Ages, ItemId.Void_Staff, ItemId.Hextech_Gunblade, ItemId.Sorcerers_Shoes };
-        static readonly ItemId[] TTShopList = { ItemId.Wooglets_Witchcap, ItemId.Rod_of_Ages, ItemId.Rylais_Crystal_Scepter, ItemId.Lich_Bane, ItemId.Liandrys_Torment, ItemId.Morellonomicon, ItemId.Locket_of_the_Iron_Solari, ItemId.Void_Staff, ItemId.Sorcerers_Shoes };
-        static readonly ItemId[] ARAMShopListAP = { ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap, ItemId.Rod_of_Ages, ItemId.Rylais_Crystal_Scepter, ItemId.Will_of_the_Ancients, ItemId.Zekes_Herald, ItemId.Locket_of_the_Iron_Solari, ItemId.Void_Staff, ItemId.Hextech_Sweeper, ItemId.Iceborn_Gauntlet, ItemId.Abyssal_Scepter, ItemId.Sorcerers_Shoes };
-        static readonly ItemId[] ARAMShopListAD = { ItemId.Blade_of_the_Ruined_King, ItemId.Infinity_Edge, ItemId.Phantom_Dancer, ItemId.Sanguine_Blade, ItemId.Mercurial_Scimitar, ItemId.Zephyr, ItemId.Maw_of_Malmortius, ItemId.Statikk_Shiv, ItemId.Berserkers_Greaves };
-        static readonly ItemId[] CrystalScar = { ItemId.Rod_of_Ages_Crystal_Scar, ItemId.Wooglets_Witchcap, ItemId.Void_Staff, ItemId.Athenes_Unholy_Grail, ItemId.Abyssal_Scepter, ItemId.Liandrys_Torment, ItemId.Morellonomicon, ItemId.Rylais_Crystal_Scepter, ItemId.Sorcerers_Shoes };
-        static readonly ItemId[] Other = { };
-        static int LastShopAttempt;
+        public static string[] AD =
+        {
+            "ashe", "caitlyn", "corki", "draven", "ezreal", "graves", "kogmaw",
+            "missfortune", "quinn", "sivir", "talon", "tristana", "twitch", "urgot", "varus", "vayne", "zed", "jinx",
+            "yasuo", "lucian", "shaco", "masteryi"	
+        };
+        private static readonly string[] ADT =
+        {
+            "darius",  "evelynn", "fiora", "gangplank", "gnar", "jayce", "yorick", "warwick",
+            "pantheon", "irelia", "jarvaniv", "jax", "khazix", "nocturne", "olaf", 
+            "rengar", "riven", "shyvana", "trundle", "tryndamere", "udyr", "vi", "monkeyking", "xinzhao", "aatrox",
+             
+        };
+        private static readonly string[] APT =
+        {
+              "galio",  "malphite", "poppy", "elise",
+            "maokai", "rammus", "sejuani", "shen", "singed", "zac",
+            "nunu",  "alistar", "nautilus", "rumble", 
+        };
+        private static readonly string[] FT =
+        {
+	    "drmundo", "skarner", "braum", "nasus", "renekton", "chogath", "taric", "leesin", "garen", "volibear", "hecarim",
+	    "Blitzcrank", "amumu",
+		
+		};
+
+
+        private static readonly string[] EN =
+        {
+	    "Akali", "Kennen", "Katarina",
+		
+		};
+        private static readonly ItemId[] TTShopList = { ItemId.Wooglets_Witchcap, ItemId.Rod_of_Ages, ItemId.Rylais_Crystal_Scepter, ItemId.Lich_Bane, ItemId.Liandrys_Torment, ItemId.Morellonomicon, ItemId.Locket_of_the_Iron_Solari, ItemId.Void_Staff, ItemId.Sorcerers_Shoes };
+        private static readonly ItemId[] ARAMShopListAP =
+        {
+            ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap,
+            ItemId.Rod_of_Ages, ItemId.Rylais_Crystal_Scepter,ItemId.Athenes_Unholy_Grail,
+            ItemId.Will_of_the_Ancients, ItemId.Liandrys_Torment, ItemId.Void_Staff, ItemId.Abyssal_Scepter, ItemId.Sorcerers_Shoes
+        };
+
+        private static readonly ItemId[] ARAMShopListEN =
+        {
+            ItemId.Zhonyas_Hourglass, ItemId.Rabadons_Deathcap,
+            ItemId.Rylais_Crystal_Scepter,
+            ItemId.Will_of_the_Ancients, ItemId.Liandrys_Torment, ItemId.Void_Staff, ItemId.Abyssal_Scepter, ItemId.Sorcerers_Shoes
+        };
+
+        private static readonly ItemId[] ARAMShopListFT =
+        {
+            ItemId.Sunfire_Cape, ItemId.Randuins_Omen,
+            ItemId.Spirit_Visage, ItemId.Banshees_Veil, ItemId.Frozen_Heart,
+            ItemId.Locket_of_the_Iron_Solari, ItemId.Orb_of_Winter, ItemId.Thornmail, ItemId.Mercurys_Treads
+        };
+
+        private static readonly ItemId[] ARAMShopListAD =
+        {
+            ItemId.Blade_of_the_Ruined_King, ItemId.Last_Whisper,
+            ItemId.Phantom_Dancer, ItemId.Infinity_Edge, ItemId.Statikk_Shiv, ItemId.Trinity_Force, ItemId.Youmuus_Ghostblade, ItemId.Berserkers_Greaves
+        };
+        private static readonly ItemId[] ARAMShopListADT =
+        {
+            ItemId.Maw_of_Malmortius, ItemId.Banshees_Veil, ItemId.Sunfire_Cape,
+            ItemId.Locket_of_the_Iron_Solari, ItemId.Blade_of_the_Ruined_King, ItemId.Randuins_Omen, ItemId.Spirit_Visage, ItemId.Mercurys_Treads
+        };
+        private static readonly ItemId[] ARAMShopListAPT =
+        {
+            ItemId.Abyssal_Scepter, ItemId.Banshees_Veil, ItemId.Sunfire_Cape,
+            ItemId.Locket_of_the_Iron_Solari, ItemId.Liandrys_Torment, ItemId.Randuins_Omen, ItemId.Spirit_Visage, ItemId.Mercurys_Treads
+        }; 
+        private static readonly ItemId[] CrystalScar = { ItemId.Rod_of_Ages_Crystal_Scar, ItemId.Wooglets_Witchcap, ItemId.Void_Staff, ItemId.Athenes_Unholy_Grail, ItemId.Abyssal_Scepter, ItemId.Liandrys_Torment, ItemId.Morellonomicon, ItemId.Rylais_Crystal_Scepter, ItemId.Sorcerers_Shoes };
+        private static readonly ItemId[] Other = { };
+        private static int LastShopAttempt;
 
         public static void DoChecks()
         {
@@ -75,18 +146,6 @@ namespace Support
                         }
                         Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
-                if (File.Exists(FileHandler._theFile) && (FileHandler.CustomShopList != null))
-                {
-                    foreach (var item in FileHandler.CustomShopList)
-                    {
-                        if (!HasItem(item))
-                        {
-                            BuyItem(item);
-                        }
-                    }
-                }
-                else
-                {
                     foreach (var item in GetDefaultItemArray())
                     {
                         if (!HasItem(item))
@@ -94,7 +153,6 @@ namespace Support
                             BuyItem(item);
                         }
                     }
-                }
             }
         }
         public static bool HasItem(ItemId item)
@@ -119,18 +177,45 @@ namespace Support
         {
 
             var map = Utility.Map.GetMap();
-            if (map.Type == Utility.Map.MapType.SummonersRift)
+            if (map.Type == Utility.Map.MapType.HowlingAbyss || map.Type == Utility.Map.MapType.SummonersRift)
             {
-                return SRShopList.OrderBy(item => Autoplay.Rand.Next()).ToArray();
+                if (APT.Any(apchamp => Autoplay.Bot.BaseSkinName.ToLower() == apchamp.ToLower()))
+                {
+                    Console.WriteLine("APT");
+                    return ARAMShopListAPT;
+                }
+                if (ADT.Any(apchamp => Autoplay.Bot.BaseSkinName.ToLower() == apchamp.ToLower()))
+                {
+                    Console.WriteLine("ADT");
+                    return ARAMShopListADT;
+                }
+                if (AP.Any(apchamp => Autoplay.Bot.BaseSkinName.ToLower() == apchamp.ToLower()))
+                {
+                    Console.WriteLine("APD");
+                    return ARAMShopListAP;
+                }
+                if (FT.Any(FTchamp => Autoplay.Bot.BaseSkinName.ToLower() == FTchamp.ToLower()))
+                {
+                    Console.WriteLine("FT");
+                    return ARAMShopListFT;
+                }
+                if (EN.Any(ENchamp => Autoplay.Bot.BaseSkinName.ToLower() == ENchamp.ToLower()))
+                {
+                    Console.WriteLine("EN");
+                    return ARAMShopListEN;
+                }
+
+
+                if (AD.Any(adchamp => Autoplay.Bot.BaseSkinName.ToLower() == adchamp.ToLower()))
+                {
+                    Console.WriteLine("ADC");
+                    return ARAMShopListAD;
+                }
+                return ARAMShopListADT;
             }
             if (map.Type == Utility.Map.MapType.TwistedTreeline)
             {
                 return TTShopList.OrderBy(item => Autoplay.Rand.Next()).ToArray();
-            }
-            if (map.Type == Utility.Map.MapType.HowlingAbyss)
-            {
-                if (AP.Any(apchamp => Autoplay.Bot.BaseSkinName.ToLower() == apchamp.ToLower())) return ARAMShopListAP;
-                return ARAMShopListAD.OrderBy(item => Autoplay.Rand.Next()).ToArray();
             }
             if (map.Type == Utility.Map.MapType.CrystalScar)
             {

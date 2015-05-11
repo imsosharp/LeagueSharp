@@ -30,7 +30,7 @@ using Version = System.Version;
 
 #endregion
 
-namespace Support.Util
+namespace AutoSharpporting.Util
 {
     internal static class Helpers
     {

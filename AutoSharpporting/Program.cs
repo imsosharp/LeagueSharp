@@ -21,12 +21,12 @@ using System;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
-using Support.Util;
+using AutoSharpporting.Util;
 using Version = System.Version;
 
 #endregion
 
-namespace Support
+namespace AutoSharpporting
 {
     internal class Program
     {
@@ -34,11 +34,11 @@ namespace Support
 
         private static void Main(string[] args)
         {
-            new Autoplay();
             Version = Assembly.GetExecutingAssembly().GetName().Version;
 
             CustomEvents.Game.OnGameLoad += a =>
             {
+                Utility.DelayAction.Add(new Random().Next(1000, 3000), () => new Autoplay.Autoplay());
                 Helpers.UpdateCheck();
                 Protector.Init();
                 new PluginLoader();

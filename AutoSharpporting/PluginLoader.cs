@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using Support.Plugins;
+using AutoSharpporting.Plugins;
 
-namespace Support
+namespace AutoSharpporting
 {
     public class PluginLoader
     {

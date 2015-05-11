@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
 
@@ -12,7 +9,6 @@ namespace AutoSharpporting.Autoplay
     {
         public static void CarryIsNull()
         {
-
             Autoplay.BotLanePos.To3D().WalkAround();
 
             if (Autoplay.Bot.Distance(Autoplay.BotLanePos) < 1000)
@@ -63,7 +59,7 @@ namespace AutoSharpporting.Autoplay
 
         public static void CarryIsDead()
         {
-            if (Autoplay._tempcarry == null || Autoplay._tempcarry.IsDead || Autoplay._tempcarry.InFountain())
+            if (Autoplay.TempCarry == null || Autoplay.TempCarry.IsDead || Autoplay.TempCarry.InFountain())
             {
                 if (
                     MetaHandler.AllyHeroes.FirstOrDefault(
@@ -71,7 +67,7 @@ namespace AutoSharpporting.Autoplay
                             !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
                             !MetaHandler.HasSmite(hero)) != null)
                 {
-                    Autoplay._tempcarry =
+                    Autoplay.TempCarry =
                         MetaHandler.AllyHeroes.FirstOrDefault(
                             hero =>
                                 !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
@@ -86,7 +82,7 @@ namespace AutoSharpporting.Autoplay
                         hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                 {
                     //well fuck, let's follow the jungler -sighs-
-                    Autoplay._tempcarry =
+                    Autoplay.TempCarry =
                         MetaHandler.AllyHeroes.FirstOrDefault(
                             hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
                 }
@@ -107,27 +103,25 @@ namespace AutoSharpporting.Autoplay
                             }
                             else
                             {
-
                                 Autoplay.Bot.IssueOrder(GameObjectOrder.MoveTo, Autoplay._saferecall.To3D());
                             }
                         }
                     }
                 }
             }
-            if (Autoplay._tempcarry != null)
+            if (Autoplay.TempCarry != null)
             {
-
-                Console.WriteLine("Autoplay.Carry dead or afk, following: " + Autoplay._tempcarry.ChampionName);
-                Autoplay._frontline.X = Autoplay._tempcarry.Position.X + Autoplay._chosen;
-                Autoplay._frontline.Y = Autoplay._tempcarry.Position.Y + Autoplay._chosen;
+                Console.WriteLine("Autoplay.Carry dead or afk, following: " + Autoplay.TempCarry.ChampionName);
+                Autoplay._frontline.X = Autoplay.TempCarry.Position.X + Autoplay._chosen;
+                Autoplay._frontline.Y = Autoplay.TempCarry.Position.Y + Autoplay._chosen;
                 if (
-                    !(Autoplay._tempcarry.UnderTurret(true) &&
-                      MetaHandler.NearbyAllyMinions(Autoplay._tempcarry, 400) < 2) &&
+                    !(Autoplay.TempCarry.UnderTurret(true) &&
+                      MetaHandler.NearbyAllyMinions(Autoplay.TempCarry, 400) < 2) &&
                     Autoplay.IsBotSafe())
                 {
-                    if (Autoplay._tempcarry.Distance(Autoplay.Bot) > 550)
+                    if (Autoplay.TempCarry.Distance(Autoplay.Bot) > 550)
                     {
-                        Autoplay._tempcarry.WalkAround();
+                        Autoplay.TempCarry.WalkAround();
                     }
                 }
             }
@@ -146,14 +140,14 @@ namespace AutoSharpporting.Autoplay
 
         public static void NoCarryFound()
         {
-            if (Autoplay._tempcarry == null || Autoplay._tempcarry.IsDead || Autoplay._tempcarry.InFountain())
+            if (Autoplay.TempCarry == null || Autoplay.TempCarry.IsDead || Autoplay.TempCarry.InFountain())
             {
                 if (
                     MetaHandler.AllyHeroes.FirstOrDefault(
                         hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) !=
                     null)
                 {
-                    Autoplay._tempcarry =
+                    Autoplay.TempCarry =
                         MetaHandler.AllyHeroes.FirstOrDefault(
                             hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
                 }
@@ -165,24 +159,24 @@ namespace AutoSharpporting.Autoplay
                         hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
                 {
                     //well fuck, let's follow the jungler -sighs-
-                    Autoplay._tempcarry =
+                    Autoplay.TempCarry =
                         MetaHandler.AllyHeroes.FirstOrDefault(
                             hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
                 }
             }
-            if (Autoplay._tempcarry != null)
+            if (Autoplay.TempCarry != null)
             {
-                Console.WriteLine("Autoplay.Carry not found, following: " + Autoplay._tempcarry.ChampionName);
-                Autoplay._frontline.X = Autoplay._tempcarry.Position.X + Autoplay._chosen;
-                Autoplay._frontline.Y = Autoplay._tempcarry.Position.Y + Autoplay._chosen;
+                Console.WriteLine("Autoplay.Carry not found, following: " + Autoplay.TempCarry.ChampionName);
+                Autoplay._frontline.X = Autoplay.TempCarry.Position.X + Autoplay._chosen;
+                Autoplay._frontline.Y = Autoplay.TempCarry.Position.Y + Autoplay._chosen;
                 if (
-                    !(Autoplay._tempcarry.UnderTurret(true) &&
-                      MetaHandler.NearbyAllyMinions(Autoplay._tempcarry, 400) < 2) &&
+                    !(Autoplay.TempCarry.UnderTurret(true) &&
+                      MetaHandler.NearbyAllyMinions(Autoplay.TempCarry, 400) < 2) &&
                     Autoplay.IsBotSafe())
                 {
                     if (Autoplay.Bot.Distance(Autoplay._frontline) > 550)
                     {
-                        Autoplay._tempcarry.WalkAround();
+                        Autoplay.TempCarry.WalkAround();
                     }
                 }
             }
@@ -190,37 +184,36 @@ namespace AutoSharpporting.Autoplay
 
         public static void LowHealth()
         {
-                Autoplay.NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
-                if (Autoplay.NearestAllyTurret != null)
+            Autoplay.NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+            if (Autoplay.NearestAllyTurret != null)
+            {
+                Autoplay._saferecall.X = Autoplay.NearestAllyTurret.Position.X + Autoplay._safe;
+                Autoplay._saferecall.Y = Autoplay.NearestAllyTurret.Position.Y;
+                if (Autoplay.Bot.Position.Distance(Autoplay._saferecall.To3D()) < 200)
                 {
-                    Autoplay._saferecall.X = Autoplay.NearestAllyTurret.Position.X + Autoplay._safe;
-                    Autoplay._saferecall.Y = Autoplay.NearestAllyTurret.Position.Y;
-                    if (Autoplay.Bot.Position.Distance(Autoplay._saferecall.To3D()) < 200)
+                    if (Environment.TickCount - Autoplay._lastRecallAttempt > Autoplay.Rand.Next(500, 2000))
                     {
-                        if (Environment.TickCount - Autoplay._lastRecallAttempt > Autoplay.Rand.Next(500, 2000))
-                        {
-                            Autoplay.Bot.Spellbook.CastSpell(SpellSlot.Recall);
-                            Autoplay._lastRecallAttempt = Environment.TickCount;
-                        }
-                    }
-                    else
-                    {
-
-                        Autoplay.Bot.IssueOrder(GameObjectOrder.MoveTo, Autoplay._saferecall.To3D());
+                        Autoplay.Bot.Spellbook.CastSpell(SpellSlot.Recall);
+                        Autoplay._lastRecallAttempt = Environment.TickCount;
                     }
                 }
+                else
+                {
+                    Autoplay.Bot.IssueOrder(GameObjectOrder.MoveTo, Autoplay._saferecall.To3D());
+                }
+            }
         }
 
         public static void SwitchCarry()
         {
-                var alliesSortedByKDA =
-                    MetaHandler.AllyHeroes.OrderByDescending(
-                        hero => (hero.ChampionsKilled/((hero.Deaths != 0) ? hero.Deaths : 1))); //AsunaChan2Kawaii
-                if (alliesSortedByKDA.FirstOrDefault() != null)
-                {
-                    Autoplay.Carry = alliesSortedByKDA.FirstOrDefault();
-                    Autoplay._lastSwitched = Environment.TickCount;
-                }
+            var alliesSortedByKDA =
+                MetaHandler.AllyHeroes.OrderByDescending(
+                    hero => (hero.ChampionsKilled/((hero.Deaths != 0) ? hero.Deaths : 1))); //AsunaChan2Kawaii
+            if (alliesSortedByKDA.FirstOrDefault() != null)
+            {
+                Autoplay.Carry = alliesSortedByKDA.FirstOrDefault();
+                Autoplay._lastSwitched = Environment.TickCount;
+            }
         }
     }
 }

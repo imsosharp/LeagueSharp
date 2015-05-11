@@ -5,14 +5,18 @@ using SharpDX;
 
 namespace AutoSharpporting.Autoplay
 {
-    static class Wizard
+    internal static class Wizard
     {
         public const int Blue = 200;
         public const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
-        public static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
+
+        public static readonly Random Rand =
+            new Random((42/13*DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
+
         private static int _randSeconds, _randRange, _stepTime;
         private static Vector2 _orbwalkingpos;
+
         public static void WalkAround(this Vector3 pos)
         {
             _randRange = Rand.Next(-267, 276);
@@ -21,13 +25,13 @@ namespace AutoSharpporting.Autoplay
             {
                 if (Bot.Team == GameObjectTeam.Order)
                 {
-                    int orbwalkingAdditionInteger = _randRange * (-1);
+                    var orbwalkingAdditionInteger = _randRange*(-1);
                     _orbwalkingpos.X = pos.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = pos.Y + orbwalkingAdditionInteger;
                 }
                 else
                 {
-                    int orbwalkingAdditionInteger = _randRange;
+                    var orbwalkingAdditionInteger = _randRange;
                     _orbwalkingpos.X = pos.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = pos.Y + orbwalkingAdditionInteger;
                 }
@@ -41,7 +45,6 @@ namespace AutoSharpporting.Autoplay
                     PluginBase.Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
                 }
             }
-
         }
 
         public static void WalkAround(this Obj_AI_Hero follow)
@@ -52,13 +55,13 @@ namespace AutoSharpporting.Autoplay
             {
                 if (Bot.Team == GameObjectTeam.Order)
                 {
-                    int orbwalkingAdditionInteger = _randRange * (-1);
+                    var orbwalkingAdditionInteger = _randRange*(-1);
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
                 }
                 else
                 {
-                    int orbwalkingAdditionInteger = _randRange;
+                    var orbwalkingAdditionInteger = _randRange;
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
                 }
@@ -72,7 +75,6 @@ namespace AutoSharpporting.Autoplay
                     PluginBase.Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
                 }
             }
-
         }
     }
 }

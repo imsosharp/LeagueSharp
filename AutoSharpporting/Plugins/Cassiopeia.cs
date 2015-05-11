@@ -1,14 +1,7 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -26,37 +19,35 @@ namespace AutoSharpporting.Plugins
             E.SetTargetted(0.2f, float.MaxValue);
 
             R = new Spell(SpellSlot.R, 800);
-            R.SetSkillshot(0.6f, (float)(80 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
+            R.SetSkillshot(0.6f, (float) (80*Math.PI/180), float.MaxValue, false, SkillshotType.SkillshotCone);
         }
 
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
-                if(E.CastCheck(Target,"ComboE") && Target.HasBuffOfType(BuffType.Poison))
+                if (E.CastCheck(Target, "ComboE") && Target.HasBuffOfType(BuffType.Poison))
                 {
                     E.CastOnUnit(Target);
                 }
-                if(Q.CastCheck(Target,"ComboQ"))
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    W.Cast(Target,UsePackets);
+                    W.Cast(Target, UsePackets);
                 }
-                if(W.CastCheck(Target,"ComboW"))
+                if (W.CastCheck(Target, "ComboW"))
                 {
-                    W.Cast(Target,UsePackets);
+                    W.Cast(Target, UsePackets);
                 }
-                if(E.CastCheck(Target,"ComboE") )
+                if (E.CastCheck(Target, "ComboE"))
                 {
                     E.CastOnUnit(Target);
                 }
-                if(R.CastCheck(Target,"ComboR") && R.IsKillable(Target))
+                if (R.CastCheck(Target, "ComboR") && R.IsKillable(Target))
                 {
-                    R.Cast(Target,UsePackets);
+                    R.Cast(Target, UsePackets);
                 }
             }
         }
-
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
@@ -68,11 +59,8 @@ namespace AutoSharpporting.Plugins
             if (R.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast(unit);
-                return;
             }
-
         }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -81,8 +69,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
-
 
         public override void InterruptMenu(Menu config)
         {

@@ -17,10 +17,10 @@
 
 #region
 
+using System;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using AutoSharpporting.Util;
-using System;
 using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
 
 #endregion
@@ -124,11 +124,10 @@ namespace AutoSharpporting.Plugins
             {
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("AutoRPercent").Value, R.Range);
 
-                if (ally != null || (Player.Health / Player.MaxHealth) * 100 < ConfigValue<Slider>("AutoRPercent").Value)
+                if (ally != null || (Player.Health/Player.MaxHealth)*100 < ConfigValue<Slider>("AutoRPercent").Value)
                 {
                     R.Cast();
                 }
-
             }
         }
 

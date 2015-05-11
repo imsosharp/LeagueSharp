@@ -1,16 +1,9 @@
-﻿
+﻿//xaxixeo *-*
 
-//xaxixeo *-*
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -75,4 +68,3 @@ namespace AutoSharpporting.Plugins
         }
     }
 }
-

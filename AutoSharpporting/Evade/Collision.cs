@@ -23,17 +23,19 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
+using LeagueSharp;
+using LeagueSharp.Common;
+using SharpDX;
+
 namespace AutoSharpporting.Evade
 {
     #region
 
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using LeagueSharp;
-    using LeagueSharp.Common;
-    using SharpDX;
+    
 
     #endregion
 
@@ -81,8 +83,8 @@ namespace AutoSharpporting.Evade
 
         public static FastPredResult FastPrediction(Vector2 from, Obj_AI_Base unit, int delay, int speed)
         {
-            var tDelay = delay / 1000f + (from.Distance(unit) / speed);
-            var d = tDelay * unit.MoveSpeed;
+            var tDelay = delay/1000f + (from.Distance(unit)/speed);
+            var d = tDelay*unit.MoveSpeed;
             var path = unit.GetWaypoints();
 
             if (path.PathLength() > d)
@@ -143,7 +145,7 @@ namespace AutoSharpporting.Evade
                                     {
                                         Position =
                                             pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint +
-                                            skillshot.Direction * 30,
+                                            skillshot.Direction*30,
                                         Unit = minion,
                                         Type = CollisionObjectTypes.Minion,
                                         Distance = pos.Distance(from),
@@ -176,7 +178,7 @@ namespace AutoSharpporting.Evade
                                     {
                                         Position =
                                             pos.ProjectOn(skillshot.End, skillshot.Start).LinePoint +
-                                            skillshot.Direction * 30,
+                                            skillshot.Direction*30,
                                         Unit = hero,
                                         Type = CollisionObjectTypes.Minion,
                                         Distance = pos.Distance(from),
@@ -210,12 +212,12 @@ namespace AutoSharpporting.Evade
                             break;
                         }
                         var level = wall.Name.Substring(wall.Name.Length - 6, 1);
-                        var wallWidth = (300 + 50 * Convert.ToInt32(level));
+                        var wallWidth = (300 + 50*Convert.ToInt32(level));
 
 
                         var wallDirection = (wall.Position.To2D() - YasuoWallCastedPos).Normalized().Perpendicular();
-                        var wallStart = wall.Position.To2D() + wallWidth / 2 * wallDirection;
-                        var wallEnd = wallStart - wallWidth * wallDirection;
+                        var wallStart = wall.Position.To2D() + wallWidth/2*wallDirection;
+                        var wallEnd = wallStart - wallWidth*wallDirection;
                         var wallPolygon = new Geometry.Rectangle(wallStart, wallEnd, 75).ToPolygon();
                         var intersection = new Vector2();
                         var intersections = new List<Vector2>();
@@ -240,7 +242,7 @@ namespace AutoSharpporting.Evade
                                                  0,
                                                  skillshot.SpellData.Delay -
                                                  (Environment.TickCount - skillshot.StartTick)) + 100 +
-                                             (1000 * intersection.Distance(from)) / skillshot.SpellData.MissileSpeed;
+                                             (1000*intersection.Distance(from))/skillshot.SpellData.MissileSpeed;
                             if (collisionT - WallCastT < 4000)
                             {
                                 if (skillshot.SpellData.Type != SkillShotType.SkillshotMissileLine)

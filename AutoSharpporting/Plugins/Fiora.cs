@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -23,8 +17,6 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-
-
             if (ComboMode)
             {
                 if (Q.CastCheck(Target, "ComboQ"))
@@ -38,10 +30,7 @@ namespace AutoSharpporting.Plugins
                     R.CastOnUnit(Target);
                 }
             }
-
-
         }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -50,6 +39,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
     }
 }

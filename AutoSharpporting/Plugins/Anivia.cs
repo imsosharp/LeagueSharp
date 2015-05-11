@@ -1,20 +1,16 @@
 ﻿//Get Some Part From xSaliceReligionAIO Credit xSalice
+
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
     public class Anivia : PluginBase
     {
-
         //R
         public Anivia()
         {
@@ -28,10 +24,8 @@ namespace AutoSharpporting.Plugins
             R.SetSkillshot(.25f, 200f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 
-
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
                 if (E.CastCheck(Target, "ComboE") && ShouldE(Target))
@@ -56,20 +50,15 @@ namespace AutoSharpporting.Plugins
                     R.Cast(Target);
                 }
             }
-
-
         }
-
-
 
         private void SmartKs()
         {
-
-            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsValidTarget(1300)))
+            foreach (var target in ObjectManager.Get<Obj_AI_Hero>().Where(x => x.IsValidTarget(1300)))
             {
                 //ER
                 if (Player.Distance(target.ServerPosition) <= R.Range && R.Instance.ToggleState == 1 &&
-                    (Player.GetSpellDamage(target, SpellSlot.R) + Player.GetSpellDamage(target, SpellSlot.E) * 2) >
+                    (Player.GetSpellDamage(target, SpellSlot.R) + Player.GetSpellDamage(target, SpellSlot.E)*2) >
                     target.Health + 50)
                 {
                     if (R.IsReady() && E.IsReady())
@@ -118,15 +107,14 @@ namespace AutoSharpporting.Plugins
 
         private void CastW(Obj_AI_Hero target)
         {
-            PredictionOutput pred = W.GetPrediction(target);
+            var pred = W.GetPrediction(target);
             var vec = new Vector3(pred.CastPosition.X - Player.ServerPosition.X, 0,
                 pred.CastPosition.Z - Player.ServerPosition.Z);
-            Vector3 castBehind = pred.CastPosition + Vector3.Normalize(vec) * 125;
+            var castBehind = pred.CastPosition + Vector3.Normalize(vec)*125;
 
             if (W.IsReady())
                 W.Cast(castBehind);
         }
-
 
         private bool ShouldE(Obj_AI_Hero target)
         {
@@ -155,7 +143,6 @@ namespace AutoSharpporting.Plugins
             return false;
         }
 
-
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
@@ -163,8 +150,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
-
-
     }
 }

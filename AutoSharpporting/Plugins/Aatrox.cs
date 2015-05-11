@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -26,10 +20,9 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
-                if (Q.CastCheck(Target, "ComboQ") )
+                if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target);
                 }
@@ -44,7 +37,7 @@ namespace AutoSharpporting.Plugins
 
                 if (E.CastCheck(Target, "ComboE"))
                 {
-                    E.Cast(Target,UsePackets);
+                    E.Cast(Target, UsePackets);
                 }
 
                 if (R.CastCheck(Target, "ComboR"))
@@ -52,8 +45,6 @@ namespace AutoSharpporting.Plugins
                     R.Cast(Target);
                 }
             }
-
-
         }
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
@@ -66,11 +57,8 @@ namespace AutoSharpporting.Plugins
             if (Q.CastCheck(unit, "Interrupt.Q"))
             {
                 Q.Cast(unit);
-                return;
             }
-
         }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -79,8 +67,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
-
 
         public override void InterruptMenu(Menu config)
         {

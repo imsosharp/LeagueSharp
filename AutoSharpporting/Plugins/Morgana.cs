@@ -23,16 +23,18 @@
 
 #endregion
 
+using System;
+using System.Linq;
+using AutoSharpporting.Util;
+using LeagueSharp;
+using LeagueSharp.Common;
+using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+
 namespace AutoSharpporting.Plugins
 {
     #region
 
-    using System;
-    using System.Linq;
-    using LeagueSharp;
-    using LeagueSharp.Common;
-    using AutoSharpporting.Util;
-    using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+    
 
     #endregion
 

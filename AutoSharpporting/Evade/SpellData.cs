@@ -23,11 +23,13 @@
 
 #endregion
 
+using LeagueSharp;
+
 namespace AutoSharpporting.Evade
 {
     #region
 
-    using LeagueSharp;
+    
 
     #endregion
 
@@ -37,7 +39,7 @@ namespace AutoSharpporting.Evade
         public bool CanBeRemoved = false;
         public bool Centered;
         public string ChampionName;
-        public CollisionObjectTypes[] CollisionObjects = { };
+        public CollisionObjectTypes[] CollisionObjects = {};
         public int DangerValue;
         public int Delay;
         public bool DisableFowDetection = false;
@@ -45,13 +47,13 @@ namespace AutoSharpporting.Evade
         public bool DontCross = false;
         public bool DontRemove = false;
         public int ExtraDuration;
-        public string[] ExtraMissileNames = { };
+        public string[] ExtraMissileNames = {};
         public int ExtraRange = -1;
-        public string[] ExtraSpellNames = { };
+        public string[] ExtraSpellNames = {};
         public bool FixedRange;
         public bool ForceRemove = false;
         public string FromObject = "";
-        public string[] FromObjects = { };
+        public string[] FromObjects = {};
         public int Id = -1;
         public bool Invert;
         public bool IsDangerous = false;
@@ -69,7 +71,10 @@ namespace AutoSharpporting.Evade
         public string SpellName;
         public string ToggleParticleName = "";
         public SkillShotType Type;
-        public SpellData() {}
+
+        public SpellData()
+        {
+        }
 
         public SpellData(string championName,
             string spellName,

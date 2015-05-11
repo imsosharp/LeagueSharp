@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -18,7 +12,6 @@ namespace AutoSharpporting.Plugins
             Q = new Spell(SpellSlot.Q);
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R);
-
         }
 
         public override void OnUpdate(EventArgs args)
@@ -41,13 +34,9 @@ namespace AutoSharpporting.Plugins
                     }
 
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-
-
                 }
             }
-
         }
-
 
         public override void ComboMenu(Menu config)
         {

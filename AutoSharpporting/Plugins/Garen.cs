@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -15,14 +10,11 @@ namespace AutoSharpporting.Plugins
     {
         public Garen()
         {
-
             Q = new Spell(SpellSlot.Q);
             W = new Spell(SpellSlot.W);
-            E = new Spell(SpellSlot.E,165);
-            R = new Spell(SpellSlot.R,400);
-
+            E = new Spell(SpellSlot.E, 165);
+            R = new Spell(SpellSlot.R, 400);
         }
-
 
         public override void OnUpdate(EventArgs args)
         {
@@ -31,26 +23,29 @@ namespace AutoSharpporting.Plugins
             {
                 if (Player.HealthPercentage() > 20 && Player.Distance(Target) < R.Range)
                 {
-                    if(W.IsReady()){
+                    if (W.IsReady())
+                    {
                         W.Cast();
                     }
-                    if(E.IsReady()){
+                    if (E.IsReady())
+                    {
                         E.Cast();
                     }
-                    if(Q.IsReady()){
+                    if (Q.IsReady())
+                    {
                         Q.Cast();
                     }
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
-                    
                 }
             }
-
         }
 
         public void KS()
         {
-
-            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+            foreach (
+                var target in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
             {
                 if (target != null)
                 {
@@ -75,8 +70,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboRKS", "Use R KS", true);
         }
-
     }
 }
-
-

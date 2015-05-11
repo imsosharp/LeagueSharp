@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -26,10 +20,8 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
-
                 if (E.CastCheck(Target, "ComboE"))
                 {
                     E.CastIfHitchanceEquals(Target, HitChance.High);
@@ -40,7 +32,7 @@ namespace AutoSharpporting.Plugins
                 }
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
-                    Q.Cast(Target,UsePackets);
+                    Q.Cast(Target, UsePackets);
                 }
                 if (W.CastCheck(Target, "ComboW"))
                 {
@@ -49,14 +41,11 @@ namespace AutoSharpporting.Plugins
                 if (R.IsReady() && (R.IsKillable(Target) || IsRActive()))
                 {
                     R.Cast(Target);
-                }           
+                }
             }
-
-
         }
 
-
-        bool IsRActive()
+        private bool IsRActive()
         {
             return ObjectManager.Player.HasBuff("AhriTumble", true);
         }
@@ -71,11 +60,8 @@ namespace AutoSharpporting.Plugins
             if (E.CastCheck(unit, "Interrupt.E"))
             {
                 E.CastIfHitchanceEquals(unit, HitChance.Medium);
-                return;
             }
-
         }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -84,8 +70,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
-
 
         public override void InterruptMenu(Menu config)
         {

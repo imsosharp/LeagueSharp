@@ -1,25 +1,21 @@
 ﻿//lux get part of script from ChewyMoon
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
-
     public class Lux : PluginBase
     {
         public static GameObject EGameObject;
 
         public Lux()
         {
-          
             Q = new Spell(SpellSlot.Q, 1300);
             W = new Spell(SpellSlot.W, 1075);
             E = new Spell(SpellSlot.E, 1100);
@@ -29,13 +25,15 @@ namespace AutoSharpporting.Plugins
             W.SetSkillshot(0.5f, 150, 1200, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.25f, 275, 1300, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(1, 190, float.MaxValue, false, SkillshotType.SkillshotLine);
-
         }
 
+        public bool EActivated
+        {
+            get { return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1 || EGameObject != null; }
+        }
 
         public override void OnUpdate(EventArgs args)
         {
-
             KS();
             StealBlue();
             StealRed();
@@ -51,7 +49,6 @@ namespace AutoSharpporting.Plugins
                     CastE(Target);
                 }
             }
-
         }
 
         private void StealBlue()
@@ -82,14 +79,6 @@ namespace AutoSharpporting.Plugins
             }
         }
 
-        public  bool EActivated
-        {
-            get { return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).ToggleState == 1 || EGameObject != null; }
-        }
-
-
-
-
         private void CastE(Obj_AI_Hero target)
         {
             if (EActivated)
@@ -119,14 +108,14 @@ namespace AutoSharpporting.Plugins
         private void CastQ(Obj_AI_Base target)
         {
             var input = Q.GetPrediction(target);
-            var col = Q.GetCollision(Player.ServerPosition.To2D(), new List<Vector2> { input.CastPosition.To2D() });
+            var col = Q.GetCollision(Player.ServerPosition.To2D(), new List<Vector2> {input.CastPosition.To2D()});
             var minions = col.Where(x => !(x is Obj_AI_Hero)).Count(x => x.IsMinion);
 
             if (minions <= 1)
                 Q.Cast(input.CastPosition);
         }
 
-        public  bool HasPassive(Obj_AI_Hero hero)
+        public bool HasPassive(Obj_AI_Hero hero)
         {
             return hero.HasBuff("luxilluminatingfraulein");
         }
@@ -148,8 +137,6 @@ namespace AutoSharpporting.Plugins
             }
         }
 
-
-
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
@@ -159,5 +146,3 @@ namespace AutoSharpporting.Plugins
         }
     }
 }
-
-

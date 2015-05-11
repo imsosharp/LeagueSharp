@@ -18,10 +18,9 @@
 #region
 
 using System;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
 
 #endregion
 
@@ -45,7 +44,8 @@ namespace AutoSharpporting.Plugins
                 {
                     Q.Cast(Target);
                 }
-                if (Player.Distance(Target) <= E.Range && Player.HealthPercentage() > 30 && E.CastCheck(Target, "ComboE"))
+                if (Player.Distance(Target) <= E.Range && Player.HealthPercentage() > 30 &&
+                    E.CastCheck(Target, "ComboE"))
                 {
                     E.Cast();
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
@@ -61,7 +61,6 @@ namespace AutoSharpporting.Plugins
         {
         }
 
-
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
@@ -72,11 +71,8 @@ namespace AutoSharpporting.Plugins
             config.AddSlider("ComboHealthR", "Health to Ult", 20, 1, 100);
         }
 
-
-
         public override void MiscMenu(Menu config)
         {
-
         }
     }
 }

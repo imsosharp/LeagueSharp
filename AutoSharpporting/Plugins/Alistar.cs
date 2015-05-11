@@ -23,15 +23,17 @@
 
 #endregion
 
+using System;
+using AutoSharpporting.Util;
+using LeagueSharp;
+using LeagueSharp.Common;
+using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+
 namespace AutoSharpporting.Plugins
 {
     #region
 
-    using System;
-    using LeagueSharp;
-    using LeagueSharp.Common;
-    using AutoSharpporting.Util;
-    using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+    
 
     #endregion
 
@@ -59,7 +61,7 @@ namespace AutoSharpporting.Plugins
                 if (Q.IsReady() && W.CastCheck(Target, "Combo.W"))
                 {
                     W.CastOnUnit(Target);
-                    var jumpTime = Math.Max(0, Player.Distance(Target) - 500) * 10 / 25 + 25;
+                    var jumpTime = Math.Max(0, Player.Distance(Target) - 500)*10/25 + 25;
                     Utility.DelayAction.Add((int) jumpTime, () => Q.Cast());
                 }
 

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-
 
 namespace AutoSharpporting.Plugins
 {
@@ -37,11 +35,9 @@ namespace AutoSharpporting.Plugins
             }
         }
 
-
         //from Beaving KarthusSharp
         private void Combo()
         {
-
             CastW(TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical), 20);
 
             if (E.IsReady() && !IsInPassiveForm())
@@ -103,7 +99,7 @@ namespace AutoSharpporting.Plugins
 
         private float GetDynamicQWidth(Obj_AI_Base target)
         {
-            return Math.Max(30, (1f - (Player.Distance(target) / Q.Range)) * SpellQWidth);
+            return Math.Max(30, (1f - (Player.Distance(target)/Q.Range))*SpellQWidth);
         }
 
         private void RegulateEState(bool ignoreTargetChecks = false)
@@ -112,7 +108,8 @@ namespace AutoSharpporting.Plugins
                 ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).ToggleState != 2)
                 return;
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range, MinionTypes.All, MinionTeam.NotAlly);
+            var minions = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, E.Range, MinionTypes.All,
+                MinionTeam.NotAlly);
 
             if (!ignoreTargetChecks && (target != null || (!_comboE && minions.Count != 0)))
                 return;
@@ -132,12 +129,12 @@ namespace AutoSharpporting.Plugins
 
         public float GetManaPercent()
         {
-            return (ObjectManager.Player.Mana / ObjectManager.Player.MaxMana) * 100f;
+            return (ObjectManager.Player.Mana/ObjectManager.Player.MaxMana)*100f;
         }
 
         private float GetDynamicWWidth(Obj_AI_Base target)
         {
-            return Math.Max(70, (1f - (Player.Distance(target) / W.Range)) * SpellWWidth);
+            return Math.Max(70, (1f - (Player.Distance(target)/W.Range))*SpellWWidth);
         }
 
         public void UltKs()
@@ -146,7 +143,8 @@ namespace AutoSharpporting.Plugins
                 var target in
                     ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < R.Range && x.IsEnemy && !x.IsDead))
             {
-                if (R.IsReady() && Player.Distance(target) <= R.Range && R.IsKillable(target) && (Player.IsZombie || Player.CountEnemiesInRange(1000) < 1))
+                if (R.IsReady() && Player.Distance(target) <= R.Range && R.IsKillable(target) &&
+                    (Player.IsZombie || Player.CountEnemiesInRange(1000) < 1))
                 {
                     R.Cast();
                 }

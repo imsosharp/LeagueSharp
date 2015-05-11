@@ -23,17 +23,19 @@
 
 #endregion
 
+using System;
+using System.Linq;
+using AutoSharpporting.Util;
+using LeagueSharp;
+using LeagueSharp.Common;
+using SharpDX;
+using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+
 namespace AutoSharpporting.Plugins
 {
     #region
 
-    using System;
-    using System.Linq;
-    using LeagueSharp;
-    using LeagueSharp.Common;
-    using SharpDX;
-    using AutoSharpporting.Util;
-    using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+    
 
     #endregion
 
@@ -220,19 +222,19 @@ namespace AutoSharpporting.Plugins
                     .Where(
                         hero =>
                             hero.IsAlly && !hero.IsMe && hero.Distance(Player) <= W.Range + 300 &&
-                            hero.Distance(Player) <= W.Range - 300 && hero.Health / hero.MaxHealth * 100 >= 20 &&
+                            hero.Distance(Player) <= W.Range - 300 && hero.Health/hero.MaxHealth*100 >= 20 &&
                             Player.CountEnemiesInRange(150) >= 1))
             {
                 var center = Player.Position;
                 const int points = 36;
                 var radius = W.Range;
-                const double slice = 2 * Math.PI / points;
+                const double slice = 2*Math.PI/points;
 
                 for (var i = 0; i < points; i++)
                 {
-                    var angle = slice * i;
-                    var newX = (int) (center.X + radius * Math.Cos(angle));
-                    var newY = (int) (center.Y + radius * Math.Sin(angle));
+                    var angle = slice*i;
+                    var newX = (int) (center.X + radius*Math.Cos(angle));
+                    var newY = (int) (center.Y + radius*Math.Sin(angle));
                     var p = new Vector3(newX, newY, 0);
                     if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
                     {
@@ -272,7 +274,7 @@ namespace AutoSharpporting.Plugins
                         hero =>
                             hero.IsAlly && !hero.IsMe && hero.Distance(ObjectManager.Player) <= W.Range + 300 &&
                             hero.Distance(ObjectManager.Player) <= W.Range - 200 &&
-                            hero.Health / hero.MaxHealth * 100 >= 20 && !hero.IsDead))
+                            hero.Health/hero.MaxHealth*100 >= 20 && !hero.IsDead))
             {
                 foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsEnemy))
                 {
@@ -284,13 +286,13 @@ namespace AutoSharpporting.Plugins
                     var center = ObjectManager.Player.Position;
                     const int points = 36;
                     var radius = W.Range;
-                    const double slice = 2 * Math.PI / points;
+                    const double slice = 2*Math.PI/points;
 
                     for (var i = 0; i < points; i++)
                     {
-                        var angle = slice * i;
-                        var newX = (int) (center.X + radius * Math.Cos(angle));
-                        var newY = (int) (center.Y + radius * Math.Sin(angle));
+                        var angle = slice*i;
+                        var newX = (int) (center.X + radius*Math.Cos(angle));
+                        var newY = (int) (center.Y + radius*Math.Sin(angle));
                         var p = new Vector3(newX, newY, 0);
                         if (p.Distance(friend.Position) <= bestcastposition.Distance(friend.Position))
                         {

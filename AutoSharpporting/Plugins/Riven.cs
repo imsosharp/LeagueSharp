@@ -1,32 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
     public class Riven : PluginBase
     {
-        public bool RActive = false;
+        public bool RActive;
 
         public Riven()
         {
-        E = new Spell(SpellSlot.E, 390f);
-        Q = new Spell(SpellSlot.Q, 250f);
-        W = new Spell(SpellSlot.W, 150f);
-        R = new Spell(SpellSlot.R, 900f);
+            E = new Spell(SpellSlot.E, 390f);
+            Q = new Spell(SpellSlot.Q, 250f);
+            W = new Spell(SpellSlot.W, 150f);
+            R = new Spell(SpellSlot.R, 900f);
         }
-
 
         public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-
             var t = target as Obj_AI_Hero;
             if (t != null && unit.IsMe)
             {
@@ -41,7 +33,6 @@ namespace AutoSharpporting.Plugins
                     Player.IssueOrder(GameObjectOrder.AttackTo, t);
                 }
             }
-
         }
 
         public override void OnUpdate(EventArgs args)
@@ -58,11 +49,7 @@ namespace AutoSharpporting.Plugins
                     RActive = false;
                 }
             }
-
-
         }
-
-
 
         public override void ComboMenu(Menu config)
         {
@@ -71,6 +58,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
     }
 }

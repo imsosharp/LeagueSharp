@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
     public class Kogmaw : PluginBase
     {
-
         public Kogmaw()
         {
-
             Q = new Spell(SpellSlot.Q, 1000f);
             W = new Spell(SpellSlot.W, float.MaxValue);
             E = new Spell(SpellSlot.E, 1360f);
@@ -26,9 +19,9 @@ namespace AutoSharpporting.Plugins
             E.SetSkillshot(0.25f, 120f, 1400f, false, SkillshotType.SkillshotLine);
             R.SetSkillshot(1.2f, 120f, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
+
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
                 if (Q.CastCheck(Target, "ComboQ"))
@@ -47,19 +40,16 @@ namespace AutoSharpporting.Plugins
                 {
                     var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                     if (t != null)
-                    R.Cast(t, false, true);
+                        R.Cast(t, false, true);
                 }
-
             }
-
-
         }
 
         private int GetUltimateBuffStacks()
         {
             return (from buff in ObjectManager.Player.Buffs
-                    where buff.DisplayName.ToLower() == "kogmawlivingartillery"
-                    select buff.Count).FirstOrDefault();
+                where buff.DisplayName.ToLower() == "kogmawlivingartillery"
+                select buff.Count).FirstOrDefault();
         }
 
         public override void ComboMenu(Menu config)
@@ -69,6 +59,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
     }
 }

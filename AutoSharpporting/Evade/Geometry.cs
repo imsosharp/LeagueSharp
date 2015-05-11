@@ -23,16 +23,18 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using ClipperLib;
+using LeagueSharp.Common;
+using SharpDX;
+using Color = System.Drawing.Color;
+
 namespace AutoSharpporting.Evade
 {
     #region
 
-    using System;
-    using System.Collections.Generic;
-    using ClipperLib;
-    using LeagueSharp.Common;
-    using SharpDX;
-    using Color = System.Drawing.Color;
+    
 
     #endregion
 
@@ -66,7 +68,7 @@ namespace AutoSharpporting.Evade
         /// </summary>
         public static Vector2 PositionAfter(this List<Vector2> self, int t, int speed, int delay = 0)
         {
-            var distance = Math.Max(0, t - delay) * speed / 1000;
+            var distance = Math.Max(0, t - delay)*speed/1000;
             for (var i = 0; i <= self.Count - 2; i++)
             {
                 var from = self[i];
@@ -74,7 +76,7 @@ namespace AutoSharpporting.Evade
                 var d = (int) to.Distance(from);
                 if (d > distance)
                 {
-                    return from + distance * (to - from).Normalized();
+                    return from + distance*(to - from).Normalized();
                 }
                 distance -= d;
             }
@@ -127,13 +129,13 @@ namespace AutoSharpporting.Evade
                 var result = new Polygon();
                 var outRadius = (overrideWidth > 0
                     ? overrideWidth
-                    : (offset + Radius) / (float) Math.Cos(2 * Math.PI / CircleLineSegmentN));
+                    : (offset + Radius)/(float) Math.Cos(2*Math.PI/CircleLineSegmentN));
 
                 for (var i = 1; i <= CircleLineSegmentN; i++)
                 {
-                    var angle = i * 2 * Math.PI / CircleLineSegmentN;
+                    var angle = i*2*Math.PI/CircleLineSegmentN;
                     var point = new Vector2(
-                        Center.X + outRadius * (float) Math.Cos(angle), Center.Y + outRadius * (float) Math.Sin(angle));
+                        Center.X + outRadius*(float) Math.Cos(angle), Center.Y + outRadius*(float) Math.Sin(angle));
                     result.Add(point);
                 }
 
@@ -200,13 +202,13 @@ namespace AutoSharpporting.Evade
                 var result = new Polygon();
 
                 result.Add(
-                    RStart + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                    RStart + (overrideWidth > 0 ? overrideWidth : Width + offset)*Perpendicular - offset*Direction);
                 result.Add(
-                    RStart - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular - offset * Direction);
+                    RStart - (overrideWidth > 0 ? overrideWidth : Width + offset)*Perpendicular - offset*Direction);
                 result.Add(
-                    REnd - (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+                    REnd - (overrideWidth > 0 ? overrideWidth : Width + offset)*Perpendicular + offset*Direction);
                 result.Add(
-                    REnd + (overrideWidth > 0 ? overrideWidth : Width + offset) * Perpendicular + offset * Direction);
+                    REnd + (overrideWidth > 0 ? overrideWidth : Width + offset)*Perpendicular + offset*Direction);
 
                 return result;
             }
@@ -229,23 +231,23 @@ namespace AutoSharpporting.Evade
             {
                 var result = new Polygon();
 
-                var outRadius = (offset + Radius + RingRadius) / (float) Math.Cos(2 * Math.PI / CircleLineSegmentN);
+                var outRadius = (offset + Radius + RingRadius)/(float) Math.Cos(2*Math.PI/CircleLineSegmentN);
                 var innerRadius = Radius - RingRadius - offset;
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var angle = i * 2 * Math.PI / CircleLineSegmentN;
+                    var angle = i*2*Math.PI/CircleLineSegmentN;
                     var point = new Vector2(
-                        Center.X - outRadius * (float) Math.Cos(angle), Center.Y - outRadius * (float) Math.Sin(angle));
+                        Center.X - outRadius*(float) Math.Cos(angle), Center.Y - outRadius*(float) Math.Sin(angle));
                     result.Add(point);
                 }
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var angle = i * 2 * Math.PI / CircleLineSegmentN;
+                    var angle = i*2*Math.PI/CircleLineSegmentN;
                     var point = new Vector2(
-                        Center.X + innerRadius * (float) Math.Cos(angle),
-                        Center.Y - innerRadius * (float) Math.Sin(angle));
+                        Center.X + innerRadius*(float) Math.Cos(angle),
+                        Center.Y - innerRadius*(float) Math.Sin(angle));
                     result.Add(point);
                 }
 
@@ -272,15 +274,15 @@ namespace AutoSharpporting.Evade
             public Polygon ToPolygon(int offset = 0)
             {
                 var result = new Polygon();
-                var outRadius = (Radius + offset) / (float) Math.Cos(2 * Math.PI / CircleLineSegmentN);
+                var outRadius = (Radius + offset)/(float) Math.Cos(2*Math.PI/CircleLineSegmentN);
 
                 result.Add(Center);
-                var Side1 = Direction.Rotated(-Angle * 0.5f);
+                var Side1 = Direction.Rotated(-Angle*0.5f);
 
                 for (var i = 0; i <= CircleLineSegmentN; i++)
                 {
-                    var cDirection = Side1.Rotated(i * Angle / CircleLineSegmentN).Normalized();
-                    result.Add(new Vector2(Center.X + outRadius * cDirection.X, Center.Y + outRadius * cDirection.Y));
+                    var cDirection = Side1.Rotated(i*Angle/CircleLineSegmentN).Normalized();
+                    result.Add(new Vector2(Center.X + outRadius*cDirection.X, Center.Y + outRadius*cDirection.Y));
                 }
 
                 return result;

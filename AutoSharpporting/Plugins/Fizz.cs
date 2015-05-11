@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
     public class Fizz : PluginBase
     {
         public static bool UseEAgain;
-        public static Spellbook spellBook = ObjectManager.Player.Spellbook;
-        public static SpellDataInst eSpell = spellBook.GetSpell(SpellSlot.E);
+
         public Fizz()
         {
             Q = new Spell(SpellSlot.Q, 560);
@@ -27,15 +20,13 @@ namespace AutoSharpporting.Plugins
             R.SetSkillshot(0.5f, 250f, 1200f, false, SkillshotType.SkillshotLine);
             UseEAgain = true;
         }
+
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
                 Combo();
             }
-
-
         }
 
         // combo from sigma series
@@ -50,7 +41,7 @@ namespace AutoSharpporting.Plugins
                     return;
                 }
                 //castItems(target);
-                if (target.IsValidTarget(R.Range)&& R.IsReady())
+                if (target.IsValidTarget(R.Range) && R.IsReady())
                 {
                     R.Cast(target, true);
                 }
@@ -67,15 +58,14 @@ namespace AutoSharpporting.Plugins
                         UseEAgain = false;
                         Utility.DelayAction.Add(250, () => UseEAgain = true);
                     }
-                    if (target.IsValidTarget(370 + 150) && target.IsValidTarget(330) == false && eSpell.Name == "fizzjumptwo")
+                    if (target.IsValidTarget(370 + 150) && target.IsValidTarget(330) == false &&
+                        eSpell.Name == "fizzjumptwo")
                     {
                         E.Cast(target, true);
                     }
                 }
-
             }
         }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -85,5 +75,7 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboR", "Use R", true);
         }
 
+        public static Spellbook spellBook = ObjectManager.Player.Spellbook;
+        public static SpellDataInst eSpell = spellBook.GetSpell(SpellSlot.E);
     }
 }

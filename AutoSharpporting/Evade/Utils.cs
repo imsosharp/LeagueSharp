@@ -23,17 +23,19 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using LeagueSharp;
+using LeagueSharp.Common;
+using SharpDX;
+using Color = System.Drawing.Color;
+
 namespace AutoSharpporting.Evade
 {
     #region
 
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using LeagueSharp;
-    using LeagueSharp.Common;
-    using SharpDX;
-    using Color = System.Drawing.Color;
+    
 
     #endregion
 
@@ -79,7 +81,7 @@ namespace AutoSharpporting.Evade
                 }
             }
 
-            return (result == 0f) ? -1 : (int) (Environment.TickCount + (result - Game.Time) * 1000);
+            return (result == 0f) ? -1 : (int) (Environment.TickCount + (result - Game.Time)*1000);
         }
 
         public static void DrawLineInWorld(Vector3 start, Vector3 end, int width, Color color)

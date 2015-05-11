@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -17,7 +11,7 @@ namespace AutoSharpporting.Plugins
         {
             Q = new Spell(SpellSlot.Q, 500f);
             W = new Spell(SpellSlot.W, Q.Range);
-            E = new Spell(SpellSlot.E, 225f + 2 * 65f);
+            E = new Spell(SpellSlot.E, 225f + 2*65f);
             R = new Spell(SpellSlot.R, 650f);
 
             R.SetSkillshot(0.25f, 350f, float.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -25,10 +19,8 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-
             if (ComboMode)
             {
-
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast();
@@ -51,10 +43,7 @@ namespace AutoSharpporting.Plugins
                     R.Cast(Target);
                 }
             }
-
-
         }
-
 
         public override void ComboMenu(Menu config)
         {
@@ -63,6 +52,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
     }
 }

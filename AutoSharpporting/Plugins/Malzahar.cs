@@ -23,7 +23,6 @@ namespace AutoSharpporting.Plugins
         {
             if (ComboMode)
             {
-
                 if (Q.CastCheck(Target, "ComboQ") && Q.GetPrediction(Target).Hitchance >= HitChance.High)
                 {
                     Q.Cast(Target);
@@ -41,7 +40,6 @@ namespace AutoSharpporting.Plugins
                 {
                     R.Cast(Target);
                 }
-
             }
             if (HarassMode)
             {

@@ -103,21 +103,24 @@ namespace AutoSharpporting.Util
         {
             return ObjectManager.Player.CountEnemiesInRange((int) range) >= numOfEnemy;
         }
+
         public static List<Obj_AI_Hero> AllyInRange(float range)
         {
             return
-            ObjectManager.Get<Obj_AI_Hero>()
-            .Where(
-            h =>
-            ObjectManager.Player.Distance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid && !h.IsDead).OrderBy(h => ObjectManager.Player.Distance(h.Position)).ToList();
+                ObjectManager.Get<Obj_AI_Hero>()
+                    .Where(
+                        h =>
+                            ObjectManager.Player.Distance(h.Position) < range && h.IsAlly && !h.IsMe && h.IsValid &&
+                            !h.IsDead).OrderBy(h => ObjectManager.Player.Distance(h.Position)).ToList();
         }
+
         public static Obj_AI_Hero AllyBelowHp(int percentHp, float range)
         {
-            var allyBelowHp = 
+            var allyBelowHp =
                 ObjectManager.Get<Obj_AI_Hero>()
                     .First(
                         h =>
-                            !h.IsMe && ((h.Health / h.MaxHealth) * 100) < percentHp &&
+                            !h.IsMe && ((h.Health/h.MaxHealth)*100) < percentHp &&
                             h.Distance(ObjectManager.Player) < range);
             return allyBelowHp;
         }

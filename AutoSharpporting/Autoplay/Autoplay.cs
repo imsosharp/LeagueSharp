@@ -8,20 +8,14 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing.Text;
 using System.Linq;
-using System.Net.Mime;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-
-
 /// This code is so shit but
 /// I'll try to show it some love :)
+
 namespace AutoSharpporting.Autoplay
 {
     internal class Autoplay
@@ -29,12 +23,11 @@ namespace AutoSharpporting.Autoplay
         public const int Blue = 200;
         public const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
-        public static Obj_AI_Hero Carry;
-        public static Obj_AI_Hero NearestAllyHero;
-        public static Obj_AI_Turret NearestAllyTurret;
-        public static Obj_AI_Hero Jungler;
-        public static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
-        public static Obj_AI_Hero _tempcarry;
+        public static Obj_AI_Hero Carry { get; set; }
+        public static Obj_AI_Hero NearestAllyHero { get; set; }
+        public static Obj_AI_Turret NearestAllyTurret { get; set; }
+        public static Obj_AI_Hero Jungler { get; set; }
+        public static Obj_AI_Hero TempCarry { get; set; }
         public static Vector2 BotLanePos;
         public static Vector2 TopLanePos;
         public static int _chosen;
@@ -43,15 +36,14 @@ namespace AutoSharpporting.Autoplay
         public static Vector2 _safepos;
         public static Vector2 _saferecall;
         public static int _loaded;
-        public static bool _byPassLoadedCheck = false;
+        public static bool _byPassLoadedCheck;
         public static float _lowHealthRatio = 0.3f;
         public static float _lowManaRatio = 0.1f;
         public static float _lowHealthIfLowManaRatio = 0.6f;
-        public static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
-        public static bool _overrideAttackUnitAction = false;
+        public static bool _overrideAttackUnitAction;
         public static int _lastSwitched = 0;
-        public static bool _tookRecallDecision = false;
-        public static int _lastTimeTookRecallDecision = 0;
+        public static bool _tookRecallDecision;
+        public static int _lastTimeTookRecallDecision;
         public static int _lastRecallAttempt = 0;
 
         public Autoplay()
@@ -68,7 +60,8 @@ namespace AutoSharpporting.Autoplay
 
         public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && sender.UnderTurret(true) && args.Target.IsEnemy && args.Target.Type == GameObjectType.obj_AI_Hero)
+            if (sender.IsMe && sender.UnderTurret(true) && args.Target.IsEnemy &&
+                args.Target.Type == GameObjectType.obj_AI_Hero)
             {
                 _overrideAttackUnitAction = true;
             }
@@ -76,7 +69,7 @@ namespace AutoSharpporting.Autoplay
 
         public static void OnGameLoad(EventArgs args)
         {
-            _loaded = (Bot.Level == 1) ? Environment.TickCount:Environment.TickCount - 140000;
+            _loaded = (Bot.Level == 1) ? Environment.TickCount : Environment.TickCount - 140000;
             var map = Utility.Map.GetMap();
             if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
             {
@@ -113,10 +106,10 @@ namespace AutoSharpporting.Autoplay
                     _safe = Blue;
                 }
             }
-            new AutoLevel(TreesAutoLevel.GetSequence().Select(l=>l-1));
+            new AutoLevel(TreesAutoLevel.GetSequence().Select(l => l - 1));
             AutoLevel.Enable();
             MetaHandler.LoadObjects();
-            
+            MetaHandler.DoChecks();
         }
 
         public static void OnUpdate(EventArgs args)
@@ -146,14 +139,15 @@ namespace AutoSharpporting.Autoplay
             }
             if (Bot.InFountain())
             {
-                return (Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f);
+                return (Bot.Health > Bot.MaxHealth*0.9f) && (Bot.Mana > Bot.MaxMana*0.8f);
             }
-            if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
+            if (Bot.Mana < Bot.MaxMana*_lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+                return Bot.Health > Bot.MaxHealth*_lowHealthIfLowManaRatio && !Bot.IsRecalling() &&
+                       !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
-
+            return (Bot.Health > Bot.MaxHealth*_lowHealthRatio) && !Bot.IsRecalling() &&
+                   !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
         }
 
         public static void DoAutoplay()
@@ -165,7 +159,8 @@ namespace AutoSharpporting.Autoplay
 
             if (!IsBotSafe() && !Bot.InFountain())
                 Behavior.LowHealth();
-            if (Carry == null && Environment.TickCount - _loaded > 15000 && Environment.TickCount - _loaded < 135000 && !_byPassLoadedCheck)
+            if (Carry == null && Environment.TickCount - _loaded > 15000 && Environment.TickCount - _loaded < 135000 &&
+                !_byPassLoadedCheck)
                 Behavior.CarryIsNull();
             if (Carry != null && IsBotSafe() && Carry.IsDead || Carry.InFountain())
                 Behavior.CarryIsDead();
@@ -193,16 +188,17 @@ namespace AutoSharpporting.Autoplay
                     {
                         _overrideAttackUnitAction = false;
                     }
-                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe() && !_tookRecallDecision)
+                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe() &&
+                        !_tookRecallDecision)
                     {
-                            if (turret.Distance(Bot.Position) < Bot.AttackRange && !_overrideAttackUnitAction)
-                                Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
+                        if (turret.Distance(Bot.Position) < Bot.AttackRange && !_overrideAttackUnitAction)
+                            Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
                     }
                     else
                     {
                         if (TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical) != null)
                         {
-                            Obj_AI_Hero target = TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical);
+                            var target = TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical);
                             if (target != null && target.IsValid && !target.IsDead && IsBotSafe() &&
                                 !target.UnderTurret(true) && !_overrideAttackUnitAction && !_tookRecallDecision)
                             {
@@ -222,6 +218,11 @@ namespace AutoSharpporting.Autoplay
                     Console.WriteLine(e);
                 }
             }
-        } //end of DoAutoplay()
+        }
+
+        public static readonly Random Rand =
+            new Random((42/13*DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
+
+        public static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
     }
 }

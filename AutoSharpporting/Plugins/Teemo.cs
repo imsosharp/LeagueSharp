@@ -1,24 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
     public class Teemo : PluginBase
     {
-        private  readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second);
-        private  Vector2 pos;
+        private readonly Random Rand = new Random((42/13*DateTime.Now.Millisecond) + DateTime.Now.Second);
+        private Vector2 pos;
 
         public Teemo()
         {
-
             Q = new Spell(SpellSlot.Q, 680);
             W = new Spell(SpellSlot.W);
             R = new Spell(SpellSlot.R, 230);
@@ -30,8 +24,6 @@ namespace AutoSharpporting.Plugins
         {
             if (ComboMode)
             {
-
-
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.Cast(Target);
@@ -43,11 +35,11 @@ namespace AutoSharpporting.Plugins
                 }
                 if (R.IsReady())
                 {
-                    int _randRange = Rand.Next(-100, 100);
- 
+                    var _randRange = Rand.Next(-100, 100);
+
                     pos.X = Player.Position.X + _randRange;
                     pos.Y = Player.Position.Y + _randRange;
-                    R.Cast(pos.To3D(),UsePackets);
+                    R.Cast(pos.To3D(), UsePackets);
                 }
                 if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 30)
                 {
@@ -66,6 +58,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
     }
 }

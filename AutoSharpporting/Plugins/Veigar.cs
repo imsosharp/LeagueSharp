@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 namespace AutoSharpporting.Plugins
 {
@@ -15,23 +10,19 @@ namespace AutoSharpporting.Plugins
     {
         public Veigar()
         {
-
             Q = new Spell(SpellSlot.Q, 650);
             W = new Spell(SpellSlot.W, 900);
             E = new Spell(SpellSlot.E, 1005);
             R = new Spell(SpellSlot.R, 650);
             W.SetSkillshot(1.25f, 230f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(.2f, 330f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-
         }
-
 
         public override void OnUpdate(EventArgs args)
         {
             KS();
             if (ComboMode)
             {
-
                 if (E.CastCheck(Target, "ComboE"))
                 {
                     E.Cast(Target, true);
@@ -44,7 +35,6 @@ namespace AutoSharpporting.Plugins
                 {
                     W.Cast(Target.Position, true);
                 }
-
             }
 
             if (HarassMode)
@@ -58,13 +48,14 @@ namespace AutoSharpporting.Plugins
                     W.Cast(Target, true);
                 }
             }
-
         }
 
         public void KS()
         {
-
-            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+            foreach (
+                var target in
+                    ObjectManager.Get<Obj_AI_Hero>()
+                        .Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
             {
                 if (target != null)
                 {
@@ -78,10 +69,8 @@ namespace AutoSharpporting.Plugins
                             return;
                         }
                     }
-
-
-               }
-          }
+                }
+            }
         }
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
@@ -94,7 +83,6 @@ namespace AutoSharpporting.Plugins
             if (E.CastCheck(unit, "Interrupt.E"))
             {
                 E.Cast(unit, true);
-                return;
             }
         }
 
@@ -116,8 +104,5 @@ namespace AutoSharpporting.Plugins
         {
             config.AddBool("Interrupt.E", "Use E to Interrupt Spells", true);
         }
-
     }
 }
-
-

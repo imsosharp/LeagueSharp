@@ -18,15 +18,9 @@
 #region
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
+using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
 
 #endregion
 
@@ -47,15 +41,12 @@ namespace AutoSharpporting.Plugins
             R = new Spell(SpellSlot.R);
         }
 
-
-
         // some part from DevRyze
 
         public override void OnUpdate(EventArgs args)
         {
             if (ComboMode)
             {
-            
                 if (Q.CastCheck(Target, "ComboQ"))
                 {
                     Q.CastOnUnit(Target);
@@ -83,9 +74,6 @@ namespace AutoSharpporting.Plugins
             }
         }
 
-      
-
-
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
@@ -93,6 +81,5 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
-
     }
 }

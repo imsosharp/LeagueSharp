@@ -19,9 +19,9 @@
 
 using System;
 using System.Reflection;
-using LeagueSharp;
-using LeagueSharp.Common;
+using AutoSharpporting.Autoplay;
 using AutoSharpporting.Util;
+using LeagueSharp.Common;
 using Version = System.Version;
 
 #endregion
@@ -38,6 +38,7 @@ namespace AutoSharpporting
 
             CustomEvents.Game.OnGameLoad += a =>
             {
+                new Humanizer();
                 Utility.DelayAction.Add(new Random().Next(1000, 3000), () => new Autoplay.Autoplay());
                 Helpers.UpdateCheck();
                 Protector.Init();

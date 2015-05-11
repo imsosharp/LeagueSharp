@@ -208,11 +208,50 @@ namespace AutoSharpporting.Autoplay
         {
             var alliesSortedByKDA =
                 MetaHandler.AllyHeroes.OrderByDescending(
-                    hero => (hero.ChampionsKilled/((hero.Deaths != 0) ? hero.Deaths : 1))); //AsunaChan2Kawaii
+                    hero => (hero.ChampionsKilled/((hero.Deaths != 0) ? hero.Deaths : 1)));
             if (alliesSortedByKDA.FirstOrDefault() != null)
             {
                 Autoplay.Carry = alliesSortedByKDA.FirstOrDefault();
                 Autoplay._lastSwitched = Environment.TickCount;
+            }
+        }
+
+        
+
+        public static void UnderTurret()
+        {
+            var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Autoplay.Bot.Position) < 1200);
+            if (Autoplay._overrideAttackUnitAction && !Autoplay._tookRecallDecision)
+            {
+                Autoplay.Bot.IssueOrder(GameObjectOrder.MoveTo, Autoplay._safepos.To3D());
+            }
+            if (!Autoplay.Bot.UnderTurret(true))
+            {
+                Autoplay._overrideAttackUnitAction = false;
+            }
+            if (Autoplay.Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && Autoplay.IsBotSafe() &&
+                !Autoplay._tookRecallDecision)
+            {
+                if (turret.Distance(Autoplay.Bot.Position) < Autoplay.Bot.AttackRange && !Autoplay._overrideAttackUnitAction)
+                    Autoplay.Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
+            }
+            else
+            {
+                if (TargetSelector.GetTarget(Autoplay.Bot.AttackRange, TargetSelector.DamageType.Physical) != null)
+                {
+                    var target = TargetSelector.GetTarget(Autoplay.Bot.AttackRange, TargetSelector.DamageType.Physical);
+                    if (target != null && target.IsValid && !target.IsDead && Autoplay.IsBotSafe() &&
+                        !target.UnderTurret(true) && !Autoplay._overrideAttackUnitAction && !Autoplay._tookRecallDecision)
+                    {
+                        Autoplay.Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
+                    }
+                }
+            }
+            if (Autoplay.Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) < 2)
+            {
+                Autoplay._safepos.X = (Autoplay.Bot.Position.X + Autoplay._safe);
+                Autoplay._safepos.Y = (Autoplay.Bot.Position.Y + Autoplay._safe);
+                PluginBase.Orbwalker.SetOrbwalkingPoint(Autoplay._safepos.To3D());
             }
         }
     }

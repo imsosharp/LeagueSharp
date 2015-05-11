@@ -20,6 +20,13 @@ namespace AutoSharpporting.Autoplay
 {
     internal class Autoplay
     {
+        public Autoplay()
+        {
+            CustomEvents.Game.OnGameLoad += OnGameLoad;
+            Game.OnUpdate += OnUpdate;
+            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+        }
+
         public const int Blue = 200;
         public const int Purple = -200;
         public static Obj_AI_Hero Bot = ObjectManager.Player;
@@ -45,13 +52,10 @@ namespace AutoSharpporting.Autoplay
         public static bool _tookRecallDecision;
         public static int _lastTimeTookRecallDecision;
         public static int _lastRecallAttempt = 0;
+        public static readonly Random Rand =
+            new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
 
-        public Autoplay()
-        {
-            CustomEvents.Game.OnGameLoad += OnGameLoad;
-            Game.OnUpdate += OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-        }
+        public static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
 
         public static bool RandomDecision()
         {
@@ -109,12 +113,11 @@ namespace AutoSharpporting.Autoplay
             new AutoLevel(TreesAutoLevel.GetSequence().Select(l => l - 1));
             AutoLevel.Enable();
             MetaHandler.LoadObjects();
-            MetaHandler.DoChecks();
         }
 
         public static void OnUpdate(EventArgs args)
         {
-            DoAutoplay();
+            SwitchStates();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
             if (Bot.InFountain() || !Carry.IsDead) _tookRecallDecision = false;
@@ -150,13 +153,12 @@ namespace AutoSharpporting.Autoplay
                    !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
         }
 
-        public static void DoAutoplay()
+        public static void SwitchStates()
         {
             if (Bot.InFountain() && RandomDecision())
             {
                 Bot.Position.WalkAround();
             }
-
             if (!IsBotSafe() && !Bot.InFountain())
                 Behavior.LowHealth();
             if (Carry == null && Environment.TickCount - _loaded > 15000 && Environment.TickCount - _loaded < 135000 &&
@@ -173,56 +175,8 @@ namespace AutoSharpporting.Autoplay
             if ((Bot.Level > 8 || Environment.TickCount - _loaded > 900000) &&
                 Environment.TickCount - _lastSwitched > 180000)
                 Behavior.SwitchCarry();
-
-
-            if (!Bot.IsDead)
-            {
-                try
-                {
-                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot.Position) < 1200);
-                    if (_overrideAttackUnitAction && !_tookRecallDecision)
-                    {
-                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
-                    }
-                    if (!Bot.UnderTurret(true))
-                    {
-                        _overrideAttackUnitAction = false;
-                    }
-                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe() &&
-                        !_tookRecallDecision)
-                    {
-                        if (turret.Distance(Bot.Position) < Bot.AttackRange && !_overrideAttackUnitAction)
-                            Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
-                    }
-                    else
-                    {
-                        if (TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical) != null)
-                        {
-                            var target = TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical);
-                            if (target != null && target.IsValid && !target.IsDead && IsBotSafe() &&
-                                !target.UnderTurret(true) && !_overrideAttackUnitAction && !_tookRecallDecision)
-                            {
-                                Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
-                            }
-                        }
-                    }
-                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) < 2)
-                    {
-                        _safepos.X = (Bot.Position.X + _safe);
-                        _safepos.Y = (Bot.Position.Y + _safe);
-                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
+            if (MetaHandler.EnemyTurrets.Any(t => t.Distance(Bot.Position) < 1200))
+                Behavior.UnderTurret();
         }
-
-        public static readonly Random Rand =
-            new Random((42/13*DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
-
-        public static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
     }
 }

@@ -131,20 +131,34 @@ namespace AutoSharpporting.Autoplay
             {
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515)) //validates on SR untill 1:55 game time
                     {
-                        int startingItem = Autoplay.Rand.Next(-6, 7);
-                        if (startingItem < 0)
+                        if (Supports.Contains(ObjectManager.Player.BaseSkinName))
                         {
-                            Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                            int startingItem = Autoplay.Rand.Next(-6, 7);
+                            if (startingItem < 0)
+                            {
+                                Autoplay.Bot.BuyItem(ItemId.Spellthiefs_Edge);
+                            }
+                            if (startingItem == 0)
+                            {
+                                Autoplay.Bot.BuyItem(ItemId.Dorans_Ring);
+                            }
+                            if (startingItem > 0)
+                            {
+                                Autoplay.Bot.BuyItem(ItemId.Ancient_Coin);
+                            }
+                            Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                         }
-                        if (startingItem == 0)
+                        if (AD.Contains(ObjectManager.Player.BaseSkinName))
+                        {
+                            Autoplay.Bot.BuyItem(ItemId.Dorans_Blade);
+                            Autoplay.Bot.BuyItem(ItemId.Health_Potion);
+                        }
+                        if (AP.Contains(ObjectManager.Player.BaseSkinName))
                         {
                             Autoplay.Bot.BuyItem(ItemId.Dorans_Ring);
+                            Autoplay.Bot.BuyItem(ItemId.Health_Potion);
+                            Autoplay.Bot.BuyItem(ItemId.Health_Potion);
                         }
-                        if (startingItem > 0)
-                        {
-                            Autoplay.Bot.BuyItem(ItemId.Ancient_Coin);
-                        }
-                        Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
                     foreach (var item in GetDefaultItemArray())
                     {

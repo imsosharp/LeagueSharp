@@ -35,8 +35,9 @@ namespace AutoSharpporting
     using SharpDX;
     using AutoSharpporting.Evade;
     using AutoSharpporting.Util;
-    using Collision = Support.Evade.Collision;
+    using Collision = Evade.Collision;
     using SpellData = LeagueSharp.SpellData;
+    using AutoSharpporting.Autoplay;
 
     #endregion
 

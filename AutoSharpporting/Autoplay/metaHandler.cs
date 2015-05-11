@@ -162,7 +162,7 @@ namespace AutoSharpporting.Autoplay
                 if (Autoplay.Bot.InFountain() && (Autoplay.Bot.Gold == 475 || Autoplay.Bot.Gold == 515))
                     //validates on SR untill 1:55 game time
                 {
-                    if (Supports.Contains(ObjectManager.Player.BaseSkinName))
+                    if (Supports.Any(c => c.ToLower() == Autoplay.Bot.BaseSkinName.ToLower()))
                     {
                         var startingItem = Autoplay.Rand.Next(-6, 7);
                         if (startingItem < 0)
@@ -179,12 +179,12 @@ namespace AutoSharpporting.Autoplay
                         }
                         Autoplay.Bot.BuyItem(ItemId.Warding_Totem_Trinket);
                     }
-                    if (AD.Contains(ObjectManager.Player.BaseSkinName))
+                    if (AD.Any(c => c.ToLower() == Autoplay.Bot.BaseSkinName.ToLower()))
                     {
                         Autoplay.Bot.BuyItem(ItemId.Dorans_Blade);
                         Autoplay.Bot.BuyItem(ItemId.Health_Potion);
                     }
-                    if (AP.Contains(ObjectManager.Player.BaseSkinName))
+                    if (AP.Any(c => c.ToLower() == Autoplay.Bot.BaseSkinName.ToLower()))
                     {
                         Autoplay.Bot.BuyItem(ItemId.Dorans_Ring);
                         Autoplay.Bot.BuyItem(ItemId.Health_Potion);

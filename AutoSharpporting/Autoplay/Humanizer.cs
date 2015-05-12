@@ -39,7 +39,7 @@ namespace AutoSharpporting.Autoplay
 
             var move = Menu.AddSubMenu(new Menu("Movement", "Movement"));
             move.AddItem(new MenuItem("MovementEnabled", "Enabled").SetValue(true));
-            move.AddItem(new MenuItem("MovementDelay", "Movement Delay")).SetValue(new Slider(250, 100, 1000));
+            move.AddItem(new MenuItem("MovementDelay", "Movement Delay")).SetValue(new Slider(400, 200, 1000));
 
             Menu.AddToMainMenu();
 

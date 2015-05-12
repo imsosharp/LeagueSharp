@@ -9,50 +9,31 @@ namespace AutoSharpporting.Autoplay
     {
         public static void CarryIsNull()
         {
+            if (Autoplay._byPassLoadedCheck)
+            {
+                Autoplay.Carry =
+                        MetaHandler.AllyHeroes.FirstOrDefault(
+                            hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero));
+                return;
+            }
+
             Autoplay.BotLanePos.To3D().WalkAround();
 
             if (Autoplay.Bot.Distance(Autoplay.BotLanePos) < 1000)
             {
                 if (Environment.TickCount - Autoplay._loaded > 60000 && !MetaHandler.ShouldSupportTopLane)
                 {
-                    if (
-                        MetaHandler.AllyHeroes.FirstOrDefault(
-                            hero =>
-                                !hero.IsMe && hero.Distance(Autoplay.Bot.Position) < 4500 && !MetaHandler.HasSmite(hero)) !=
-                        null)
-                    {
-                        Autoplay.Carry =
-                            MetaHandler.AllyHeroes.FirstOrDefault(
-                                hero =>
-                                    !hero.IsMe && hero.Distance(Autoplay.Bot.Position) < 4500 &&
-                                    !MetaHandler.HasSmite(hero));
-                    }
+                    Autoplay.Carry = MetaHandler.AllyHeroes.FirstOrDefault(
+                        hero =>
+                            !hero.IsMe && hero.Distance(Autoplay.Bot.Position) < 4500 && !MetaHandler.HasSmite(hero));
                 }
                 if (Environment.TickCount - Autoplay._loaded > 60000 && MetaHandler.ShouldSupportTopLane)
                 {
-                    if (
-                        MetaHandler.AllyHeroes.FirstOrDefault(
-                            hero =>
-                                !hero.IsMe && hero.Distance(Autoplay.TopLanePos) < 4500 && !MetaHandler.HasSmite(hero)) !=
-                        null)
-                    {
-                        Autoplay.Carry =
+                    Autoplay.Carry =
                             MetaHandler.AllyHeroes.FirstOrDefault(
                                 hero =>
                                     !hero.IsMe && hero.Distance(Autoplay.TopLanePos) < 4500 &&
                                     !MetaHandler.HasSmite(hero));
-                    }
-                }
-            }
-            if (Autoplay._byPassLoadedCheck && Autoplay.Carry == null)
-            {
-                if (
-                    MetaHandler.AllyHeroes.FirstOrDefault(
-                        hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero)) != null)
-                {
-                    Autoplay.Carry =
-                        MetaHandler.AllyHeroes.FirstOrDefault(
-                            hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero));
                 }
             }
         }
@@ -142,17 +123,10 @@ namespace AutoSharpporting.Autoplay
         {
             if (Autoplay.TempCarry == null || Autoplay.TempCarry.IsDead || Autoplay.TempCarry.InFountain())
             {
-                if (
-                    MetaHandler.AllyHeroes.FirstOrDefault(
-                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) !=
-                    null)
-                {
-                    Autoplay.TempCarry =
+                Autoplay.TempCarry =
                         MetaHandler.AllyHeroes.FirstOrDefault(
                             hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
-                }
-                if (
-                    MetaHandler.AllyHeroes.FirstOrDefault(
+                if (MetaHandler.AllyHeroes.FirstOrDefault(
                         hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) ==
                     null &&
                     MetaHandler.AllyHeroes.FirstOrDefault(
@@ -166,7 +140,7 @@ namespace AutoSharpporting.Autoplay
             }
             if (Autoplay.TempCarry != null)
             {
-                Console.WriteLine("Autoplay.Carry not found, following: " + Autoplay.TempCarry.ChampionName);
+                Console.WriteLine("Carry not found, following: " + Autoplay.TempCarry.ChampionName);
                 Autoplay._frontline.X = Autoplay.TempCarry.Position.X + Autoplay._chosen;
                 Autoplay._frontline.Y = Autoplay.TempCarry.Position.Y + Autoplay._chosen;
                 if (

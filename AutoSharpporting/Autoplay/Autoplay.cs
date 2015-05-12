@@ -161,8 +161,7 @@ namespace AutoSharpporting.Autoplay
             }
             if (!IsBotSafe() && !Bot.InFountain())
                 Behavior.LowHealth();
-            if (Carry == null && Environment.TickCount - _loaded > 15000 && Environment.TickCount - _loaded < 135000 &&
-                !_byPassLoadedCheck)
+            if (Carry == null && Environment.TickCount - _loaded > 15000 && Environment.TickCount - _loaded < 135000)
                 Behavior.CarryIsNull();
             if (Carry != null && IsBotSafe() && Carry.IsDead || Carry.InFountain())
                 Behavior.CarryIsDead();

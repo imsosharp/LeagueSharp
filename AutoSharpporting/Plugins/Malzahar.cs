@@ -1,9 +1,9 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using Support.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Malzahar : PluginBase
     {
@@ -23,6 +23,7 @@ namespace AutoSharpporting.Plugins
         {
             if (ComboMode)
             {
+
                 if (Q.CastCheck(Target, "ComboQ") && Q.GetPrediction(Target).Hitchance >= HitChance.High)
                 {
                     Q.Cast(Target);
@@ -40,6 +41,7 @@ namespace AutoSharpporting.Plugins
                 {
                     R.Cast(Target);
                 }
+
             }
             if (HarassMode)
             {

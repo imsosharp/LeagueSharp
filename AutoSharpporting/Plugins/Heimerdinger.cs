@@ -1,10 +1,15 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Heimerdinger : PluginBase
     {
@@ -21,9 +26,9 @@ namespace AutoSharpporting.Plugins
             W.SetSkillshot(250f, 200, 1400, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.51f, 120, 1200, false, SkillshotType.SkillshotCircle);
         }
-
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
                 if (W.CastCheck(Target, "ComboW"))
@@ -40,14 +45,18 @@ namespace AutoSharpporting.Plugins
                 {
                     R.Cast();
                 }
-                if (Q.IsReady() && Player.CountEnemiesInRange(1300) > 2)
+                if (Q.IsReady() && Player.CountEnemiesInRange(1300)>2)
                 {
-                    var rnd = new Random();
-                    pos.X = Player.Position.X + rnd.Next(-20, 20);
-                    pos.Y = Player.Position.Y + rnd.Next(-20, 20);
+                    Random rnd = new Random();
+                    pos.X = Player.Position.X + rnd.Next(-20,20); 
+                    pos.Y = Player.Position.Y + rnd.Next(-20,20);
                     Q.Cast(pos.To3D());
                 }
+               
+
             }
+
+
         }
 
         public override void ComboMenu(Menu config)
@@ -57,5 +66,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

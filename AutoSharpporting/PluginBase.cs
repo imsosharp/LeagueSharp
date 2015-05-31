@@ -23,21 +23,23 @@
 
 #endregion
 
-using System;
-using System.Drawing;
-using System.Linq;
-using AutoSharpporting.Util;
-using LeagueSharp;
-using LeagueSharp.Common;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using AntiGapcloser = AutoSharpporting.Util.AntiGapcloser;
-using Version = System.Version;
-
-namespace AutoSharpporting
+namespace Support
 {
     #region
 
-    
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using System.Drawing;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using AntiGapcloser = Support.Util.AntiGapcloser;
+    using Color = System.Drawing.Color;
+    using Version = System.Version;
 
     #endregion
 
@@ -46,6 +48,7 @@ namespace AutoSharpporting
     /// </summary>
     public abstract class PluginBase
     {
+
         /// <summary>
         ///     Init BaseClass
         /// </summary>
@@ -61,348 +64,6 @@ namespace AutoSharpporting
             InitPrivateEvents();
 
             Helpers.PrintMessage(string.Format("{0} by {1} v.{2} loaded!", ChampionName, Author, Version));
-        }
-
-        /// <summary>
-        ///     Plugin display name
-        /// </summary>
-        public string Author { get; set; }
-
-        /// <summary>
-        ///     Champion Author
-        /// </summary>
-        public string ChampionName { get; set; }
-
-        /// <summary>
-        ///     Plugin Version
-        /// </summary>
-        public Version Version { get; set; }
-
-        /// <summary>
-        ///     Orbwalker
-        /// </summary>
-        public static Orbwalking.Orbwalker Orbwalker { get; set; }
-
-        /// <summary>
-        ///     ActiveMode
-        /// </summary>
-        public static Orbwalking.OrbwalkingMode ActiveMode { get; set; }
-
-        /// <summary>
-        ///     SupportTargetSelector
-        /// </summary>
-        public TargetSelector TargetSelector { get; set; }
-
-        /// <summary>
-        ///     ComboMode
-        /// </summary>
-        public bool ComboMode
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        ///     HarassMode
-        /// </summary>
-        public bool HarassMode
-        {
-            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead; }
-        }
-
-        /// <summary>
-        ///     HarassMana
-        /// </summary>
-        public bool HarassMana
-        {
-            get { return Player.Mana > Player.MaxMana*ConfigValue<Slider>("HarassMana").Value/100; }
-        }
-
-        /// <summary>
-        ///     UsePackets
-        /// </summary>
-        public bool UsePackets
-        {
-            get { return false; /* 4.21 ConfigValue<bool>("UsePackets"); */ }
-        }
-
-        /// <summary>
-        ///     Player Object
-        /// </summary>
-        public Obj_AI_Hero Player
-        {
-            get { return ObjectManager.Player; }
-        }
-
-        /// <summary>
-        ///     AttackRange
-        /// </summary>
-        public float AttackRange
-        {
-            get { return Orbwalking.GetRealAutoAttackRange(Target); }
-        }
-
-        /// <summary>
-        ///     Target
-        /// </summary>
-        public Obj_AI_Hero Target
-        {
-            get { return TargetSelector.GetTarget(1200, TargetSelector.DamageType.Magical); }
-        }
-
-        /// <summary>
-        ///     OrbwalkerTarget
-        /// </summary>
-        public AttackableUnit OrbwalkerTarget
-        {
-            get { return Orbwalker.GetTarget(); }
-        }
-
-        /// <summary>
-        ///     AttackMinion
-        /// </summary>
-        public bool AttackMinion
-        {
-            get
-            {
-                return Helpers.AllyInRange(1500).Count == 0 ||
-                       Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0);
-            }
-        }
-
-        /// <summary>
-        ///     Q
-        /// </summary>
-        public Spell Q { get; set; }
-
-        /// <summary>
-        ///     W
-        /// </summary>
-        public Spell W { get; set; }
-
-        /// <summary>
-        ///     E
-        /// </summary>
-        public Spell E { get; set; }
-
-        /// <summary>
-        ///     R
-        /// </summary>
-        public Spell R { get; set; }
-
-        /// <summary>
-        ///     Config
-        /// </summary>
-        public static Menu Config { get; set; }
-
-        /// <summary>
-        ///     ComboConfig
-        /// </summary>
-        public Menu ComboConfig { get; set; }
-
-        /// <summary>
-        ///     HarassConfig
-        /// </summary>
-        public Menu HarassConfig { get; set; }
-
-        /// <summary>
-        ///     MiscConfig
-        /// </summary>
-        public Menu MiscConfig { get; set; }
-
-        /// <summary>
-        ///     ManaConfig
-        /// </summary>
-        public Menu ManaConfig { get; set; }
-
-        /// <summary>
-        ///     DrawingConfig
-        /// </summary>
-        public Menu DrawingConfig { get; set; }
-
-        /// <summary>
-        ///     InterruptConfig
-        /// </summary>
-        public Menu InterruptConfig { get; set; }
-
-        /// <summary>
-        ///     ConfigValue
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <param name="item">string</param>
-        /// <remarks>
-        ///     Helper for
-        /// </remarks>
-        /// <returns></returns>
-        public T ConfigValue<T>(string item)
-        {
-            return Config.Item(item + ChampionName).GetValue<T>();
-        }
-
-        /// <summary>
-        ///     OnProcessPacket
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement OnProcessPacket logic
-        /// </remarks>
-        /// <param name="args"></param>
-        public virtual void OnProcessPacket(GamePacketEventArgs args)
-        {
-        }
-
-        /// <summary>
-        ///     OnSendPacket
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement OnSendPacket logic
-        /// </remarks>
-        /// <param name="args"></param>
-        public virtual void OnSendPacket(GamePacketEventArgs args)
-        {
-        }
-
-        /// <summary>
-        ///     OnPossibleToInterrupt
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement SpellsInterrupt logic
-        /// </remarks>
-        /// <param name="unit">Obj_AI_Base</param>
-        /// <param name="spell">InterruptableSpell</param>
-        public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
-        {
-        }
-
-        /// <summary>
-        ///     OnEnemyGapcloser
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement AntiGapcloser logic
-        /// </remarks>
-        /// <param name="gapcloser">ActiveGapcloser</param>
-        public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser)
-        {
-        }
-
-        /// <summary>
-        ///     OnUpdate
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement Update logic
-        /// </remarks>
-        /// <param name="args">EventArgs</param>
-        public virtual void OnUpdate(EventArgs args)
-        {
-        }
-
-        /// <summary>
-        ///     OnBeforeAttack
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement OnBeforeAttack logic
-        /// </remarks>
-        /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
-        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
-        {
-        }
-
-        /// <summary>
-        ///     OnAfterAttack
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement OnAfterAttack logic
-        /// </remarks>
-        /// <param name="unit">unit</param>
-        /// <param name="target">target</param>
-        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
-        {
-        }
-
-        /// <summary>
-        ///     OnLoad
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement class Initialization
-        /// </remarks>
-        /// <param name="args">EventArgs</param>
-        public virtual void OnLoad(EventArgs args)
-        {
-        }
-
-        /// <summary>
-        ///     OnDraw
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement Drawing
-        /// </remarks>
-        /// <param name="args">EventArgs</param>
-        public virtual void OnDraw(EventArgs args)
-        {
-        }
-
-        /// <summary>
-        ///     ComboMenu
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement ComboMenu Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void ComboMenu(Menu config)
-        {
-        }
-
-        /// <summary>
-        ///     HarassMenu
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement HarassMenu Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void HarassMenu(Menu config)
-        {
-        }
-
-        /// <summary>
-        ///     ManaMenu
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement ManaMenu Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void ManaMenu(Menu config)
-        {
-        }
-
-        /// <summary>
-        ///     MiscMenu
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement MiscMenu Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void MiscMenu(Menu config)
-        {
-        }
-
-        /// <summary>
-        ///     MiscMenu
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement Interrupt Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void InterruptMenu(Menu config)
-        {
-        }
-
-        /// <summary>
-        ///     DrawingMenu
-        /// </summary>
-        /// <remarks>
-        ///     override to Implement DrawingMenu Config
-        /// </remarks>
-        /// <param name="config">Menu</param>
-        public virtual void DrawingMenu(Menu config)
-        {
         }
 
         #region Private Stuff
@@ -519,7 +180,7 @@ namespace AutoSharpporting
             ManaConfig.AddSlider("HarassMana", "Harass Mana %", 1, 1, 100);
 
             // misc
-            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] {"Smart", "Never", "Always"});
+            MiscConfig.AddList("AttackMinions", "Attack Minions?", new[] { "Smart", "Never", "Always" });
             MiscConfig.AddBool("AttackChampions", "Attack Champions?", true);
 
             // drawing
@@ -558,5 +219,318 @@ namespace AutoSharpporting
         }
 
         #endregion
+
+        /// <summary>
+        ///     Plugin display name
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        ///     Champion Author
+        /// </summary>
+        public string ChampionName { get; set; }
+
+        /// <summary>
+        ///     Plugin Version
+        /// </summary>
+        public Version Version { get; set; }
+
+        /// <summary>
+        ///     Orbwalker
+        /// </summary>
+        public Orbwalking.Orbwalker Orbwalker { get; set; }
+
+        /// <summary>
+        ///     ActiveMode
+        /// </summary>
+        public static Orbwalking.OrbwalkingMode ActiveMode { get; set; }
+
+        /// <summary>
+        ///     SupportTargetSelector
+        /// </summary>
+        public TargetSelector TargetSelector { get; set; }
+
+        /// <summary>
+        ///     ComboMode
+        /// </summary>
+        public bool ComboMode
+        {
+            get { return true; }
+        }
+
+        /// <summary>
+        ///     HarassMode
+        /// </summary>
+        public bool HarassMode
+        {
+            get { return Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && HarassMana && !Player.IsDead; }
+        }
+
+        /// <summary>
+        ///     HarassMana
+        /// </summary>
+        public bool HarassMana
+        {
+            get { return Player.Mana > Player.MaxMana * ConfigValue<Slider>("HarassMana").Value / 100; }
+        }
+
+        /// <summary>
+        ///     UsePackets
+        /// </summary>
+        public bool UsePackets
+        {
+            get { return false; /* 4.21 ConfigValue<bool>("UsePackets"); */ }
+        }
+
+        /// <summary>
+        ///     Player Object
+        /// </summary>
+        public Obj_AI_Hero Player
+        {
+            get { return ObjectManager.Player; }
+        }
+
+        /// <summary>
+        ///     AttackRange
+        /// </summary>
+        public float AttackRange
+        {
+            get { return Orbwalking.GetRealAutoAttackRange(Target); }
+        }
+
+        /// <summary>
+        ///     Target
+        /// </summary>
+        public Obj_AI_Hero Target
+        {
+            get { return TargetSelector.GetTarget(1200, TargetSelector.DamageType.Magical); }
+        }
+
+        /// <summary>
+        ///     OrbwalkerTarget
+        /// </summary>
+        public AttackableUnit OrbwalkerTarget
+        {
+            get { return Orbwalker.GetTarget(); }
+        }
+
+        /// <summary>
+        ///     AttackMinion
+        /// </summary>
+        public bool AttackMinion
+        {
+            get
+            {
+                return Helpers.AllyInRange(1500).Count == 0 ||
+                       Player.Buffs.Any(buff => buff.Name == "talentreaperdisplay" && buff.Count > 0);
+            }
+        }
+
+        /// <summary>
+        ///     Q
+        /// </summary>
+        public Spell Q { get; set; }
+
+        /// <summary>
+        ///     W
+        /// </summary>
+        public Spell W { get; set; }
+
+        /// <summary>
+        ///     E
+        /// </summary>
+        public Spell E { get; set; }
+
+        /// <summary>
+        ///     R
+        /// </summary>
+        public Spell R { get; set; }
+
+        /// <summary>
+        ///     Config
+        /// </summary>
+        public static Menu Config { get; set; }
+
+        /// <summary>
+        ///     ComboConfig
+        /// </summary>
+        public Menu ComboConfig { get; set; }
+
+        /// <summary>
+        ///     HarassConfig
+        /// </summary>
+        public Menu HarassConfig { get; set; }
+
+        /// <summary>
+        ///     MiscConfig
+        /// </summary>
+        public Menu MiscConfig { get; set; }
+
+        /// <summary>
+        ///     ManaConfig
+        /// </summary>
+        public Menu ManaConfig { get; set; }
+
+        /// <summary>
+        ///     DrawingConfig
+        /// </summary>
+        public Menu DrawingConfig { get; set; }
+
+        /// <summary>
+        ///     InterruptConfig
+        /// </summary>
+        public Menu InterruptConfig { get; set; }
+
+
+        /// <summary>
+        ///     ConfigValue
+        /// </summary>
+        /// <typeparam name="T">Type</typeparam>
+        /// <param name="item">string</param>
+        /// <remarks>
+        ///     Helper for
+        /// </remarks>
+        /// <returns></returns>
+        public T ConfigValue<T>(string item)
+        {
+            return Config.Item(item + ChampionName).GetValue<T>();
+        }
+
+        /// <summary>
+        ///     OnProcessPacket
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnProcessPacket logic
+        /// </remarks>
+        /// <param name="args"></param>
+        public virtual void OnProcessPacket(GamePacketEventArgs args) { }
+
+        /// <summary>
+        ///     OnSendPacket
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnSendPacket logic
+        /// </remarks>
+        /// <param name="args"></param>
+        public virtual void OnSendPacket(GamePacketEventArgs args) { }
+
+        /// <summary>
+        ///     OnPossibleToInterrupt
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement SpellsInterrupt logic
+        /// </remarks>
+        /// <param name="unit">Obj_AI_Base</param>
+        /// <param name="spell">InterruptableSpell</param>
+        public virtual void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell) { }
+
+        /// <summary>
+        ///     OnEnemyGapcloser
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement AntiGapcloser logic
+        /// </remarks>
+        /// <param name="gapcloser">ActiveGapcloser</param>
+        public virtual void OnEnemyGapcloser(ActiveGapcloser gapcloser) { }
+
+        /// <summary>
+        ///     OnUpdate
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement Update logic
+        /// </remarks>
+        /// <param name="args">EventArgs</param>
+        public virtual void OnUpdate(EventArgs args) { }
+
+        /// <summary>
+        ///     OnBeforeAttack
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnBeforeAttack logic
+        /// </remarks>
+        /// <param name="args">Orbwalking.BeforeAttackEventArgs</param>
+        public virtual void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args) { }
+
+        /// <summary>
+        ///     OnAfterAttack
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement OnAfterAttack logic
+        /// </remarks>
+        /// <param name="unit">unit</param>
+        /// <param name="target">target</param>
+        public virtual void OnAfterAttack(AttackableUnit unit, AttackableUnit target) { }
+
+        /// <summary>
+        ///     OnLoad
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement class Initialization
+        /// </remarks>
+        /// <param name="args">EventArgs</param>
+        public virtual void OnLoad(EventArgs args) { }
+
+        /// <summary>
+        ///     OnDraw
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement Drawing
+        /// </remarks>
+        /// <param name="args">EventArgs</param>
+        public virtual void OnDraw(EventArgs args) { }
+
+        /// <summary>
+        ///     ComboMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement ComboMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void ComboMenu(Menu config) { }
+
+        /// <summary>
+        ///     HarassMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement HarassMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void HarassMenu(Menu config) { }
+
+        /// <summary>
+        ///     ManaMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement ManaMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void ManaMenu(Menu config) { }
+
+        /// <summary>
+        ///     MiscMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement MiscMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void MiscMenu(Menu config) { }
+
+        /// <summary>
+        ///     MiscMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement Interrupt Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void InterruptMenu(Menu config) { }
+
+        /// <summary>
+        ///     DrawingMenu
+        /// </summary>
+        /// <remarks>
+        ///     override to Implement DrawingMenu Config
+        /// </remarks>
+        /// <param name="config">Menu</param>
+        public virtual void DrawingMenu(Menu config) { }
     }
 }

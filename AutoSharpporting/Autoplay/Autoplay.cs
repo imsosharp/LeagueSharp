@@ -8,18 +8,50 @@
 */
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing.Text;
 using System.Linq;
+using System.Net.Mime;
+using Support.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-/// This code is so shit but
-/// I'll try to show it some love :)
-
-namespace AutoSharpporting.Autoplay
+namespace Support
 {
     internal class Autoplay
     {
+        public const int Blue = 200;
+        public const int Purple = -200;
+        public static Obj_AI_Hero Bot = ObjectManager.Player;
+        public static Obj_AI_Hero Carry;
+        public static Obj_AI_Hero NearestAllyHero;
+        public static Obj_AI_Turret NearestAllyTurret;
+        public static Obj_AI_Hero Jungler;
+        public static readonly Random Rand = new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
+        private static Obj_AI_Hero _tempcarry;
+        public static Vector2 BotLanePos;
+        public static Vector2 TopLanePos;
+        private static int _chosen;
+        private static int _safe;
+        private static Vector2 _frontline;
+        private static Vector2 _safepos;
+        private static Vector2 _saferecall;
+        private static Vector2 _orbwalkingpos;
+        private static int _loaded;
+        private static bool _byPassLoadedCheck = false;
+        private static int _randSeconds, _randRange, _stepTime;
+        private static float _lowHealthRatio = 0.3f;
+        private static float _lowManaRatio = 0.1f;
+        private static float _lowHealthIfLowManaRatio = 0.6f;
+        private static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
+        private static bool _overrideAttackUnitAction = false;
+        private static int _lastSwitched = 0;
+        private static bool _tookRecallDecision = false;
+        private static int _lastTimeTookRecallDecision = 0;
+        private static int _lastRecallAttempt = 0;
+
         public Autoplay()
         {
             CustomEvents.Game.OnGameLoad += OnGameLoad;
@@ -27,53 +59,23 @@ namespace AutoSharpporting.Autoplay
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
         }
 
-        public const int Blue = 200;
-        public const int Purple = -200;
-        public static Obj_AI_Hero Bot = ObjectManager.Player;
-        public static Obj_AI_Hero Carry { get; set; }
-        public static Obj_AI_Hero NearestAllyHero { get; set; }
-        public static Obj_AI_Turret NearestAllyTurret { get; set; }
-        public static Obj_AI_Hero Jungler { get; set; }
-        public static Obj_AI_Hero TempCarry { get; set; }
-        public static Vector2 BotLanePos;
-        public static Vector2 TopLanePos;
-        public static int _chosen;
-        public static int _safe;
-        public static Vector2 _frontline;
-        public static Vector2 _safepos;
-        public static Vector2 _saferecall;
-        public static int _loaded;
-        public static bool _byPassLoadedCheck;
-        public static float _lowHealthRatio = 0.3f;
-        public static float _lowManaRatio = 0.1f;
-        public static float _lowHealthIfLowManaRatio = 0.6f;
-        public static bool _overrideAttackUnitAction;
-        public static int _lastSwitched = 0;
-        public static bool _tookRecallDecision;
-        public static int _lastTimeTookRecallDecision;
-        public static int _lastRecallAttempt = 0;
-        public static readonly Random Rand =
-            new Random((42 / 13 * DateTime.Now.Millisecond) + DateTime.Now.Second + Environment.TickCount);
-
-        public static int _neededGoldToBack = 2200 + Rand.Next(0, 1100);
-
         public static bool RandomDecision()
         {
             return Rand.Next(0, 20) > 10; //Hi there riot games ^^
         }
 
-        public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (sender.IsMe && sender.UnderTurret(true) && args.Target.IsEnemy &&
-                args.Target.Type == GameObjectType.obj_AI_Hero)
+            if (sender.IsMe && sender.UnderTurret(true) && args.Target.IsEnemy && args.Target.Type == GameObjectType.obj_AI_Hero)
             {
                 _overrideAttackUnitAction = true;
             }
         }
 
-        public static void OnGameLoad(EventArgs args)
+        private static void OnGameLoad(EventArgs args)
         {
-            _loaded = (Bot.Level == 1) ? Environment.TickCount : Environment.TickCount - 140000;
+            _loaded = (Bot.Level == 1) ? Environment.TickCount:Environment.TickCount - 140000;
+            _stepTime = Environment.TickCount;
             var map = Utility.Map.GetMap();
             if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
             {
@@ -110,14 +112,16 @@ namespace AutoSharpporting.Autoplay
                     _safe = Blue;
                 }
             }
-            new AutoLevel(TreesAutoLevel.GetSequence().Select(l => l - 1));
+            new AutoLevel(TreesAutoLevel.GetSequence().Select(l=>l-1));
             AutoLevel.Enable();
+            FileHandler.DoChecks();
             MetaHandler.LoadObjects();
+            
         }
 
-        public static void OnUpdate(EventArgs args)
+        private static void OnUpdate(EventArgs args)
         {
-            SwitchStates();
+            DoAutoplay();
             MetaHandler.DoChecks();
             MetaHandler.UpdateObjects();
             if (Bot.InFountain() || !Carry.IsDead) _tookRecallDecision = false;
@@ -129,7 +133,7 @@ namespace AutoSharpporting.Autoplay
             }
         }
 
-        public static bool IsBotSafe()
+        private static bool IsBotSafe()
         {
             var map = Utility.Map.GetMap();
             if (map != null && map.Type == Utility.Map.MapType.HowlingAbyss)
@@ -142,40 +146,333 @@ namespace AutoSharpporting.Autoplay
             }
             if (Bot.InFountain())
             {
-                return (Bot.Health > Bot.MaxHealth*0.9f) && (Bot.Mana > Bot.MaxMana*0.8f);
+                return (Bot.Health > Bot.MaxHealth * 0.9f) && (Bot.Mana > Bot.MaxMana * 0.8f);
             }
-            if (Bot.Mana < Bot.MaxMana*_lowManaRatio)
+            if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth*_lowHealthIfLowManaRatio && !Bot.IsRecalling() &&
-                       !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
             }
-            return (Bot.Health > Bot.MaxHealth*_lowHealthRatio) && !Bot.IsRecalling() &&
-                   !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+
         }
 
-        public static void SwitchStates()
+        public static void DoAutoplay()
         {
             if (Bot.InFountain() && RandomDecision())
             {
-                Bot.Position.WalkAround();
+                WalkAround(Bot.Position);
             }
-            if (!IsBotSafe() && !Bot.InFountain())
-                Behavior.LowHealth();
-            if (Carry == null && Environment.TickCount - _loaded > 15000 && Environment.TickCount - _loaded < 135000)
-                Behavior.CarryIsNull();
-            if (Carry != null && IsBotSafe() && Carry.IsDead || Carry.InFountain())
-                Behavior.CarryIsDead();
-            if (Carry != null && !Carry.IsDead && !Carry.InFountain() && IsBotSafe() &&
-                !(Carry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(Carry, 400) < 2))
-                Behavior.Follow();
-            if (Environment.TickCount - _loaded > 135000 &&
-                Carry == null && IsBotSafe())
-                Behavior.NoCarryFound();
-            if ((Bot.Level > 8 || Environment.TickCount - _loaded > 900000) &&
-                Environment.TickCount - _lastSwitched > 180000)
-                Behavior.SwitchCarry();
-            if (MetaHandler.EnemyTurrets.Any(t => t.Distance(Bot.Position) < 1200))
-                Behavior.UnderTurret();
-        }
+            var timeElapsed = Environment.TickCount - _loaded;
+            if (!Bot.IsDead)
+            {
+                try
+                {
+                    var turret = MetaHandler.EnemyTurrets.FirstOrDefault(t => t.Distance(Bot.Position) < 1200);
+                    if (_overrideAttackUnitAction && !_tookRecallDecision)
+                    {
+                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
+                    }
+                    if (!Bot.UnderTurret(true))
+                    {
+                        _overrideAttackUnitAction = false;
+                    }
+                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) > 2 && IsBotSafe() && !_tookRecallDecision)
+                    {
+                            if (turret.Distance(Bot.Position) < Bot.AttackRange && !_overrideAttackUnitAction)
+                                Bot.IssueOrder(GameObjectOrder.AttackUnit, turret);
+                    }
+                    else
+                    {
+                        if (TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical) != null)
+                        {
+                            Obj_AI_Hero target = TargetSelector.GetTarget(Bot.AttackRange, TargetSelector.DamageType.Physical);
+                            if (target != null && target.IsValid && !target.IsDead && IsBotSafe() &&
+                                !target.UnderTurret(true) && !_overrideAttackUnitAction && !_tookRecallDecision)
+                            {
+                                Bot.IssueOrder(GameObjectOrder.AttackUnit, target);
+                            }
+                        }
+                    }
+                    if (Bot.UnderTurret(true) && MetaHandler.NearbyAllyMinions(turret, 750) < 2)
+                    {
+                        _safepos.X = (Bot.Position.X + _safe);
+                        _safepos.Y = (Bot.Position.Y + _safe);
+                        Bot.IssueOrder(GameObjectOrder.MoveTo, _safepos.To3D());
+                    }
+                    #region Carry is null
+                    if (Carry == null && timeElapsed > 15000 && timeElapsed < 135000 && !_byPassLoadedCheck)
+                    {
+                        if (Bot.InFountain() || Bot.Distance(BotLanePos) > 400)
+                        {
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, BotLanePos.To3D());
+                        }
+                        if (Bot.Distance(BotLanePos) < 1000)
+                        {
+                            WalkAround(BotLanePos.To3D());
+                            if (timeElapsed > 60000 && !MetaHandler.ShouldSupportTopLane)
+                            {
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && hero.Distance(Bot.Position) < 4500 && !MetaHandler.HasSmite(hero)) !=
+                                    null)
+                                {
+                                    Carry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero =>
+                                                !hero.IsMe && hero.Distance(Bot.Position) < 4500 && !MetaHandler.HasSmite(hero));
+                                }
+                            }
+                            if (timeElapsed > 60000 && MetaHandler.ShouldSupportTopLane)
+                            {
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && hero.Distance(TopLanePos) < 4500 && !MetaHandler.HasSmite(hero)) !=
+                                    null)
+                                {
+                                    Carry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero =>
+                                                !hero.IsMe && hero.Distance(TopLanePos) < 4500 && !MetaHandler.HasSmite(hero));
+                                }
+                            }
+                        }
+                    }
+                    if (_byPassLoadedCheck && Carry == null)
+                    {
+                        if (MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero)) != null)
+                        {
+                            Carry = MetaHandler.AllyHeroes.FirstOrDefault(hero => !hero.IsMe && !hero.InFountain() && !MetaHandler.HasSmite(hero));
+                        }
+                    }
+                    #endregion
+                    #region Carry is dead
+                    if (Carry != null)
+                    {
+                        if (IsBotSafe() && Carry.IsDead || Carry.InFountain())
+                        {
+                            if (_tempcarry == null || _tempcarry.IsDead || _tempcarry.InFountain())
+                            {
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero =>
+                                            !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
+                                            !MetaHandler.HasSmite(hero)) != null)
+                                {
+                                    _tempcarry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero =>
+                                                !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
+                                                !MetaHandler.HasSmite(hero));
+                                }
+                                if (
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero =>
+                                            !hero.IsMe && !hero.InFountain() && !hero.IsDead &&
+                                            !MetaHandler.HasSmite(hero)) == null &&
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
+                                {
+                                    //well fuck, let's follow the jungler -sighs-
+                                    _tempcarry =
+                                        MetaHandler.AllyHeroes.FirstOrDefault(
+                                            hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
+                                }
+                                if (!MetaHandler.AllyHeroes.Any(hero => !hero.IsMe && !hero.IsDead))
+                                    //everyone is dead
+                                {
+                                    if (!Bot.InFountain())
+                                    {
+                                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+                                        if (NearestAllyTurret != null)
+                                        {
+                                            _saferecall.X = NearestAllyTurret.Position.X + _safe;
+                                            _saferecall.Y = NearestAllyTurret.Position.Y;
+                                            _tookRecallDecision = true;
+                                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                                            {
+                                                Bot.Spellbook.CastSpell(SpellSlot.Recall);
+                                            }
+                                            else
+                                            {
+
+                                                Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (_tempcarry != null)
+                            {
+
+                                Console.WriteLine("Carry dead or afk, following: " + _tempcarry.ChampionName);
+                                _frontline.X = _tempcarry.Position.X + _chosen;
+                                _frontline.Y = _tempcarry.Position.Y + _chosen;
+                                if (!(_tempcarry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(_tempcarry, 400) < 2) && IsBotSafe())
+                                {
+                                    if (_tempcarry.Distance(Bot) > 550 && !_tookRecallDecision)
+                                    {
+                                        Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
+                                        WalkAround(_tempcarry);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    #endregion Carry is dead
+                    #region Following
+                    if (Carry != null && !Carry.IsDead && !Carry.InFountain() && IsBotSafe() && !(Carry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(Carry, 400) < 2))
+                    {
+                        Console.WriteLine("All good, following: " + Carry.ChampionName);
+                        _frontline.X = Carry.Position.X + _chosen;
+                        _frontline.Y = Carry.Position.Y + _chosen;
+                        if (Carry.Distance(Bot) > 550 && !_tookRecallDecision)
+                        {
+                            Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
+                        }
+
+                        WalkAround(Carry);
+                    }
+                    #endregion Following
+                    #region Carry not found
+                    if (timeElapsed > 135000 &&
+                        Carry == null && IsBotSafe())
+                    {
+                        if (_tempcarry == null || _tempcarry.IsDead || _tempcarry.InFountain())
+                        {
+                            if (
+                                MetaHandler.AllyHeroes.FirstOrDefault(
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) != null)
+                            {
+                                _tempcarry =
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero));
+                            }
+                            if (
+                                MetaHandler.AllyHeroes.FirstOrDefault(
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead && !MetaHandler.HasSmite(hero)) == null &&
+                                MetaHandler.AllyHeroes.FirstOrDefault(
+                                    hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead) != null)
+                            {
+                                //well fuck, let's follow the jungler -sighs-
+                                _tempcarry =
+                                    MetaHandler.AllyHeroes.FirstOrDefault(
+                                        hero => !hero.IsMe && !hero.InFountain() && !hero.IsDead);
+                            }
+                        }
+                        if (_tempcarry != null)
+                        {
+                            Console.WriteLine("Carry not found, following: " + _tempcarry.ChampionName);
+                            _frontline.X = _tempcarry.Position.X + _chosen;
+                            _frontline.Y = _tempcarry.Position.Y + _chosen;
+                            if (!(_tempcarry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(_tempcarry, 400) < 2) && IsBotSafe())
+                            {
+                                if (Bot.Distance(_frontline) > 550 && !_tookRecallDecision)
+                                {
+                                    Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
+                                }
+                                WalkAround(_tempcarry);
+                            }
+                        }
+                    }
+                    #endregion
+                    #region Lowhealth mode
+                    if (!IsBotSafe() && !Bot.InFountain())
+                    {
+                        NearestAllyTurret = MetaHandler.AllyTurrets.FirstOrDefault();
+                        if (NearestAllyTurret != null)
+                        {
+                            _saferecall.X = NearestAllyTurret.Position.X + _safe;
+                            _saferecall.Y = NearestAllyTurret.Position.Y;
+                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                            {
+                                if (Environment.TickCount - _lastRecallAttempt > Rand.Next(500, 2000))
+                                {
+                                    Bot.Spellbook.CastSpell(SpellSlot.Recall);
+                                    _lastRecallAttempt = Environment.TickCount;
+                                }
+                            }
+                            else
+                            {
+
+                                Bot.IssueOrder(GameObjectOrder.MoveTo, _saferecall.To3D());
+                            }
+                        }
+
+                    }
+                    #endregion
+                    #region Carry Switching
+
+                    if ((Bot.Level > 8 || Environment.TickCount - _loaded > 900000) && Environment.TickCount - _lastSwitched > 180000)
+                    {
+                        var alliesSortedByKDA =
+                            MetaHandler.AllyHeroes.OrderByDescending(hero => (hero.ChampionsKilled / ((hero.Deaths != 0) ? hero.Deaths : 1))); //AsunaChan2Kawaii
+                        if (alliesSortedByKDA.FirstOrDefault() != null)
+                        {
+                            Carry = alliesSortedByKDA.FirstOrDefault();
+                            _lastSwitched = Environment.TickCount;
+                        }
+                    }
+                    #endregion
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+            }
+        } //end of DoAutoplay()
+
+        private static void WalkAround(Vector3 pos)
+        {
+            _randRange = Rand.Next(-267, 276);
+            _randSeconds = Rand.Next(1000, 4000);
+            if (Environment.TickCount - _stepTime >= _randSeconds && !_overrideAttackUnitAction)
+            {
+                if (Bot.Team == GameObjectTeam.Order)
+                {
+                    int orbwalkingAdditionInteger = _randRange * (-1);
+                    _orbwalkingpos.X = pos.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = pos.Y + orbwalkingAdditionInteger;
+                }
+                else
+                {
+                    int orbwalkingAdditionInteger = _randRange;
+                    _orbwalkingpos.X = pos.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = pos.Y + orbwalkingAdditionInteger;
+                }
+                if (_orbwalkingpos != null && !_tookRecallDecision)
+                {
+                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
+                    _stepTime = Environment.TickCount;
+                }
+            }
+
+        } //end of WalkAround()
+
+        private static void WalkAround(Obj_AI_Hero follow)
+        {
+            _randRange = Rand.Next(-367, 376);
+            _randSeconds = Rand.Next(500, 3500);
+            if (Environment.TickCount - _stepTime >= _randSeconds && !_overrideAttackUnitAction)
+            {
+                if (Bot.Team == GameObjectTeam.Order)
+                {
+                    int orbwalkingAdditionInteger = _randRange * (-1);
+                    _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
+                }
+                else
+                {
+                    int orbwalkingAdditionInteger = _randRange;
+                    _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
+                    _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
+                }
+                if (_orbwalkingpos != null && Bot.Distance(follow) < 550 && !_tookRecallDecision)
+                {
+                    Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
+                    _stepTime = Environment.TickCount;
+                }
+            }
+
+        } //end of WalkAround(Obj_AI_Hero)
     }
 }

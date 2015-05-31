@@ -23,15 +23,13 @@
 
 #endregion
 
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-
-namespace AutoSharpporting.Util
+namespace Support.Util
 {
     #region
 
-    
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
 
     #endregion
 
@@ -114,7 +112,7 @@ namespace AutoSharpporting.Util
 
         public static double HealthBuffer(this Obj_AI_Base hero, int buffer)
         {
-            return hero.Health - (hero.MaxHealth*buffer/100);
+            return hero.Health - (hero.MaxHealth * buffer / 100);
         }
 
         public static bool CastCheck(this Items.Item item, Obj_AI_Base target)
@@ -134,8 +132,7 @@ namespace AutoSharpporting.Util
 
         public static bool CastCheck(this Spell spell, Obj_AI_Base target, bool range = true, bool team = true)
         {
-            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team) &&
-                   !ObjectManager.Player.UnderTurret(true);
+            return spell.IsReady() && target.IsValidTarget(range ? spell.Range : float.MaxValue, team) && !ObjectManager.Player.UnderTurret(true);
         }
 
         public static bool IsInRange(this Spell spell, Obj_AI_Base target)

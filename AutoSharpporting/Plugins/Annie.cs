@@ -27,17 +27,15 @@
 
 #endregion
 
-using System;
-using System.Linq;
-using AutoSharpporting.Util;
-using LeagueSharp;
-using LeagueSharp.Common;
-
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     #region
 
-    
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Support.Util;
 
     #endregion
 
@@ -51,7 +49,7 @@ namespace AutoSharpporting.Plugins
             R = new Spell(SpellSlot.R, 600);
 
             Q.SetTargetted(250, 1400);
-            W.SetSkillshot(600, (float) (50*Math.PI/180), float.MaxValue, false, SkillshotType.SkillshotCone);
+            W.SetSkillshot(600, (float) (50 * Math.PI / 180), float.MaxValue, false, SkillshotType.SkillshotCone);
             R.SetSkillshot(250, 200, float.MaxValue, false, SkillshotType.SkillshotCircle);
         }
 

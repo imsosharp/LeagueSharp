@@ -18,13 +18,13 @@
 #region
 
 using System;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
+using Support.Util;
 
 #endregion
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Default : PluginBase
     {
@@ -37,6 +37,9 @@ namespace AutoSharpporting.Plugins
             Q.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.25f, 60f, 1600f, true, SkillshotType.SkillshotLine);
         }
+
+
+
 
         public override void OnUpdate(EventArgs args)
         {

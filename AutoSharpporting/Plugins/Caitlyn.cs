@@ -1,10 +1,15 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Caitlyn : PluginBase
     {
@@ -19,7 +24,8 @@ namespace AutoSharpporting.Plugins
             E.SetSkillshot(0.25f, 80f, 1600f, true, SkillshotType.SkillshotLine);
         }
 
-        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
+
+        public override void OnEnemyGapcloser(ActiveGapcloser gapcloser) 
         {
             if (E.IsReady() && gapcloser.Sender.IsValidTarget(E.Range))
                 E.CastOnUnit(gapcloser.Sender);
@@ -27,19 +33,22 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
-            R.Range = 500*R.Level + 1500;
+            R.Range = 500 * R.Level + 1500;
             Obj_AI_Hero t;
 
             if (ComboMode)
             {
+
+
+
                 //Auto W (Stun/Snare/Taunt)
                 if (W.IsReady())
                 {
                     t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
                     if (t.IsValidTarget(W.Range) &&
                         (t.HasBuffOfType(BuffType.Stun) || t.HasBuffOfType(BuffType.Snare) ||
-                         t.HasBuffOfType(BuffType.Taunt) || t.HasBuff("zhonyasringshield") ||
-                         t.HasBuff("Recall")))
+                        t.HasBuffOfType(BuffType.Taunt) || t.HasBuff("zhonyasringshield") ||
+                        t.HasBuff("Recall")))
                     {
                         W.Cast(t.Position);
                     }
@@ -67,7 +76,11 @@ namespace AutoSharpporting.Plugins
                     }
                 }
             }
+
+
         }
+
+
 
         public override void ComboMenu(Menu config)
         {
@@ -76,5 +89,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

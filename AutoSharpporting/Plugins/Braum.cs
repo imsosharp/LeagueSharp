@@ -23,22 +23,20 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoSharpporting.Evade;
-using AutoSharpporting.Util;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-using SpellData = LeagueSharp.SpellData;
-
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     #region
 
-    
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
+    using Support.Evade;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
+    using SpellData = LeagueSharp.SpellData;
 
     #endregion
 
@@ -100,9 +98,9 @@ namespace AutoSharpporting.Plugins
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
-                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
-                                   (W.Instance.SData.SpellCastTime*1000);
-                    var missileTime = caster.Distance(target)*1000/spell.MissileSpeed;
+                    var jumpTime = (Player.Distance(target) * 1000 / W.Instance.SData.MissileSpeed) +
+                                   (W.Instance.SData.SpellCastTime * 1000);
+                    var missileTime = caster.Distance(target) * 1000 / spell.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {
@@ -151,9 +149,9 @@ namespace AutoSharpporting.Plugins
 
                 if (!target.IsMe && W.IsReady() && W.IsInRange(target) && (IsShieldActive || E.IsReady()))
                 {
-                    var jumpTime = (Player.Distance(target)*1000/W.Instance.SData.MissileSpeed) +
-                                   (W.Instance.SData.SpellCastTime*1000);
-                    var missileTime = target.Distance(max.MissilePosition)*1000/max.SpellData.MissileSpeed;
+                    var jumpTime = (Player.Distance(target) * 1000 / W.Instance.SData.MissileSpeed) +
+                                   (W.Instance.SData.SpellCastTime * 1000);
+                    var missileTime = target.Distance(max.MissilePosition) * 1000 / max.SpellData.MissileSpeed;
 
                     if (jumpTime > missileTime)
                     {

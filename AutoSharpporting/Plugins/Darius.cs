@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Darius : PluginBase
     {
@@ -14,10 +19,12 @@ namespace AutoSharpporting.Plugins
             W = new Spell(SpellSlot.W, 145);
             E = new Spell(SpellSlot.E, 550);
             R = new Spell(SpellSlot.R, 460);
+
         }
 
         public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
         {
+
             if (!unit.IsMe)
             {
                 return;
@@ -26,12 +33,14 @@ namespace AutoSharpporting.Plugins
             var t = target as Obj_AI_Hero;
             if (unit.IsMe && t != null)
             {
-                if (W.IsReady())
+                if(W.IsReady())
                 {
                     W.Cast();
                     Orbwalking.ResetAutoAttackTimer();
                 }
+
             }
+
         }
 
         public override void OnUpdate(EventArgs args)
@@ -39,6 +48,7 @@ namespace AutoSharpporting.Plugins
             ExecuteKillsteal();
             if (ComboMode)
             {
+
                 if (E.CastCheck(Target, "ComboE"))
                 {
                     E.Cast(Target);
@@ -51,19 +61,21 @@ namespace AutoSharpporting.Plugins
                 {
                     W.Cast();
                 }
+
             }
         }
-
+           
         public void ExecuteKillsteal()
         {
-            foreach (
-                var target in
-                    ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < R.Range && x.IsEnemy && !x.IsDead))
+
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < R.Range && x.IsEnemy && !x.IsDead))
             {
-                if (R.IsReady() && Player.Distance(target) <= R.Range && R.IsKillable(target))
+
+                if (R.IsReady() && Player.Distance(target) <= R.Range  && R.IsKillable(target))
                 {
                     CastR(target);
                 }
+
             }
         }
 
@@ -78,8 +90,8 @@ namespace AutoSharpporting.Plugins
                 {
                     if (buff.Name == "dariushemo")
                     {
-                        if (ObjectManager.Player.GetSpellDamage(target, SpellSlot.R, 1)*
-                            (1 + buff.Count/5) - 1 > (target.Health))
+                        if (ObjectManager.Player.GetSpellDamage(target, SpellSlot.R, 1) *
+                            (1 + buff.Count / 5) - 1 > (target.Health))
                         {
                             R.CastOnUnit(target, true);
                         }

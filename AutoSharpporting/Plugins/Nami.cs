@@ -23,18 +23,16 @@
 
 #endregion
 
-using System;
-using System.Linq;
-using AutoSharpporting.Util;
-using LeagueSharp;
-using LeagueSharp.Common;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     #region
 
-    
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
 
     #endregion
 
@@ -56,8 +54,8 @@ namespace AutoSharpporting.Plugins
         {
             get
             {
-                int[] heal = {0, 65, 95, 125, 155, 185};
-                return heal[W.Level] + Player.FlatMagicDamageMod*0.3;
+                int[] heal = { 0, 65, 95, 125, 155, 185 };
+                return heal[W.Level] + Player.FlatMagicDamageMod * 0.3;
             }
         }
 

@@ -1,21 +1,27 @@
 ﻿//from AlrikSharp
 
 using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Gragas : PluginBase
     {
         public GameObject Bomb;
-        public Obj_AI_Hero CurrentQTarget;
         public Vector3 UltPos;
+        public Obj_AI_Hero CurrentQTarget;
 
         public Gragas()
         {
+
             Q = new Spell(SpellSlot.Q, 775);
             W = new Spell(SpellSlot.W, 0);
             E = new Spell(SpellSlot.E, 600);
@@ -60,10 +66,12 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
                 Combo(Target);
             }
+
         }
 
         private void ThrowBarrel(Obj_AI_Hero tar)
@@ -172,7 +180,7 @@ namespace AutoSharpporting.Plugins
                         }
                         else
                         {
-                            var pred = Prediction.GetPrediction(t, R.Delay, R.Width/2, R.Speed);
+                            var pred = Prediction.GetPrediction(t, R.Delay, R.Width / 2, R.Speed);
                             R.Cast(pred.CastPosition);
                         }
                     }
@@ -197,5 +205,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

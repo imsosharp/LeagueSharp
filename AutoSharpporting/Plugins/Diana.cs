@@ -1,9 +1,16 @@
-﻿using System;
-using AutoSharpporting.Util;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Diana : PluginBase
     {
@@ -21,8 +28,8 @@ namespace AutoSharpporting.Plugins
         {
             if (ComboMode)
             {
-                var rnd = new Random();
-                var mode = rnd.Next(0, 1);
+                Random rnd = new Random();
+                int mode = rnd.Next(0, 1);
                 if (mode == 1)
                 {
                     Combo(Target);
@@ -32,6 +39,7 @@ namespace AutoSharpporting.Plugins
                     Misaya(Target);
                 }
             }
+
         }
 
         //From Diabaths
@@ -48,6 +56,7 @@ namespace AutoSharpporting.Plugins
                 {
                     R.Cast(target);
                     Q.CastIfHitchanceEquals(target, HitChance.High);
+
                 }
             }
             if (Player.Distance(target) <= W.Range && W.IsReady())
@@ -95,6 +104,7 @@ namespace AutoSharpporting.Plugins
             }
         }
 
+
         public override void ComboMenu(Menu config)
         {
             config.AddBool("ComboQ", "Use Q", true);
@@ -102,5 +112,8 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
+
+
     }
 }

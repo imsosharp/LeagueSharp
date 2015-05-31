@@ -23,18 +23,16 @@
 
 #endregion
 
-using System;
-using System.Linq;
-using AutoSharpporting.Util;
-using LeagueSharp;
-using LeagueSharp.Common;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
-
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     #region
 
-    
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using Support.Util;
+    using ActiveGapcloser = Support.Util.ActiveGapcloser;
 
     #endregion
 
@@ -145,7 +143,7 @@ namespace AutoSharpporting.Plugins
 
         public override void MiscMenu(Menu config)
         {
-            config.AddList("Misc.Laugh", "Laugh Emote", new[] {"OFF", "ON", "ON + Mute"});
+            config.AddList("Misc.Laugh", "Laugh Emote", new[] { "OFF", "ON", "ON + Mute" });
         }
 
         public override void InterruptMenu(Menu config)

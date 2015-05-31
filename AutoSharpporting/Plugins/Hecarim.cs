@@ -1,12 +1,19 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Hecarim : PluginBase
     {
+
         public Hecarim()
         {
             Q = new Spell(SpellSlot.Q, 350);
@@ -16,9 +23,9 @@ namespace AutoSharpporting.Plugins
 
             R.SetSkillshot(0.5f, 200f, 1200f, false, SkillshotType.SkillshotLine);
         }
-
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
                 if (Q.IsReady() && Target.IsValidTarget(Q.Range))
@@ -31,9 +38,12 @@ namespace AutoSharpporting.Plugins
                 }
                 if (R.CastCheck(Target, "ComboR"))
                 {
-                    R.Cast(Target, UsePackets);
+                    R.Cast(Target,UsePackets);
                 }
+
             }
+
+
         }
 
         public override void ComboMenu(Menu config)
@@ -43,5 +53,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

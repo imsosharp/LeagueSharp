@@ -1,9 +1,9 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using Support.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Skarner : PluginBase
     {
@@ -40,6 +40,7 @@ namespace AutoSharpporting.Plugins
                 }
             }
         }
+
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {

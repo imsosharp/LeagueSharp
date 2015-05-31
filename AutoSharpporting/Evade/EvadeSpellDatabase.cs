@@ -23,16 +23,14 @@
 
 #endregion
 
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-
-namespace AutoSharpporting.Evade
+namespace Support.Evade
 {
     #region
 
-    
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
 
     #endregion
 
@@ -82,8 +80,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Blitzcrank W", SpellSlot.W, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.12f + 0.04f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.12f + 0.04f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -96,8 +94,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Draven W", SpellSlot.W, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.35f + 0.05f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.35f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -110,8 +108,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Evelynn W", SpellSlot.W, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.2f + 0.1f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.2f + 0.1f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -121,7 +119,7 @@ namespace AutoSharpporting.Evade
 
             if (ObjectManager.Player.ChampionName == "Garen")
             {
-                spell = new MoveBuffData("Garen Q", SpellSlot.Q, 100, 3, () => ObjectManager.Player.MoveSpeed*(1.35f));
+                spell = new MoveBuffData("Garen Q", SpellSlot.Q, 100, 3, () => ObjectManager.Player.MoveSpeed * (1.35f));
                 Spells.Add(spell);
             }
 
@@ -135,8 +133,8 @@ namespace AutoSharpporting.Evade
                     "Katarina W", SpellSlot.W, 100, 3,
                     () =>
                         ObjectManager.Get<Obj_AI_Hero>().Any(h => h.IsValidTarget(375))
-                            ? ObjectManager.Player.MoveSpeed*
-                              (1 + 0.10f + 0.05f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)
+                            ? ObjectManager.Player.MoveSpeed *
+                              (1 + 0.10f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)
                             : 0);
                 Spells.Add(spell);
             }
@@ -150,8 +148,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Karma E", SpellSlot.E, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.35f + 0.05f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.35f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level));
                 Spells.Add(spell);
             }
 
@@ -172,7 +170,7 @@ namespace AutoSharpporting.Evade
 
             if (ObjectManager.Player.ChampionName == "Khazix")
             {
-                spell = new MoveBuffData("Khazix R", SpellSlot.R, 100, 5, () => ObjectManager.Player.MoveSpeed*1.4f);
+                spell = new MoveBuffData("Khazix R", SpellSlot.R, 100, 5, () => ObjectManager.Player.MoveSpeed * 1.4f);
                 Spells.Add(spell);
             }
 
@@ -184,7 +182,7 @@ namespace AutoSharpporting.Evade
             {
                 spell = new MoveBuffData(
                     "Lulu W", SpellSlot.W, 100, 5,
-                    () => ObjectManager.Player.MoveSpeed*(1.3f + ObjectManager.Player.FlatMagicDamageMod/100*0.1f));
+                    () => ObjectManager.Player.MoveSpeed * (1.3f + ObjectManager.Player.FlatMagicDamageMod / 100 * 0.1f));
                 Spells.Add(spell);
             }
 
@@ -197,8 +195,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Nunu W", SpellSlot.W, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.1f + 0.01f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.1f + 0.01f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -218,7 +216,7 @@ namespace AutoSharpporting.Evade
 
             if (ObjectManager.Player.ChampionName == "Sivir")
             {
-                spell = new MoveBuffData("Sivir R", SpellSlot.R, 100, 5, () => ObjectManager.Player.MoveSpeed*(1.6f));
+                spell = new MoveBuffData("Sivir R", SpellSlot.R, 100, 5, () => ObjectManager.Player.MoveSpeed * (1.6f));
                 Spells.Add(spell);
             }
 
@@ -231,8 +229,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Shyvana W", SpellSlot.W, 100, 4,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.25f + 0.05f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.25f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 spell.CheckSpellName = "ShyvanaImmolationAura";
                 Spells.Add(spell);
             }
@@ -246,10 +244,10 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Sona E", SpellSlot.E, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.12f + 0.01f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level +
-                         ObjectManager.Player.FlatMagicDamageMod/100*0.075f +
-                         0.02f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.12f + 0.01f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level +
+                         ObjectManager.Player.FlatMagicDamageMod / 100 * 0.075f +
+                         0.02f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level));
                 Spells.Add(spell);
             }
 
@@ -262,8 +260,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Teemo W", SpellSlot.W, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.06f + 0.04f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.06f + 0.04f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -276,8 +274,8 @@ namespace AutoSharpporting.Evade
                 spell = new MoveBuffData(
                     "Udyr E", SpellSlot.E, 100, 3,
                     () =>
-                        ObjectManager.Player.MoveSpeed*
-                        (1 + 0.1f + 0.05f*ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level));
+                        ObjectManager.Player.MoveSpeed *
+                        (1 + 0.1f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level));
                 Spells.Add(spell);
             }
 
@@ -287,7 +285,7 @@ namespace AutoSharpporting.Evade
 
             if (ObjectManager.Player.ChampionName == "Zilean")
             {
-                spell = new MoveBuffData("Zilean E", SpellSlot.E, 100, 3, () => ObjectManager.Player.MoveSpeed*1.55f);
+                spell = new MoveBuffData("Zilean E", SpellSlot.E, 100, 3, () => ObjectManager.Player.MoveSpeed * 1.55f);
                 Spells.Add(spell);
             }
 
@@ -313,7 +311,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "Akali")
             {
                 spell = new DashData("Akali R", SpellSlot.R, 800, false, 100, 2461, 3);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 
@@ -324,7 +322,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "Alistar")
             {
                 spell = new DashData("Alistar W", SpellSlot.W, 650, false, 100, 1900, 3);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 
@@ -356,7 +354,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "Fizz")
             {
                 spell = new DashData("Fizz Q", SpellSlot.Q, 550, true, 100, 1400, 4);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyMinions, SpellValidTargets.EnemyChampions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyMinions, SpellValidTargets.EnemyChampions };
                 Spells.Add(spell);
             }
 
@@ -398,7 +396,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "Irelia")
             {
                 spell = new DashData("Irelia Q", SpellSlot.Q, 650, false, 100, 2200, 3);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 
@@ -443,7 +441,7 @@ namespace AutoSharpporting.Evade
             {
                 spell = new DashData("LeeSin W", SpellSlot.W, 700, false, 250, 2000, 3);
                 spell.ValidTargets = new[]
-                {SpellValidTargets.AllyChampions, SpellValidTargets.AllyMinions, SpellValidTargets.AllyWards};
+                { SpellValidTargets.AllyChampions, SpellValidTargets.AllyMinions, SpellValidTargets.AllyWards };
                 spell.CheckSpellName = "BlindMonkWOne";
                 Spells.Add(spell);
             }
@@ -476,7 +474,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "Pantheon")
             {
                 spell = new DashData("Pantheon W", SpellSlot.W, 600, false, 100, 1000, 3);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 
@@ -531,7 +529,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "MonkeyKing")
             {
                 spell = new DashData("Wukong E", SpellSlot.E, 650, false, 100, 1400, 3);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 
@@ -591,7 +589,7 @@ namespace AutoSharpporting.Evade
             if (ObjectManager.Player.ChampionName == "Talon")
             {
                 spell = new BlinkData("Talon E", SpellSlot.E, 700, 100, 3);
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 
@@ -640,7 +638,7 @@ namespace AutoSharpporting.Evade
             {
                 spell = new InvulnerabilityData("MasterYi Q", SpellSlot.Q, 250, 3);
                 spell.MaxRange = 600;
-                spell.ValidTargets = new[] {SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions};
+                spell.ValidTargets = new[] { SpellValidTargets.EnemyChampions, SpellValidTargets.EnemyMinions };
                 Spells.Add(spell);
             }
 

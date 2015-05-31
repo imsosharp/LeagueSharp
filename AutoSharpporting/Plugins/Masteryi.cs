@@ -18,13 +18,19 @@
 #region
 
 using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
 #endregion
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Masteryi : PluginBase
     {
@@ -36,6 +42,7 @@ namespace AutoSharpporting.Plugins
             E = new Spell(SpellSlot.E);
             R = new Spell(SpellSlot.R);
         }
+
 
         // some part from Prunes
 
@@ -49,9 +56,10 @@ namespace AutoSharpporting.Plugins
                 }
                 if (R.IsReady() && Player.CountEnemiesInRange(Q.Range) >= 2)
                 {
+
                     R.Cast();
                 }
-
+                
                 if (E.IsReady() && Orbwalking.InAutoAttackRange(Target))
                 {
                     E.Cast();
@@ -78,21 +86,24 @@ namespace AutoSharpporting.Plugins
 
             if ((Player.MoveSpeed - target.MoveSpeed) < 50 && target.IsMoving)
             {
+
                 Q.CastOnUnit(target);
             }
-            if ((target.IsDashing() || target.LastCastedSpellName() == "SummonerFlash"))
+            if ((target.IsDashing() || target.LastCastedSpellName() == "SummonerFlash") )
             {
                 Q.CastOnUnit(target);
             }
-            if (Player.Health < Player.MaxHealth/4)
+            if (Player.Health < Player.MaxHealth / 4 )
             {
                 Q.CastOnUnit(target);
             }
             if (Q.IsReady())
             {
                 Q.CastOnUnit(target);
+
             }
         }
+
 
         public override void ComboMenu(Menu config)
         {
@@ -101,5 +112,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

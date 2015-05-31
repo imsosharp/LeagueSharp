@@ -1,16 +1,23 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Leblanc : PluginBase
     {
-        private bool firstW;
 
+        private bool firstW = false;
         public Leblanc()
         {
+
             Q = new Spell(SpellSlot.Q, 720);
             Q.SetTargetted(0.5f, 1500f);
 
@@ -23,18 +30,20 @@ namespace AutoSharpporting.Plugins
             R = new Spell(SpellSlot.R, 720);
         }
 
+
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
+
                 if (Q.IsReady() && R.IsReady() && Target.IsValidTarget(Q.Range))
                 {
                     Q.CastOnUnit(Target);
-                    Utility.DelayAction.Add(100, () => R.CastOnUnit(Target));
+                    Utility.DelayAction.Add(100,() => R.CastOnUnit(Target));
                 }
 
-                if (W.IsReady() && Target.IsValidTarget(W.Range) && !firstW &&
-                    (Player.HealthPercentage() > 30 || W.IsKillable(Target)))
+                if (W.IsReady() && Target.IsValidTarget(W.Range) && !firstW && (Player.HealthPercentage() > 30 || W.IsKillable(Target)))
                 {
                     W.Cast(Target);
                     firstW = true;
@@ -68,15 +77,18 @@ namespace AutoSharpporting.Plugins
             if (isPetValid)
             {
                 Utility.DelayAction.Add(
-                    100,
-                    () =>
-                    {
-                        pet.IssueOrder(
-                            GameObjectOrder.MoveTo,
-                            (pet.Position + 500*((pet.Position - Player.Position).Normalized())));
-                    });
+                       100,
+                       () =>
+                       {
+                           pet.IssueOrder(
+                               GameObjectOrder.MoveTo,
+                               (pet.Position + 500 * ((pet.Position - Player.Position).Normalized())));
+                       });
             }
+
         }
+
+
 
         public override void ComboMenu(Menu config)
         {
@@ -85,5 +97,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

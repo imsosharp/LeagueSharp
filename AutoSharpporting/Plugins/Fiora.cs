@@ -1,9 +1,15 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Fiora : PluginBase
     {
@@ -17,6 +23,8 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
+
+
             if (ComboMode)
             {
                 if (Q.CastCheck(Target, "ComboQ"))
@@ -30,7 +38,10 @@ namespace AutoSharpporting.Plugins
                     R.CastOnUnit(Target);
                 }
             }
+
+
         }
+
 
         public override void ComboMenu(Menu config)
         {
@@ -39,5 +50,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

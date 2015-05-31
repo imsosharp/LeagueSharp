@@ -57,17 +57,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="clipper_library">
-      <HintPath>C:\LeagueSharp\System\clipper_library.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\clipper_library.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp, Version=1.0.0.25, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.dll</HintPath>
     </Reference>
     <Reference Include="LeagueSharp.Common">
-      <HintPath>C:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\LeagueSharp.Common.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX">
-      <HintPath>C:\LeagueSharp\System\SharpDX.dll</HintPath>
+      <HintPath>D:\LeagueSharp\System\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -76,11 +76,9 @@
   <ItemGroup>
     <Compile Include="Autoplay\Autoplay.cs" />
     <Compile Include="Autoplay\AutoPot.cs" />
-    <Compile Include="Autoplay\Behavior.cs" />
-    <Compile Include="Autoplay\Humanizer.cs" />
     <Compile Include="Autoplay\MetaHandler.cs" />
+    <Compile Include="Autoplay\FileHandler.cs" />
     <Compile Include="Autoplay\TreesAutoLevel.cs" />
-    <Compile Include="Autoplay\Wizard.cs" />
     <Compile Include="PluginLoader.cs" />
     <Compile Include="Plugins\Aatrox.cs" />
     <Compile Include="Plugins\Ahri.cs" />

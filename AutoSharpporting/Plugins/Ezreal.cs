@@ -1,15 +1,22 @@
-﻿using System;
+﻿
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Ezreal : PluginBase
     {
         public Ezreal()
         {
+
             Q = new Spell(SpellSlot.Q, 1200);
             Q.SetSkillshot(0.25f, 60f, 2000f, true, SkillshotType.SkillshotLine);
 
@@ -18,13 +25,17 @@ namespace AutoSharpporting.Plugins
 
             R = new Spell(SpellSlot.R, 2500);
             R.SetSkillshot(1f, 160f, 2000f, false, SkillshotType.SkillshotLine);
+
         }
+
 
         public override void OnUpdate(EventArgs args)
         {
+
             KS();
             if (ComboMode)
             {
+
                 if (W.CastCheck(Target, "ComboW"))
                 {
                     W.Cast(Target);
@@ -34,17 +45,13 @@ namespace AutoSharpporting.Plugins
                     Q.CastIfHitchanceEquals(Target, HitChance.Medium);
                 }
             }
+
         }
 
         public void KS()
         {
-            foreach (
-                var target in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(
-                            x =>
-                                Player.Distance(x) < 2000 && Player.Distance(x) > 400 && x.IsValidTarget() && x.IsEnemy &&
-                                !x.IsDead))
+
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 2000 && Player.Distance(x) > 400 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
             {
                 if (target != null)
                 {
@@ -58,6 +65,8 @@ namespace AutoSharpporting.Plugins
                             return;
                         }
                     }
+
+
                 }
             }
         }
@@ -70,3 +79,5 @@ namespace AutoSharpporting.Plugins
         }
     }
 }
+
+

@@ -1,9 +1,15 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Warwick : PluginBase
     {
@@ -13,10 +19,13 @@ namespace AutoSharpporting.Plugins
             W = new Spell(SpellSlot.W, 1000);
             E = new Spell(SpellSlot.E, 1500);
             R = new Spell(SpellSlot.R, 700);
+
         }
+
 
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
                 if (Q.CastCheck(Target, "ComboQ"))
@@ -34,9 +43,10 @@ namespace AutoSharpporting.Plugins
                         W.Cast();
                     }
                     Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                   
                 }
             }
-        }
+       }
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
@@ -44,11 +54,16 @@ namespace AutoSharpporting.Plugins
             {
                 return;
             }
-            if (R.CastCheck(unit, "Interrupt.R"))
-            {
-                R.Cast(unit);
-            }
+                if (R.CastCheck(unit, "Interrupt.R"))
+                {
+                    R.Cast(unit);
+                    return;
+                }
+            
         }
+
+
+
 
         public override void ComboMenu(Menu config)
         {
@@ -62,5 +77,6 @@ namespace AutoSharpporting.Plugins
         {
             config.AddBool("Interrupt.R", "Use R to Interrupt Spells", true);
         }
+
     }
 }

@@ -1,9 +1,15 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Ashe : PluginBase
     {
@@ -15,18 +21,14 @@ namespace AutoSharpporting.Plugins
             R = new Spell(SpellSlot.R, 20000);
 
 
-            W.SetSkillshot(250f, (float) (24.32f*Math.PI/180), 902f, true, SkillshotType.SkillshotCone);
+            W.SetSkillshot(250f, (float)(24.32f * Math.PI / 180), 902f, true, SkillshotType.SkillshotCone);
             E.SetSkillshot(377f, 299f, 1400f, false, SkillshotType.SkillshotLine);
             R.SetSkillshot(250f, 130f, 1600f, false, SkillshotType.SkillshotLine);
         }
 
-        public bool IsQActive
-        {
-            get { return ObjectManager.Player.HasBuff("FrostShot"); }
-        }
-
         public override void OnUpdate(EventArgs args)
         {
+
             var targetR = TargetSelector.GetTarget(10000, TargetSelector.DamageType.Magical);
             if (ComboMode)
             {
@@ -39,7 +41,7 @@ namespace AutoSharpporting.Plugins
                     W.Cast(Target);
                 }
 
-                if (R.CastCheck(targetR, "ComboR") && R.IsKillable(targetR))
+                if (R.CastCheck(targetR, "ComboR") && R.IsKillable(targetR) )
                 {
                     R.Cast(targetR);
                 }
@@ -64,12 +66,22 @@ namespace AutoSharpporting.Plugins
             if (R.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast(unit);
+                return;
+            }
+        
+        }
+
+        public bool IsQActive
+        {
+            get
+            {
+                return ObjectManager.Player.HasBuff("FrostShot");
             }
         }
 
         public override void ComboMenu(Menu config)
         {
-            // config.AddBool("ComboQ", "Use Q", true);
+           // config.AddBool("ComboQ", "Use Q", true);
             config.AddBool("ComboW", "Use W", true);
             config.AddBool("ComboR", "Use R", true);
         }

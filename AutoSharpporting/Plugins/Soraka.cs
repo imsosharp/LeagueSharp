@@ -17,15 +17,15 @@
 
 #region
 
-using System;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
-using ActiveGapcloser = AutoSharpporting.Util.ActiveGapcloser;
+using Support.Util;
+using System;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
 
 #endregion
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Soraka : PluginBase
     {
@@ -124,10 +124,11 @@ namespace AutoSharpporting.Plugins
             {
                 var ally = Helpers.AllyBelowHp(ConfigValue<Slider>("AutoRPercent").Value, R.Range);
 
-                if (ally != null || (Player.Health/Player.MaxHealth)*100 < ConfigValue<Slider>("AutoRPercent").Value)
+                if (ally != null || (Player.Health / Player.MaxHealth) * 100 < ConfigValue<Slider>("AutoRPercent").Value)
                 {
                     R.Cast();
                 }
+
             }
         }
 

@@ -23,17 +23,15 @@
 
 #endregion
 
-using System;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-
-namespace AutoSharpporting.Evade
+namespace Support.Evade
 {
     #region
 
-    
+    using System;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
 
     #endregion
 
@@ -66,9 +64,7 @@ namespace AutoSharpporting.Evade
             }
         }
 
-        private static void GameObject_OnCreate(GameObject sender, EventArgs args)
-        {
-        }
+        private static void GameObject_OnCreate(GameObject sender, EventArgs args) {}
 
         private static void GameObject_OnDelete(GameObject sender, EventArgs args)
         {
@@ -117,17 +113,17 @@ namespace AutoSharpporting.Evade
             var direction = (endPos - unitPosition).Normalized();
             if (unitPosition.Distance(endPos) > spellData.Range || spellData.FixedRange)
             {
-                endPos = unitPosition + direction*spellData.Range;
+                endPos = unitPosition + direction * spellData.Range;
             }
 
             if (spellData.ExtraRange != -1)
             {
                 endPos = endPos +
-                         Math.Min(spellData.ExtraRange, spellData.Range - endPos.Distance(unitPosition))*direction;
+                         Math.Min(spellData.ExtraRange, spellData.Range - endPos.Distance(unitPosition)) * direction;
             }
 
-            var castTime = Environment.TickCount - Game.Ping/2 - (spellData.MissileDelayed ? 0 : spellData.Delay) -
-                           (int) (1000*missilePosition.Distance(unitPosition)/spellData.MissileSpeed);
+            var castTime = Environment.TickCount - Game.Ping / 2 - (spellData.MissileDelayed ? 0 : spellData.Delay) -
+                           (int) (1000 * missilePosition.Distance(unitPosition) / spellData.MissileSpeed);
 
             //Trigger the skillshot detection callbacks.
             TriggerOnDetectSkillshot(DetectionType.RecvPacket, spellData, castTime, unitPosition, endPos, unit);
@@ -261,9 +257,9 @@ namespace AutoSharpporting.Evade
                     if (obj.IsEnemy && spellData.FromObjects.Contains(obj.Name))
                     {
                         var start = obj.Position.To2D();
-                        var end = start + spellData.Range*(args.End.To2D() - obj.Position.To2D()).Normalized();
+                        var end = start + spellData.Range * (args.End.To2D() - obj.Position.To2D()).Normalized();
                         TriggerOnDetectSkillshot(
-                            DetectionType.ProcessSpell, spellData, Environment.TickCount - Game.Ping/2, start, end,
+                            DetectionType.ProcessSpell, spellData, Environment.TickCount - Game.Ping / 2, start, end,
                             sender);
                     }
                 }
@@ -286,19 +282,19 @@ namespace AutoSharpporting.Evade
             var direction = (endPos - startPos).Normalized();
             if (startPos.Distance(endPos) > spellData.Range || spellData.FixedRange)
             {
-                endPos = startPos + direction*spellData.Range;
+                endPos = startPos + direction * spellData.Range;
             }
 
             if (spellData.ExtraRange != -1)
             {
                 endPos = endPos +
-                         Math.Min(spellData.ExtraRange, spellData.Range - endPos.Distance(startPos))*direction;
+                         Math.Min(spellData.ExtraRange, spellData.Range - endPos.Distance(startPos)) * direction;
             }
 
 
             //Trigger the skillshot detection callbacks.
             TriggerOnDetectSkillshot(
-                DetectionType.ProcessSpell, spellData, Environment.TickCount - Game.Ping/2, startPos, endPos, sender);
+                DetectionType.ProcessSpell, spellData, Environment.TickCount - Game.Ping / 2, startPos, endPos, sender);
         }
 
         /// <summary>
@@ -346,9 +342,9 @@ namespace AutoSharpporting.Evade
                 {
                     return;
                 }
-                var castTime = Environment.TickCount - Game.Ping/2 - spellData.Delay -
+                var castTime = Environment.TickCount - Game.Ping / 2 - spellData.Delay -
                                (int)
-                                   (1000*missilePosition.SwitchYZ().To2D().Distance(unitPosition.SwitchYZ())/
+                                   (1000 * missilePosition.SwitchYZ().To2D().Distance(unitPosition.SwitchYZ()) /
                                     spellData.MissileSpeed);
 
                 //Trigger the skillshot detection callbacks.

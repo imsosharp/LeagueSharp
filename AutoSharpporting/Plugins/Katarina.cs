@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Katarina : PluginBase
     {
@@ -19,6 +24,7 @@ namespace AutoSharpporting.Plugins
             R.SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
         }
 
+
         public override void OnUpdate(EventArgs args)
         {
             if (!R.IsCharging)
@@ -30,7 +36,7 @@ namespace AutoSharpporting.Plugins
             KS();
 
 
-            if (Player.IsChannelingImportantSpell() || Player.HasBuff("katarinarsound", true))
+            if (Player.IsChannelingImportantSpell() || Player.HasBuff("katarinarsound", true) )
             {
                 return;
             }
@@ -45,23 +51,25 @@ namespace AutoSharpporting.Plugins
                 {
                     W.Cast();
                 }
+
             }
         }
 
+        
+
         public void KS()
         {
-            foreach (
-                var target in
-                    ObjectManager.Get<Obj_AI_Hero>()
-                        .Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
+
+            foreach (Obj_AI_Hero target in ObjectManager.Get<Obj_AI_Hero>().Where(x => Player.Distance(x) < 900 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
             {
                 if (target != null)
                 {
+                   
                     if (Player.Distance(target.ServerPosition) <= E.Range &&
                         (Player.GetSpellDamage(target, SpellSlot.E)) > target.Health)
                     {
                         if (E.CastCheck(Target, "ComboE"))
-                        {
+                        {                       
                             E.CastOnUnit(target);
                             if (R.IsReady())
                             {
@@ -71,6 +79,8 @@ namespace AutoSharpporting.Plugins
                             }
                         }
                     }
+
+
                 }
             }
         }
@@ -82,5 +92,7 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
+
     }
 }

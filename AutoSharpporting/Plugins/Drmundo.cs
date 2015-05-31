@@ -1,9 +1,16 @@
-﻿using System;
-using AutoSharpporting.Util;
+﻿
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Drmundo : PluginBase
     {
@@ -15,6 +22,7 @@ namespace AutoSharpporting.Plugins
             R = new Spell(SpellSlot.R, 0);
 
             Q.SetSkillshot(0.50f, 75f, 1500f, true, SkillshotType.SkillshotLine);
+
         }
 
         public override void OnUpdate(EventArgs args)
@@ -23,12 +31,13 @@ namespace AutoSharpporting.Plugins
             {
                 Combo(Target);
             }
+
         }
 
         //from mundo TheKushStyle
         private void Combo(Obj_AI_Hero target)
         {
-            var ActiveW = false;
+            bool ActiveW = false;
             if (Player.HasBuff("BurningAgony"))
             {
                 ActiveW = true;
@@ -38,7 +47,7 @@ namespace AutoSharpporting.Plugins
                 ActiveW = false;
             }
 
-            if (Q.CastCheck(target, "ComboQ"))
+            if (Q.CastCheck(target,"ComboQ"))
             {
                 Q.Cast(target);
             }
@@ -57,12 +66,13 @@ namespace AutoSharpporting.Plugins
                 E.Cast();
             }
 
-            var EnInRang = Player.CountEnemiesInRange(1000);
+            int EnInRang = Player.CountEnemiesInRange(1000);
 
             if (Player.HealthPercentage() < 30 && R.IsReady() && EnInRang >= 1 || EnInRang == 1)
             {
                 R.Cast();
             }
+            
         }
 
         public override void ComboMenu(Menu config)
@@ -72,5 +82,8 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
+
+
     }
 }

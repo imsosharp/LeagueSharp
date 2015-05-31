@@ -1,11 +1,18 @@
-﻿//xaxixeo *-*
+﻿
 
+//xaxixeo *-*
 using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Lucian : PluginBase
     {
@@ -68,3 +75,4 @@ namespace AutoSharpporting.Plugins
         }
     }
 }
+

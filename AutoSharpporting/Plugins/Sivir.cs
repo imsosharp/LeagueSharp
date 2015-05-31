@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using AutoSharpporting.Util;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Sivir : PluginBase
     {
@@ -16,24 +21,28 @@ namespace AutoSharpporting.Plugins
             W = new Spell(SpellSlot.W, 593);
         }
 
-        public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target)
+
+        public override void OnAfterAttack(AttackableUnit unit, AttackableUnit target) 
         {
+
             var t = target as Obj_AI_Hero;
-            if (t != null && unit.IsMe)
-            {
+            if (t != null && unit.IsMe){
                 if (W.IsReady())
                 {
                     W.Cast();
+                    
                 }
                 if (R.IsReady())
                 {
                     R.Cast();
                 }
             }
+
         }
 
         public override void OnUpdate(EventArgs args)
         {
+
             if (Q.IsReady())
             {
                 foreach (var enemy in ObjectManager.Get<Obj_AI_Hero>().Where(h => h.IsValidTarget(Q.Range)))
@@ -48,12 +57,15 @@ namespace AutoSharpporting.Plugins
                 {
                     Q.Cast(Target);
                 }
-                if (R.IsReady() && Player.CountEnemiesInRange(600) > 2)
-                {
+                if(R.IsReady() && Player.CountEnemiesInRange(600) > 2){
                     R.Cast();
                 }
             }
+
+
         }
+
+
 
         public override void ComboMenu(Menu config)
         {
@@ -62,5 +74,6 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
     }
 }

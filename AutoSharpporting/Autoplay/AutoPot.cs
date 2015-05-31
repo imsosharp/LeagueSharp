@@ -7,11 +7,25 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-namespace AutoSharpporting.Autoplay
+namespace Support
 {
-    internal class PotionManager
+    class PotionManager
     {
-        private readonly Menu ExtrasMenu;
+        private Menu ExtrasMenu;
+        private enum PotionType
+        {
+            Health, Mana
+        };
+
+        private class Potion
+        {
+            public string Name { get; set; }
+            public int MinCharges { get; set; }
+            public ItemId ItemId { get; set; }
+            public int Priority { get; set; }
+            public List<PotionType> TypeList { get; set; }
+        }
+
         private List<Potion> potions;
 
         public PotionManager(Menu extrasMenu)
@@ -107,50 +121,36 @@ namespace AutoSharpporting.Autoplay
 
             catch (Exception)
             {
+
             }
         }
 
         private InventorySlot GetPotionSlot(PotionType type)
         {
             return (from potion in potions
-                where potion.TypeList.Contains(type)
-                from item in ObjectManager.Player.InventoryItems
-                where item.Id == potion.ItemId && item.Charges >= potion.MinCharges
-                select item).FirstOrDefault();
+                    where potion.TypeList.Contains(type)
+                    from item in ObjectManager.Player.InventoryItems
+                    where item.Id == potion.ItemId && item.Charges >= potion.MinCharges
+                    select item).FirstOrDefault();
         }
 
         private bool IsBuffActive(PotionType type)
         {
             return (from potion in potions
-                where potion.TypeList.Contains(type)
-                from buff in ObjectManager.Player.Buffs
-                where buff.Name == potion.Name && buff.IsActive
-                select potion).Any();
+                    where potion.TypeList.Contains(type)
+                    from buff in ObjectManager.Player.Buffs
+                    where buff.Name == potion.Name && buff.IsActive
+                    select potion).Any();
         }
 
         private static float GetPlayerHealthPercentage()
         {
-            return ObjectManager.Player.Health*100/ObjectManager.Player.MaxHealth;
+            return ObjectManager.Player.Health * 100 / ObjectManager.Player.MaxHealth;
         }
 
         private static float GetPlayerManaPercentage()
         {
-            return ObjectManager.Player.Mana*100/ObjectManager.Player.MaxMana;
-        }
-
-        private enum PotionType
-        {
-            Health,
-            Mana
-        };
-
-        private class Potion
-        {
-            public string Name { get; set; }
-            public int MinCharges { get; set; }
-            public ItemId ItemId { get; set; }
-            public int Priority { get; set; }
-            public List<PotionType> TypeList { get; set; }
+            return ObjectManager.Player.Mana * 100 / ObjectManager.Player.MaxMana;
         }
     }
 }

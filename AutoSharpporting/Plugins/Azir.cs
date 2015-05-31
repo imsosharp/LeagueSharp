@@ -1,12 +1,20 @@
 ﻿using System;
-using AutoSharpporting.Util;
+using System.Collections.Generic;
+using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using SharpDX;
+using Support.Evade;
+using Support.Util;
+using ActiveGapcloser = Support.Util.ActiveGapcloser;
+using SpellData = LeagueSharp.SpellData;
 
-namespace AutoSharpporting.Plugins
+namespace Support.Plugins
 {
     public class Azir : PluginBase
     {
+
+
         public Azir()
         {
             Q = new Spell(SpellSlot.Q, 850);
@@ -21,8 +29,10 @@ namespace AutoSharpporting.Plugins
 
         public override void OnUpdate(EventArgs args)
         {
+
             if (ComboMode)
             {
+
                 if (ShouldR(Target) && R.CastCheck(Target, "ComboR"))
                 {
                     R.Cast(Target);
@@ -39,15 +49,20 @@ namespace AutoSharpporting.Plugins
                 {
                     E.Cast(Target);
                 }
+
             }
+
+
         }
+
+
 
         private bool ShouldR(Obj_AI_Hero target)
         {
             if (Player.GetSpellDamage(target, SpellSlot.R) > target.Health - 150)
                 return true;
 
-            var hpPercent = Player.Health/Player.MaxHealth*100;
+            var hpPercent = Player.Health / Player.MaxHealth * 100;
             if (hpPercent < 20)
                 return true;
 
@@ -57,6 +72,8 @@ namespace AutoSharpporting.Plugins
 
             return false;
         }
+
+
 
         public override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)
         {
@@ -68,8 +85,11 @@ namespace AutoSharpporting.Plugins
             if (E.CastCheck(unit, "Interrupt.R"))
             {
                 R.Cast(unit);
+                return;
             }
+
         }
+
 
         public override void ComboMenu(Menu config)
         {
@@ -78,6 +98,8 @@ namespace AutoSharpporting.Plugins
             config.AddBool("ComboE", "Use E", true);
             config.AddBool("ComboR", "Use R", true);
         }
+
+
 
         public override void InterruptMenu(Menu config)
         {

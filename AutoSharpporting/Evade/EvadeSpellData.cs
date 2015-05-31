@@ -23,13 +23,11 @@
 
 #endregion
 
-using LeagueSharp;
-
-namespace AutoSharpporting.Evade
+namespace Support.Evade
 {
     #region
 
-    
+    using LeagueSharp;
 
     #endregion
 
@@ -73,10 +71,7 @@ namespace AutoSharpporting.Evade
         public SpellSlot Slot;
         public int Speed;
         public SpellValidTargets[] ValidTargets;
-
-        public EvadeSpellData()
-        {
-        }
+        public EvadeSpellData() {}
 
         public EvadeSpellData(string name, int dangerLevel)
         {

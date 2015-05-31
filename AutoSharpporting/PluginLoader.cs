@@ -1,12 +1,17 @@
-﻿using AutoSharpporting.Plugins;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using LeagueSharp;
+using LeagueSharp.Common;
+using Support.Plugins;
 
-namespace AutoSharpporting
+namespace Support
 {
     public class PluginLoader
     {
         private static bool loaded;
-
         public PluginLoader()
         {
             if (!loaded)
@@ -232,5 +237,6 @@ namespace AutoSharpporting
                 }
             }
         }
+
     }
 }

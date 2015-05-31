@@ -23,18 +23,16 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using LeagueSharp;
-using LeagueSharp.Common;
-using SharpDX;
-
-namespace AutoSharpporting.Util
+namespace Support.Util
 {
     #region
 
-    
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using LeagueSharp;
+    using LeagueSharp.Common;
+    using SharpDX;
 
     #endregion
 

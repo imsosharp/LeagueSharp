@@ -288,7 +288,7 @@ namespace Support
                                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
                                             _saferecall.Y = NearestAllyTurret.Position.Y;
                                             _tookRecallDecision = true;
-                                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                                            if (Bot.Position.Distance(_saferecall.To3D()) < 300)
                                             {
                                                 Bot.Spellbook.CastSpell(SpellSlot.Recall);
                                             }

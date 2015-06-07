@@ -150,9 +150,9 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.HasBuff("Recall")  && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.HasBuff("Recall")  && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
 
         }
 

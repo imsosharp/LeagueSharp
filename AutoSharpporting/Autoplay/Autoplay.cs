@@ -140,7 +140,7 @@ namespace Support
             {
                 return true;
             }
-            if (_tookRecallDecision)
+            if (_tookRecallDecision || Bot.HasBuff("Recall"))
             {
                 return false;
             }

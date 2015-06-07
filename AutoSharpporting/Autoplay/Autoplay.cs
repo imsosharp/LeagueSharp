@@ -140,7 +140,7 @@ namespace Support
             {
                 return true;
             }
-            if (_tookRecallDecision)
+            if (_tookRecallDecision || Bot.HasBuff("Recall"))
             {
                 return false;
             }
@@ -150,9 +150,9 @@ namespace Support
             }
             if (Bot.Mana < Bot.MaxMana * _lowManaRatio)
             {
-                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+                return Bot.Health > Bot.MaxHealth * _lowHealthIfLowManaRatio && !Bot.HasBuff("Recall")  && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
             }
-            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.IsRecalling() && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
+            return (Bot.Health > Bot.MaxHealth * _lowHealthRatio) && !Bot.HasBuff("Recall")  && !(Bot.Gold > _neededGoldToBack && !MetaHandler.HasSixItems());
 
         }
 
@@ -288,7 +288,7 @@ namespace Support
                                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
                                             _saferecall.Y = NearestAllyTurret.Position.Y;
                                             _tookRecallDecision = true;
-                                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                                            if (Bot.Position.Distance(_saferecall.To3D()) < 300)
                                             {
                                                 Bot.Spellbook.CastSpell(SpellSlot.Recall);
                                             }
@@ -309,7 +309,7 @@ namespace Support
                                 _frontline.Y = _tempcarry.Position.Y + _chosen;
                                 if (!(_tempcarry.UnderTurret(true) && MetaHandler.NearbyAllyMinions(_tempcarry, 400) < 2) && IsBotSafe())
                                 {
-                                    if (_tempcarry.Distance(Bot) > 550 && !_tookRecallDecision)
+                                    if (_tempcarry.Distance(Bot.ServerPosition) > 550 && !_tookRecallDecision)
                                     {
                                         Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                                         WalkAround(_tempcarry);
@@ -325,7 +325,7 @@ namespace Support
                         Console.WriteLine("All good, following: " + Carry.ChampionName);
                         _frontline.X = Carry.Position.X + _chosen;
                         _frontline.Y = Carry.Position.Y + _chosen;
-                        if (Carry.Distance(Bot) > 550 && !_tookRecallDecision)
+                        if (Carry.Distance(Bot.ServerPosition) > 550 && !_tookRecallDecision)
                         {
                             Bot.IssueOrder(GameObjectOrder.MoveTo, _frontline.To3D());
                         }
@@ -383,7 +383,7 @@ namespace Support
                         {
                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
                             _saferecall.Y = NearestAllyTurret.Position.Y;
-                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                            if (Bot.Position.Distance(_saferecall.To3D()) < 300)
                             {
                                 if (Environment.TickCount - _lastRecallAttempt > Rand.Next(500, 2000))
                                 {
@@ -466,7 +466,7 @@ namespace Support
                     _orbwalkingpos.X = follow.Position.X + orbwalkingAdditionInteger;
                     _orbwalkingpos.Y = follow.Position.Y + orbwalkingAdditionInteger;
                 }
-                if (_orbwalkingpos != null && Bot.Distance(follow) < 550 && !_tookRecallDecision)
+                if (_orbwalkingpos != null && Bot.Distance(follow.ServerPosition) < 550 && !_tookRecallDecision)
                 {
                     Bot.IssueOrder(GameObjectOrder.MoveTo, _orbwalkingpos.To3D());
                     _stepTime = Environment.TickCount;

@@ -383,7 +383,7 @@ namespace Support
                         {
                             _saferecall.X = NearestAllyTurret.Position.X + _safe;
                             _saferecall.Y = NearestAllyTurret.Position.Y;
-                            if (Bot.Position.Distance(_saferecall.To3D()) < 200)
+                            if (Bot.Position.Distance(_saferecall.To3D()) < 300)
                             {
                                 if (Environment.TickCount - _lastRecallAttempt > Rand.Next(500, 2000))
                                 {

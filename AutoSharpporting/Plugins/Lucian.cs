@@ -46,6 +46,10 @@ namespace Support.Plugins
                 {
                     R.Cast(Target);
                 }
+                if (Orbwalking.InAutoAttackRange(Target) && Player.HealthPercentage() > 30)
+                {
+                    Player.IssueOrder(GameObjectOrder.AttackUnit, Target);
+                }
             }
 
             if (HarassMode)
